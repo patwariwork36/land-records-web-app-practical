@@ -616,14 +616,12 @@
 
             const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7w0RI9RMbD3vx841C6CHzFyHwwbX2L5zyhjabc2ov7AvR7OWzJfXgvbiPvV6oXvhJZj5RCmcOzq2r/pub?gid=1832973148&single=true&output=csv";
 
-            // 6 proxy fallbacks in order of reliability
+            // Try direct fetch first (fastest, Google supports CORS for published ranges), then proxy fallbacks
             const URLS = [
+                SHEET_URL,
                 `https://api.allorigins.win/raw?url=${encodeURIComponent(SHEET_URL)}`,
                 `https://corsproxy.io/?${encodeURIComponent(SHEET_URL)}`,
-                `https://thingproxy.freeboard.io/fetch/${SHEET_URL}`,
-                `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(SHEET_URL)}`,
-                `https://htmldriven.com/fetch?url=${encodeURIComponent(SHEET_URL)}`,
-                SHEET_URL  // direct last attempt
+                `https://thingproxy.freeboard.io/fetch/${SHEET_URL}`
             ];
 
             async function tryFetch(url) {
@@ -813,13 +811,13 @@
                 const banner = document.createElement('div');
                 banner.className = 'portfolio-banner';
                 banner.style.marginBottom = '24px';
-                
-                const subtitle = currentTab === 'basra' 
+
+                const subtitle = currentTab === 'basra'
                     ? `ग्राम: ${v} &nbsp;|&nbsp; बसरा: ${val}`
                     : `ग्राम: ${v} &nbsp;|&nbsp; भूमिस्वामी: ${val}`;
-                    
+
                 const ownerName = currentTab === 'basra' ? found[0].owner : val;
-                
+
                 const printFn = currentTab === 'basra'
                     ? `printPortfolio('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')`
                     : `printFarmerPortfolio('${escJS(ownerName)}','${escJS(v)}')`;
@@ -1017,8 +1015,8 @@
             if (!farmerRecs.length) return;
 
             const totalArea = farmerRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
-            const sinchai   = farmerRecs.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')).length;
-            const asinchai  = farmerRecs.length - sinchai;
+            const sinchai = farmerRecs.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')).length;
+            const asinchai = farmerRecs.length - sinchai;
 
             // Optional: Get unique basras logic
             const uniqueBasras = [...new Set(farmerRecs.map(r => r.bn).filter(Boolean))].join(', ');
