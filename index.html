@@ -828,13 +828,8 @@
         function processCSVResults(results) {
             if (!results.data || results.data.length === 0) return false;
             records = results.data.map((o, i) => {
-                // Extract first owner name from multiline owner fields like "(1)नाम - फूलबाई\n..."
-                let ownerRaw = o['भूमिस्वामी का नाम'] || 'अज्ञात';
-                // Try to extract first clean name from "(1)नाम - XYZ..." pattern
-                let ownerClean = ownerRaw;
-                const nameMatch = ownerRaw.match(/नाम\s*[-–]\s*(.+)/);
-                if (nameMatch) ownerClean = nameMatch[1].trim();
-                else ownerClean = ownerRaw.replace(/^\(1\)/, '').trim();
+                // Use owner name exactly as-is from CSV — no cleaning or trimming
+                let ownerClean = o['भूमिस्वामी का नाम'] || 'अज्ञात';
 
                 return {
                     id: i + 1,
