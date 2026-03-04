@@ -830,8 +830,8 @@
             records = results.data.map((o, i) => {
                 // owner: raw CSV value (full, for display in khasra/basra results)
                 let ownerRaw = o['भूमिस्वामी का नाम'] || 'अज्ञात';
-                // ownerKey: cleaned single-line (for escJS / display)
-                let ownerKey = ownerRaw.replace(/\r/g, '').replace(/\n/g, ' ').trim();
+                // ownerKey: cleaned single-line (normalized spaces, for search & escJS)
+                let ownerKey = ownerRaw.replace(/\r/g, '').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
                 // ownerNames: all individual names extracted (for naam search datalist & matching)
                 const nameMatches = [...ownerRaw.matchAll(/नाम\s*[-–]\s*([^\n\r]+)/g)];
                 let ownerNames = nameMatches.map(m => m[1].trim()).filter(Boolean);
@@ -1004,7 +1004,7 @@
                 let found = [];
                 if (currentTab === 'khasra') found = records.filter(r => r.v === v && r.kn == val);
                 else if (currentTab === 'basra') found = records.filter(r => r.v === v && r.bn == val);
-                else if (currentTab === 'nam') found = records.filter(r => r.v === v && r.ownerKey.includes(val));
+                else if (currentTab === 'nam') { const nval = val.replace(/\s+/g, ' ').trim(); found = records.filter(r => r.v === v && r.ownerKey.includes(nval)); }
 
                 setLoading(false);
                 renderResults(found, v, val);
