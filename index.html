@@ -909,7 +909,7 @@
 
             // 1. Populate Basra
             const sel = document.getElementById('basraVal');
-            const basras = [...new Set(records.filter(r => r.v === v).map(r => r.bn).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'hi'));
+            const basras = [...new Set(records.filter(r => r.v === v).map(r => r.bn).filter(Boolean))].sort((a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b, 'hi'));
             sel.innerHTML = '<option value="" disabled selected>— बसरा चुनें —</option>';
             basras.forEach(b => { const o = document.createElement('option'); o.value = o.text = b; sel.appendChild(o); });
             sel.disabled = false;
