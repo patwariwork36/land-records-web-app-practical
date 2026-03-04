@@ -828,15 +828,18 @@
         function processCSVResults(results) {
             if (!results.data || results.data.length === 0) return false;
             records = results.data.map((o, i) => {
-                // Use owner name exactly as-is from CSV — no cleaning or trimming
-                let ownerClean = o['भूमिस्वामी का नाम'] || 'अज्ञात';
+                // owner: raw CSV value (full, for display in khasra/basra results)
+                let ownerRaw = o['भूमिस्वामी का नाम'] || 'अज्ञात';
+                // ownerKey: cleaned single-line name (for naam search dropdown & matching)
+                let ownerKey = ownerRaw.replace(/\r/g, '').replace(/\n/g, ' ').trim();
 
                 return {
                     id: i + 1,
                     v: o['ग्राम'] || '',
                     kn: o['खसरा नंबर'] || '',
                     bn: o['बसरा नंबर'] || '',
-                    owner: ownerClean || 'अज्ञात',
+                    owner: ownerRaw || 'अज्ञात',
+                    ownerKey: ownerKey || 'अज्ञात',
                     area: parseFloat(o['क्षेत्रफल'] || 0).toFixed(3),
                     type: o['सिंचित / असिंचित'] || '',
                     nistar: o['निस्तार पत्रक विवरण'] || ''
@@ -920,7 +923,7 @@
             const farmerList = document.getElementById('farmerList');
             const namInput = document.getElementById('namVal');
             if (farmerList && namInput) {
-                const names = [...new Set(records.filter(r => r.v === v).map(r => r.owner).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'hi'));
+                const names = [...new Set(records.filter(r => r.v === v).map(r => r.ownerKey).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'hi'));
                 farmerList.innerHTML = '';
                 names.forEach(n => { const o = document.createElement('option'); o.value = n; farmerList.appendChild(o); });
                 namInput.disabled = false;
@@ -987,7 +990,7 @@
                 let found = [];
                 if (currentTab === 'khasra') found = records.filter(r => r.v === v && r.kn == val);
                 else if (currentTab === 'basra') found = records.filter(r => r.v === v && r.bn == val);
-                else if (currentTab === 'nam') found = records.filter(r => r.v === v && r.owner === val);
+                else if (currentTab === 'nam') found = records.filter(r => r.v === v && r.ownerKey === val);
 
                 setLoading(false);
                 renderResults(found, v, val);
@@ -1220,7 +1223,7 @@
 
         // ─── Farmer Portfolio Print ───────────────────────────────
         function printFarmerPortfolio(owner, village) {
-            const farmerRecs = records.filter(r => r.v === village && r.owner === owner);
+            const farmerRecs = records.filter(r => r.v === village && r.ownerKey === owner);
             if (!farmerRecs.length) return;
 
             const totalArea = farmerRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
