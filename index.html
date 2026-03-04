@@ -717,7 +717,10 @@
         <!-- Tab Bar -->
         <div style="display:flex; justify-content:center; margin-bottom:28px;" class="fade-in">
             <div class="tab-bar">
-                <button class="tab-btn active" id="tab-khasra" onclick="switchTab('khasra')">
+                <button class="tab-btn active" id="tab-dashboard" onclick="switchTab('dashboard')">
+                    🏠 डैशबोर्ड
+                </button>
+                <button class="tab-btn" id="tab-khasra" onclick="switchTab('khasra')">
                     📄 खसरा खोज
                 </button>
                 <button class="tab-btn" id="tab-basra" onclick="switchTab('basra')">
@@ -726,8 +729,8 @@
                 <button class="tab-btn" id="tab-nam" onclick="switchTab('nam')">
                     👤 नाम खोज
                 </button>
-                <button class="tab-btn" id="tab-dashboard" onclick="switchTab('dashboard')">
-                    📊 डैशबोर्ड
+                <button class="tab-btn" id="tab-statistics" onclick="switchTab('statistics')">
+                    � स्टेटिस्टिक्स
                 </button>
             </div>
         </div>
@@ -803,8 +806,10 @@
 
         <!-- Results -->
         <div id="resultsDiv"></div>
-        <!-- Dashboard View -->
+        <!-- Dashboard Home View -->
         <div id="dashboardDiv" style="display:none;"></div>
+        <!-- Statistics View -->
+        <div id="statisticsDiv" style="display:none;"></div>
 
     </main>
 
@@ -814,7 +819,7 @@
         // const CSV_URL = "...";
 
         let records = [];
-        let currentTab = 'khasra';
+        let currentTab = 'dashboard';
 
         // ── Toast ──────────────────────────────────────
         function toast(msg, type = 'success') {
@@ -951,35 +956,111 @@
         // ── Tab Switch ────────────────────────────────
         function switchTab(tab) {
             currentTab = tab;
+            const isSearch = ['khasra', 'basra', 'nam'].includes(tab);
             const isDash = tab === 'dashboard';
+            const isStat = tab === 'statistics';
 
             // Show/hide search form
-            document.getElementById('searchForm').closest('.search-card').style.display = isDash ? 'none' : '';
+            document.getElementById('searchForm').closest('.search-card').style.display = isSearch ? '' : 'none';
             document.getElementById('khasraGroup').style.display = tab === 'khasra' ? '' : 'none';
             document.getElementById('basraGroup').style.display = tab === 'basra' ? '' : 'none';
             document.getElementById('namGroup').style.display = tab === 'nam' ? '' : 'none';
 
             // Tab buttons
-            document.getElementById('tab-khasra').className = 'tab-btn' + (tab === 'khasra' ? ' active' : '');
-            document.getElementById('tab-basra').className = 'tab-btn' + (tab === 'basra' ? ' active' : '');
-            document.getElementById('tab-nam').className = 'tab-btn' + (tab === 'nam' ? ' active' : '');
-            document.getElementById('tab-dashboard').className = 'tab-btn' + (tab === 'dashboard' ? ' active' : '');
+            ['dashboard', 'khasra', 'basra', 'nam', 'statistics'].forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                if (el) el.className = 'tab-btn' + (tab === t ? ' active' : '');
+            });
 
-            // Show/hide results and dashboard panels
+            // Show/hide panels
             document.getElementById('resultsDiv').innerHTML = '';
             document.getElementById('emptyDiv').style.display = 'none';
             document.getElementById('dashboardDiv').style.display = isDash ? '' : 'none';
+            document.getElementById('statisticsDiv').style.display = isStat ? '' : 'none';
 
-            if (isDash) {
-                showDashboard();
-                return;
-            }
+            if (isDash) { showDashboardHome(); return; }
+            if (isStat) { showStatistics(); return; }
 
-            // If village already chosen, populate basra and famerList
+            // If village already chosen, re-populate basra / farmerList
             if (tab === 'basra' || tab === 'nam') {
                 const v = document.getElementById('villageInput').value;
                 if (v) document.getElementById('villageInput').dispatchEvent(new Event('change'));
             }
+        }
+
+        // ── Dashboard Home ────────────────────────────
+        function showDashboardHome() {
+            const dash = document.getElementById('dashboardDiv');
+            const totalRec = records.length;
+            const totalArea = records.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
+            const grams = [...new Set(records.map(r => r.v).filter(Boolean))].length;
+            const sinchai = records.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')).length;
+            const now = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            dash.innerHTML = `
+            <div style="animation:slideUp 0.4s ease both;">
+
+              <!-- Welcome Strip -->
+              <div style="background:linear-gradient(135deg,#1a1a6e 0%,#2d2db0 60%,#1e3a8a 100%);border-radius:20px;padding:28px 32px;color:#fff;margin-bottom:24px;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>
+                <div style="position:absolute;bottom:-30px;left:40px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.04);"></div>
+                <div style="position:relative;z-index:1;">
+                  <div style="font-size:11px;font-weight:700;opacity:0.6;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;">भूमि रिकॉर्ड – हल्का 43 एवं 28</div>
+                  <div style="font-size:clamp(18px,3vw,26px);font-weight:900;font-family:'Noto Sans Devanagari',sans-serif;margin-bottom:4px;">🏠 मुख्य डैशबोर्ड</div>
+                  <div style="font-size:13px;opacity:0.7;">🕐 ${now}</div>
+                </div>
+              </div>
+
+              <!-- Summary Counters -->
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:28px;">
+                <div style="background:linear-gradient(135deg,#1a1a6e,#3b5bdb);color:#fff;border-radius:16px;padding:18px 20px;text-align:center;box-shadow:0 4px 20px rgba(26,26,110,0.25);">
+                  <div style="font-size:11px;font-weight:700;opacity:0.7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">कुल ग्राम</div>
+                  <div style="font-size:36px;font-weight:900;line-height:1;">${grams}</div>
+                </div>
+                <div style="background:linear-gradient(135deg,#065f46,#059669);color:#fff;border-radius:16px;padding:18px 20px;text-align:center;box-shadow:0 4px 20px rgba(5,150,105,0.25);">
+                  <div style="font-size:11px;font-weight:700;opacity:0.7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">कुल रिकॉर्ड</div>
+                  <div style="font-size:36px;font-weight:900;line-height:1;">${totalRec}</div>
+                </div>
+                <div style="background:linear-gradient(135deg,#7c2d12,#ea580c);color:#fff;border-radius:16px;padding:18px 20px;text-align:center;box-shadow:0 4px 20px rgba(234,88,12,0.25);">
+                  <div style="font-size:11px;font-weight:700;opacity:0.7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">कुल क्षेत्रफल (हे.)</div>
+                  <div style="font-size:32px;font-weight:900;line-height:1;">${totalArea}</div>
+                </div>
+                <div style="background:linear-gradient(135deg,#1e3a5f,#0ea5e9);color:#fff;border-radius:16px;padding:18px 20px;text-align:center;box-shadow:0 4px 20px rgba(14,165,233,0.25);">
+                  <div style="font-size:11px;font-weight:700;opacity:0.7;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">सिंचित खसरे</div>
+                  <div style="font-size:36px;font-weight:900;line-height:1;">${sinchai}</div>
+                </div>
+              </div>
+
+              <!-- Quick Access Cards -->
+              <div style="margin-bottom:12px;font-size:14px;font-weight:800;color:var(--royal);text-transform:uppercase;letter-spacing:0.08em;">⚡ त्वरित खोज</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;">
+
+                <div onclick="switchTab('khasra')" style="cursor:pointer;background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(26,26,110,0.1);border:1.5px solid #e2e8f0;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(26,26,110,0.18)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(26,26,110,0.1)'">
+                  <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#1a1a6e,#3b5bdb);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;">📄</div>
+                  <div style="font-size:17px;font-weight:800;color:var(--royal);margin-bottom:4px;font-family:'Noto Sans Devanagari',sans-serif;">खसरा खोज</div>
+                  <div style="font-size:12px;color:var(--text-muted);font-weight:600;">खसरा नंबर से रिकॉर्ड खोजें</div>
+                </div>
+
+                <div onclick="switchTab('basra')" style="cursor:pointer;background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(5,150,105,0.1);border:1.5px solid #e2e8f0;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(5,150,105,0.18)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(5,150,105,0.1)'">
+                  <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#065f46,#059669);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;">👥</div>
+                  <div style="font-size:17px;font-weight:800;color:#065f46;margin-bottom:4px;font-family:'Noto Sans Devanagari',sans-serif;">बसरा खोज</div>
+                  <div style="font-size:12px;color:var(--text-muted);font-weight:600;">बसरा नंबर से रिकॉर्ड खोजें</div>
+                </div>
+
+                <div onclick="switchTab('nam')" style="cursor:pointer;background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(234,88,12,0.1);border:1.5px solid #e2e8f0;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(234,88,12,0.18)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(234,88,12,0.1)'">
+                  <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#7c2d12,#ea580c);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;">👤</div>
+                  <div style="font-size:17px;font-weight:800;color:#7c2d12;margin-bottom:4px;font-family:'Noto Sans Devanagari',sans-serif;">नाम खोज</div>
+                  <div style="font-size:12px;color:var(--text-muted);font-weight:600;">भूमिस्वामी के नाम से खोजें</div>
+                </div>
+
+                <div onclick="switchTab('statistics')" style="cursor:pointer;background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(124,58,237,0.1);border:1.5px solid #e2e8f0;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 32px rgba(124,58,237,0.18)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(124,58,237,0.1)'">
+                  <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#4c1d95,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;">📈</div>
+                  <div style="font-size:17px;font-weight:800;color:#4c1d95;margin-bottom:4px;font-family:'Noto Sans Devanagari',sans-serif;">स्टेटिस्टिक्स</div>
+                  <div style="font-size:12px;color:var(--text-muted);font-weight:600;">ग्रामवार विस्तृत आँकड़े</div>
+                </div>
+
+              </div>
+            </div>`;
         }
 
         // ── Search ────────────────────────────────────
