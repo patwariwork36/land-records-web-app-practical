@@ -1004,7 +1004,7 @@
                 let found = [];
                 if (currentTab === 'khasra') found = records.filter(r => r.v === v && r.kn == val);
                 else if (currentTab === 'basra') found = records.filter(r => r.v === v && r.bn == val);
-                else if (currentTab === 'nam') found = records.filter(r => r.v === v && r.ownerNames.includes(val));
+                else if (currentTab === 'nam') found = records.filter(r => r.v === v && r.ownerKey.includes(val));
 
                 setLoading(false);
                 renderResults(found, v, val);
@@ -1246,7 +1246,7 @@
 
         // ─── Farmer Portfolio Print ───────────────────────────────
         function printFarmerPortfolio(owner, village) {
-            const farmerRecs = records.filter(r => r.v === village && r.ownerNames.includes(owner));
+            const farmerRecs = records.filter(r => r.v === village && r.ownerKey.includes(owner));
             if (!farmerRecs.length) return;
 
             const totalArea = farmerRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
