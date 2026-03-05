@@ -460,9 +460,9 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
+            /* flex-start fixes Android left-clip bug */
             padding-bottom: 4px;
-            /* room for scrollbar on some devices */
             scrollbar-width: none;
             /* Firefox */
         }
@@ -471,11 +471,11 @@
             display: none;
         }
 
-        /* Chrome/Safari */
-
+        /* Center tab-bar via margin:auto — works even when overflow-x is active */
         .tab-bar {
             flex-shrink: 0;
-            /* never shrink — let wrapper scroll instead */
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* ── Tablet (≤ 900px) ── */
