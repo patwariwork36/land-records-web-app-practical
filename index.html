@@ -1899,62 +1899,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                 </div>
               </div>
 
-              <!-- Village Search + Cards -->
-              <div style="margin-bottom:6px;">
-                <div class="dash-section-title" style="margin-bottom:14px;">🏘️ ग्रामवार विवरण</div>
-                <div class="dash-search-wrap">
-                  <svg class="dash-search-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                  </svg>
-                  <input type="text" id="statSearchInput" class="dash-search-input"
-                    placeholder="ग्राम खोजें..." oninput="filterDashCards(this.value)">
-                </div>
-              </div>
-
-              <div id="dashCardsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;margin-bottom:8px;">
-              ${grams.map((g, i) => {
-                const d = gramMap[g];
-                const recs = d.recs;
-                const area = recs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
-                const sCount = recs.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')).length;
-                const aCount = recs.length - sCount;
-                const sPct = recs.length ? Math.round((sCount / recs.length) * 100) : 0;
-                const topOwner = Object.entries(d.owners).sort((a, b) => b[1] - a[1])[0];
-                const grad = GRAM_GRADIENTS[i % GRAM_GRADIENTS.length];
-                const uBasras = new Set(recs.map(r => r.bn)).size;
-                return `
-                <div class="result-card dash-gram-card" data-gram="${g}" style="overflow:hidden;border-radius:20px;animation:slideUp 0.4s ease both;animation-delay:${i * 0.04}s;">
-                  <div style="background:${grad};padding:18px 20px;position:relative;overflow:hidden;">
-                    <div style="position:absolute;top:-20px;right:-20px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,0.08);"></div>
-                    <div style="position:absolute;bottom:-30px;left:-10px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.05);"></div>
-                    <div style="position:relative;z-index:1;">
-                      <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">ग्राम</div>
-                      <div style="font-size:20px;font-weight:900;color:#fff;font-family:'Noto Sans Devanagari',sans-serif;line-height:1.2;">${g}</div>
-                      <div style="font-size:11px;color:rgba(255,255,255,0.65);margin-top:4px;font-weight:600;">${uBasras} बसरे</div>
-                    </div>
-                  </div>
-                  <div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                    <div class="stat-chip"><div class="stat-chip-label">कुल खसरे</div><div class="stat-chip-val">${recs.length}</div></div>
-                    <div class="stat-chip"><div class="stat-chip-label">क्षेत्रफल (हे.)</div><div class="stat-chip-val" style="font-size:16px;">${area}</div></div>
-                    <div class="stat-chip" style="background:#d1fae5;"><div class="stat-chip-label" style="color:#065f46;">सिंचित</div><div class="stat-chip-val" style="color:#065f46;">${sCount}</div></div>
-                    <div class="stat-chip" style="background:#fef3c7;"><div class="stat-chip-label" style="color:#92400e;">असिंचित</div><div class="stat-chip-val" style="color:#92400e;">${aCount}</div></div>
-                  </div>
-                  <div style="padding:0 20px 14px;">
-                    <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:5px;">
-                      <span>सिंचित अनुपात</span><span>${sPct}%</span>
-                    </div>
-                    <div style="background:#e2e8f0;border-radius:99px;height:8px;overflow:hidden;">
-                      <div style="width:${sPct}%;height:100%;background:${grad};border-radius:99px;transition:width 0.8s ease;"></div>
-                    </div>
-                  </div>
-                  <div style="padding:12px 20px 16px;border-top:1px solid var(--border);">
-                    <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">शीर्ष भूमिस्वामी</div>
-                    <div style="font-size:13px;font-weight:700;color:var(--text-main);font-family:'Noto Sans Devanagari',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${topOwner ? topOwner[0] : '—'}</div>
-                    ${topOwner ? `<div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${topOwner[1]} खसरे</div>` : ''}
-                  </div>
-                </div>`;
-            }).join('')}
-              </div>
+              <!-- Village wise ring graphs ends here -->
 
             </div>`;
 
