@@ -1032,8 +1032,13 @@
         }
 
         function fillVillages() {
+            const desiredOrder = ['छेरकापुर (हल्का 28)', 'छड़िया (हल्का 28)', 'तिल्दा (हल्का 43)', 'गबौद (हल्का 43)'];
             const sel = document.getElementById('villageInput');
-            const vals = [...new Set(records.map(r => r.v).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'hi'));
+            const vals = [...new Set(records.map(r => r.v).filter(Boolean))].sort((a, b) => {
+                const idxA = desiredOrder.indexOf(a);
+                const idxB = desiredOrder.indexOf(b);
+                return (idxA !== -1 ? idxA : 999) - (idxB !== -1 ? idxB : 999);
+            });
             while (sel.options.length > 1) sel.remove(1);
             vals.forEach(v => { const o = document.createElement('option'); o.value = o.text = v; sel.appendChild(o); });
         }
@@ -1916,8 +1921,13 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                 return;
             }
 
-            // Optional: Identify unique villages for dropdown
-            const grams = [...new Set(records.map(r => r.v).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'hi'));
+            // Identify unique villages for dropdown and sort by custom order
+            const desiredOrder = ['छेरकापुर (हल्का 28)', 'छड़िया (हल्का 28)', 'तिल्दा (हल्का 43)', 'गबौद (हल्का 43)'];
+            const grams = [...new Set(records.map(r => r.v).filter(Boolean))].sort((a, b) => {
+                const idxA = desiredOrder.indexOf(a);
+                const idxB = desiredOrder.indexOf(b);
+                return (idxA !== -1 ? idxA : 999) - (idxB !== -1 ? idxB : 999);
+            });
 
             let html = `
             <div style="animation:slideUp 0.4s ease both; max-width:900px; margin:0 auto;">
