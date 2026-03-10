@@ -1937,8 +1937,13 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                       const d = gramMap[g];
                       const recs = d.recs;
                       const totalArea = recs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
-                      const sCount = recs.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')).length;
-                      const aCount = recs.length - sCount;
+                      const sRecs = recs.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित'));
+                      const aRecs = recs.filter(r => !(r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')));
+                      const sArea = sRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
+                      const aArea = aRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
+                      
+                      const sCount = sRecs.length;
+                      const aCount = aRecs.length;
                       const total = recs.length || 1;
                       const sPct = Math.round((sCount / total) * 100);
                       const strokeDashArea = 226.19; // 2 * Math.PI * 36
@@ -1960,12 +1965,14 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                           
                           <div style="width:100%; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                             <div style="background:#d1fae5; border-radius:10px; padding:8px 4px;">
-                              <div style="font-size:10px; font-weight:700; color:#065f46; text-transform:uppercase;">सिंचित</div>
-                              <div style="font-size:14px; font-weight:900; color:#065f46;">${sCount}</div>
+                              <div style="font-size:10px; font-weight:700; color:#065f46; text-transform:uppercase; margin-bottom:2px;">सिंचित</div>
+                              <div style="font-size:13px; font-weight:800; color:#065f46;">${sCount} खसरे</div>
+                              <div style="font-size:14px; font-weight:900; color:#065f46;">${sArea} हे.</div>
                             </div>
                             <div style="background:#fef3c7; border-radius:10px; padding:8px 4px;">
-                              <div style="font-size:10px; font-weight:700; color:#92400e; text-transform:uppercase;">असिंचित</div>
-                              <div style="font-size:14px; font-weight:900; color:#92400e;">${aCount}</div>
+                              <div style="font-size:10px; font-weight:700; color:#92400e; text-transform:uppercase; margin-bottom:2px;">असिंचित</div>
+                              <div style="font-size:13px; font-weight:800; color:#92400e;">${aCount} खसरे</div>
+                              <div style="font-size:14px; font-weight:900; color:#92400e;">${aArea} हे.</div>
                             </div>
                           </div>
                           
