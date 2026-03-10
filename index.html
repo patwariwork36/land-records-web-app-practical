@@ -1928,6 +1928,55 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                     </div>
                   </div>
                 </div>
+
+                <!-- NEW: Village-wise Ring Charts -->
+                <div style="margin-top: 24px;">
+                  <div style="font-size:14px;font-weight:800;color:var(--royal);margin-bottom:12px;border-top:1px dashed var(--border);padding-top:16px;">ग्राम-वार सिंचित / असिंचित स्थिति</div>
+                  <div style="display:flex; gap:16px; overflow-x:auto; padding-bottom:10px;">
+                    ${grams.map((g) => {
+                      const d = gramMap[g];
+                      const recs = d.recs;
+                      const totalArea = recs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
+                      const sCount = recs.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')).length;
+                      const aCount = recs.length - sCount;
+                      const total = recs.length || 1;
+                      const sPct = Math.round((sCount / total) * 100);
+                      const strokeDashArea = 226.19; // 2 * Math.PI * 36
+                      const strokeDashSinchai = (sPct / 100) * strokeDashArea;
+                      
+                      return `
+                        <div style="flex:1; min-width:180px; background:#f8fafc; border:1px solid var(--border); border-radius:16px; padding:16px; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.03);">
+                          <div style="font-weight:800; font-size:15px; color:var(--text-main); margin-bottom:12px; font-family:'Noto Sans Devanagari',sans-serif;">${g}</div>
+                          
+                          <div style="position:relative; width:80px; height:80px; margin-bottom:12px;">
+                            <svg class="ring-svg" width="80" height="80" viewBox="0 0 100 100" style="transform: rotate(-90deg);">
+                              <circle cx="50" cy="50" r="36" stroke="#fef3c7" stroke-width="14" fill="none"></circle>
+                              <circle cx="50" cy="50" r="36" stroke="#059669" stroke-width="14" fill="none" stroke-dasharray="${strokeDashSinchai} ${strokeDashArea}" style="transition: stroke-dasharray 1s ease-out; stroke-linecap:round;"></circle>
+                            </svg>
+                            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+                              <span style="font-size:16px; font-weight:900; color:#065f46; line-height:1;">${sPct}%</span>
+                            </div>
+                          </div>
+                          
+                          <div style="width:100%; display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                            <div style="background:#d1fae5; border-radius:10px; padding:8px 4px;">
+                              <div style="font-size:10px; font-weight:700; color:#065f46; text-transform:uppercase;">सिंचित</div>
+                              <div style="font-size:14px; font-weight:900; color:#065f46;">${sCount}</div>
+                            </div>
+                            <div style="background:#fef3c7; border-radius:10px; padding:8px 4px;">
+                              <div style="font-size:10px; font-weight:700; color:#92400e; text-transform:uppercase;">असिंचित</div>
+                              <div style="font-size:14px; font-weight:900; color:#92400e;">${aCount}</div>
+                            </div>
+                          </div>
+                          
+                          <div style="margin-top:10px; font-size:12px; font-weight:700; color:var(--text-muted); background:#fff; padding:6px 12px; border-radius:20px; border:1px solid #e2e8f0;">
+                            कुल रकबा: <span style="color:var(--royal); font-weight:900;">${totalArea} हे.</span>
+                          </div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
               </div>
 
               <!-- Top Farmers Leaderboard -->
