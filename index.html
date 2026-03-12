@@ -1170,10 +1170,7 @@
                 this.scrollTop += e.deltaY;
             }, { passive: false });
 
-            // ── Close dropdown when page scrolls, reposition on resize ──
-            window.addEventListener('scroll', function () {
-                if (box.style.display !== 'none') box.style.display = 'none';
-            }, true);
+            // ── Reposition on resize ──
             window.addEventListener('resize', function () {
                 if (box.style.display !== 'none') positionBox();
             });
