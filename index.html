@@ -1155,6 +1155,17 @@
                 }
             });
 
+            // ── Prevent page scroll when scrolling inside dropdown ──
+            box.addEventListener('wheel', function (e) {
+                const atTop = this.scrollTop === 0;
+                const atBottom = this.scrollTop + this.clientHeight >= this.scrollHeight;
+                if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) return;
+                e.stopPropagation();
+                e.preventDefault();
+                this.scrollTop += e.deltaY;
+            }, { passive: false });
+
+
             inp.addEventListener('keydown', function (e) {
                 if (!box.style.display || box.style.display === 'none') return;
                 const items = box.querySelectorAll('[data-kn]');
