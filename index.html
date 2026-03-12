@@ -2610,8 +2610,8 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                 return all;
             }
 
-            const govtAll  = expandByBasra('स्वामित्व शासकीय');
-            const privAll  = expandByBasra('स्वामित्व भूमिस्वामी');
+            const govtAll  = expandByBasra('शासकीय');
+            const privAll  = expandByBasra('भूमिस्वामी');
 
             const govtCount = govtAll.length;
             const govtArea  = govtAll.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
