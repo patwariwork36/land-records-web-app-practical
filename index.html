@@ -2576,27 +2576,52 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                 return;
             }
 
-            // Filter records for selected village
+            // सभी records उस ग्राम के
             const gramRecs = records.filter(r => r.v === gram);
 
-            // शासकीय भूमि: charai OR ceiling OR nistar has meaningful value
-            const isGovt = r =>
-                (r.charai && r.charai.trim() && r.charai.trim() !== 'नहीं' && r.charai.trim() !== '-') ||
-                (r.ceiling && r.ceiling.trim() && r.ceiling.trim() !== 'नहीं' && r.ceiling.trim() !== '-') ||
-                (r.nistar && r.nistar.trim() && r.nistar.trim() !== 'नहीं' && r.nistar.trim() !== '-');
+            // ── Helper: keyword से seed records निकालो, फिर उनके basra से expand करो ──
+            function expandByBasra(keyword) {
+                // Step 1: seed records — owner में keyword हो
+                const seedRecs = gramRecs.filter(r =>
+                    r.owner && r.owner.includes(keyword)
+                );
+                if (seedRecs.length === 0) return [];
 
-            const govtRecs = gramRecs.filter(isGovt);
-            const privRecs = gramRecs.filter(r => !isGovt(r));
+                // Step 2: seed records के सभी unique basra numbers
+                const basraSet = new Set(
+                    seedRecs
+                        .map(r => (r.bn || '').trim())
+                        .filter(b => b && b !== '' && b !== '-' && b !== '0')
+                );
 
-            const govtCount = govtRecs.length;
-            const govtArea = govtRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
-            const privCount = privRecs.length;
-            const privArea = privRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
+                // Step 3: उन basra numbers के सभी records (same village)
+                const expanded = gramRecs.filter(r =>
+                    basraSet.has((r.bn || '').trim())
+                );
 
-            document.getElementById('stat-gov-count').textContent = govtCount;
-            document.getElementById('stat-gov-area').textContent = govtArea;
-            document.getElementById('stat-priv-count').textContent = privCount;
-            document.getElementById('stat-priv-area').textContent = privArea;
+                // seed + expanded (dedup by khasra+basra)
+                const seen = new Set();
+                const all = [...seedRecs, ...expanded].filter(r => {
+                    const key = `${r.kn}|${r.bn}`;
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                });
+                return all;
+            }
+
+            const govtAll  = expandByBasra('स्वामित्व शासकीय');
+            const privAll  = expandByBasra('स्वामित्व भूमिस्वामी');
+
+            const govtCount = govtAll.length;
+            const govtArea  = govtAll.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
+            const privCount = privAll.length;
+            const privArea  = privAll.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
+
+            document.getElementById('stat-gov-count').textContent  = govtCount  || '0';
+            document.getElementById('stat-gov-area').textContent   = govtArea   || '0.000';
+            document.getElementById('stat-priv-count').textContent = privCount  || '0';
+            document.getElementById('stat-priv-area').textContent  = privArea   || '0.000';
 
             cards.style.display = 'grid';
             if (placeholder) placeholder.style.display = 'none';
