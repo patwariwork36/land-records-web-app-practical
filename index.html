@@ -1522,7 +1522,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
 
             // ── Global totals ──
             const totalRec = records.length;
-            const totalArea = records.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
+            const totalArea = records.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
             const sinchai = records.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')).length;
             const asinchai = totalRec - sinchai;
             const sinchaiPctGlobal = totalRec ? Math.round((sinchai / totalRec) * 100) : 0;
@@ -1629,7 +1629,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                         <div class="bar-track">
                             <div class="bar-fill" style="width:${pct}%;background:${grad};"></div>
                         </div>
-                        <div class="bar-val">${area.toFixed(2)}</div>
+                        <div class="bar-val">${area.toFixed(3)}</div>
                     </div>`;
             }).join('')}
             </div>
@@ -1648,7 +1648,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                             <div style="font-size:11px;color:var(--text-muted);font-weight:600;margin-top:2px;">ग्राम: ${info.village}</div>
                         </div>
                         <div class="lb-stat">
-                            <div class="lb-stat-val">${info.area.toFixed(2)} हे.</div>
+                            <div class="lb-stat-val">${info.area.toFixed(3)} हे.</div>
                             <div class="lb-stat-lbl">${info.khasras} खसरे</div>
                         </div>
                     </div>`;
@@ -1671,7 +1671,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             ${grams.map((g, i) => {
                 const d = gramMap[g];
                 const recs = d.recs;
-                const area = recs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
+                const area = recs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
                 const sCount = recs.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')).length;
                 const aCount = recs.length - sCount;
                 const sPct = recs.length ? Math.round((sCount / recs.length) * 100) : 0;
@@ -1739,7 +1739,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                     const progress = Math.min(elapsed / duration, 1);
                     const eased = 1 - Math.pow(1 - progress, 3);
                     const current = Math.round(eased * target);
-                    el.textContent = isDecimal && progress >= 1 ? parseFloat(isDecimal).toFixed(2) : current;
+                    el.textContent = isDecimal && progress >= 1 ? parseFloat(isDecimal).toFixed(3) : current;
                     if (progress < 1) requestAnimationFrame(tick);
                 }
                 requestAnimationFrame(tick);
@@ -1778,7 +1778,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
 
             // Global totals
             const totalRec = records.length;
-            const totalArea = records.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
+            const totalArea = records.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
             const sinchai = records.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')).length;
             const asinchai = totalRec - sinchai;
 
@@ -1854,11 +1854,11 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                     ${grams.map((g) => {
                       const d = gramMap[g];
                       const recs = d.recs;
-                      const totalArea = recs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
+                      const totalArea = recs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
                       const sRecs = recs.filter(r => r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित'));
                       const aRecs = recs.filter(r => !(r.type && r.type.includes('सिंचित') && !r.type.includes('असिंचित')));
-                      const sArea = sRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
-                      const aArea = aRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(2);
+                      const sArea = sRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
+                      const aArea = aRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
                       
                       const sCount = sRecs.length;
                       const aCount = aRecs.length;
@@ -2118,7 +2118,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                 sumCards.style.display = 'flex';
                 document.getElementById('govSumCount').textContent = currentGovData.length;
                 const totalArea = currentGovData.reduce((s, r) => s + parseFloat(r.area || 0), 0);
-                document.getElementById('govSumArea').textContent = totalArea.toFixed(4);
+                document.getElementById('govSumArea').textContent = totalArea.toFixed(3);
             }
 
             // Sorting by khasra (basic numeric sort)
