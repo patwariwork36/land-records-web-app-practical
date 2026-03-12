@@ -1954,7 +1954,10 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                     <select id="statGramSelect" onchange="updateGramSummary()"
                       style="width:100%;padding:12px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.08);color:#fff;font-size:14px;font-weight:700;font-family:'Noto Sans Devanagari',sans-serif;appearance:none;cursor:pointer;outline:none;">
                       <option value="" style="background:#1e293b;color:#fff;">— ग्राम चुनें —</option>
-                      ${grams.map(g => `<option value="${g}" style="background:#1e293b;color:#fff;">${g}</option>`).join('')}
+                      <option value="छेरकापुर (हल्का 28)" style="background:#1e293b;color:#fff;">छेरकापुर (हल्का 28)</option>
+                      <option value="छड़िया (हल्का 28)" style="background:#1e293b;color:#fff;">छड़िया (हल्का 28)</option>
+                      <option value="तिल्दा (हल्का 43)" style="background:#1e293b;color:#fff;">तिल्दा (हल्का 43)</option>
+                      <option value="गबौद (हल्का 43)" style="background:#1e293b;color:#fff;">गबौद (हल्का 43)</option>
                     </select>
                     <div style="position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:rgba(255,255,255,0.5);font-size:14px;">▼</div>
                   </div>
@@ -1998,6 +2001,12 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                       </div>
                     </div>
 
+                  </div>
+
+                  <!-- कुल रकबा Total Row (shown when gram selected) -->
+                  <div id="statGramTotal" style="display:none;margin-top:14px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:14px 20px;display:none;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                    <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.09em;">🧮 कुल रकबा (शासकीय + भूमिस्वामी)</div>
+                    <div id="stat-total-area" style="font-size:24px;font-weight:900;color:#fde68a;">—</div>
                   </div>
 
                   <!-- Placeholder text when no gram selected -->
@@ -2614,16 +2623,20 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             const privAll  = expandByBasra('भूमिस्वामी');
 
             const govtCount = govtAll.length;
-            const govtArea  = govtAll.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
+            const govtArea  = govtAll.reduce((s, r) => s + parseFloat(r.area || 0), 0);
             const privCount = privAll.length;
-            const privArea  = privAll.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
+            const privArea  = privAll.reduce((s, r) => s + parseFloat(r.area || 0), 0);
+            const totalArea = (govtArea + privArea).toFixed(3);
 
             document.getElementById('stat-gov-count').textContent  = govtCount  || '0';
-            document.getElementById('stat-gov-area').textContent   = govtArea   || '0.000';
+            document.getElementById('stat-gov-area').textContent   = govtArea.toFixed(3)   || '0.000';
             document.getElementById('stat-priv-count').textContent = privCount  || '0';
-            document.getElementById('stat-priv-area').textContent  = privArea   || '0.000';
+            document.getElementById('stat-priv-area').textContent  = privArea.toFixed(3)   || '0.000';
+            document.getElementById('stat-total-area').textContent = totalArea + ' हे.';
 
             cards.style.display = 'grid';
+            const totalDiv = document.getElementById('statGramTotal');
+            if (totalDiv) totalDiv.style.display = 'flex';
             if (placeholder) placeholder.style.display = 'none';
         }
 
