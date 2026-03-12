@@ -1006,6 +1006,7 @@
                 fillVillages();
                 badge.textContent = `✅ ${records.length} रिकॉर्ड लोड`;
                 toast(`${records.length} रिकॉर्ड सफलतापूर्वक लोड हुए`, 'success');
+                switchTab('statistics');
             }
             function onError(msg) {
                 badge.innerHTML = `❌ लोड विफल &nbsp;<button onclick="loadData()" style="background:#1a1a6e;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:12px;cursor:pointer;font-weight:700;">🔄 पुनः प्रयास</button>`;
