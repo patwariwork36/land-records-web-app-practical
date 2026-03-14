@@ -565,6 +565,19 @@
             #statisticsDiv>div>div[style*="grid"] {
                 grid-template-columns: 1fr !important;
             }
+
+            /* Responsive fix for Village Summary Card */
+            .stats-summary-card {
+                padding: 20px 16px !important;
+                border-radius: 16px !important;
+            }
+            .stats-grid-main {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            .stats-grid-inner {
+                grid-template-columns: 1fr 1fr !important;
+            }
         }
 
         /* ══ DASHBOARD NEW FEATURES ══ */
@@ -1937,7 +1950,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
               </div>
 
               <!-- ▸ ग्रामवार भूमि सारांश Card (NEW) -->
-              <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:24px;padding:26px 28px;margin-bottom:28px;box-shadow:0 8px 32px rgba(0,0,0,0.22);position:relative;overflow:hidden;">
+              <div class="stats-summary-card" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:24px;padding:26px 28px;margin-bottom:28px;box-shadow:0 8px 32px rgba(0,0,0,0.22);position:relative;overflow:hidden;">
                 <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.03);"></div>
                 <div style="position:absolute;bottom:-30px;left:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.02);"></div>
                 <div style="position:relative;z-index:1;">
@@ -1963,7 +1976,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                   </div>
 
                   <!-- Summary Cards Row (hidden until gram selected) -->
-                  <div id="statGramCards" style="display:none;grid-template-columns:1fr 1fr;gap:14px;">
+                  <div id="statGramCards" class="stats-grid-main" style="display:none;grid-template-columns:1fr 1fr;gap:14px;">
 
                     <!-- शासकीय भूमि -->
                     <div style="background:linear-gradient(135deg,rgba(220,38,38,0.25),rgba(153,27,27,0.35));border:1px solid rgba(220,38,38,0.35);border-radius:18px;padding:18px 20px;">
@@ -1971,7 +1984,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                         <div style="width:36px;height:36px;border-radius:10px;background:rgba(220,38,38,0.4);display:flex;align-items:center;justify-content:center;font-size:18px;">🏛️</div>
                         <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,0.9);font-family:'Noto Sans Devanagari',sans-serif;line-height:1.3;">शासकीय भूमि</div>
                       </div>
-                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                      <div class="stats-grid-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                         <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:12px;text-align:center;">
                           <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">कुल खसरे</div>
                           <div id="stat-gov-count" style="font-size:28px;font-weight:900;color:#fca5a5;line-height:1;">—</div>
@@ -1989,7 +2002,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                         <div style="width:36px;height:36px;border-radius:10px;background:rgba(5,150,105,0.4);display:flex;align-items:center;justify-content:center;font-size:18px;">👨‍🌾</div>
                         <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,0.9);font-family:'Noto Sans Devanagari',sans-serif;line-height:1.3;">भूमिस्वामी हक</div>
                       </div>
-                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                      <div class="stats-grid-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                         <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:12px;text-align:center;">
                           <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">कुल खसरे</div>
                           <div id="stat-priv-count" style="font-size:28px;font-weight:900;color:#6ee7b7;line-height:1;">—</div>
@@ -2128,6 +2141,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
               <!-- ▸ ग्रामवार मकबूजा एवं गैरमकबूज़ा रकबा Cards -->
               <div class="dash-section" style="margin-top:28px;">
                 <div class="dash-section-title">🗺️ ग्रामवार मकबूजा एवं गैरमकबूज़ा रकबा (हेक्टेयर)</div>
+                <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; margin-top: -8px; margin-bottom: 12px; font-family:'Noto Sans Devanagari',sans-serif;">(भू-अभिलेख से प्राप्त अपरिवर्तित आकड़े)</div>
                 <div style="display:flex; flex-direction:row; gap:14px; margin-top:16px; overflow-x:auto; padding-bottom:6px;">
 
                   <!-- छेरकापुर -->
