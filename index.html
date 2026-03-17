@@ -994,6 +994,20 @@
                 if (v === 'गबौद' || v === 'तिल्दा') v += ' (हल्का 43)';
                 else if (v === 'छड़िया' || v === 'छेरकापुर') v += ' (हल्का 28)';
 
+                let nistarText = o['निस्तार पत्रक विवरण'] || '';
+                let kharifCrop = o['खरीफ DCS में फसल '] || '';
+                let rabiCrop = o['रबी DCS में फसल '] || '';
+                let cropName = o['फसल का नाम'] || '';
+                let naArea = o['NA Area'] || '';
+                let fallowArea = o['Fallow Area'] || '';
+
+                // Determine dufasali (double crop): if both kharif & rabi have a crop string, or cropName says 'द्वि' or 'दुफसली'
+                let isDufasali = false;
+                if ((kharifCrop.trim() !== '' && rabiCrop.trim() !== '') || 
+                    cropName.includes('द्वि') || cropName.includes('दुफसली')) {
+                    isDufasali = true;
+                }
+
                 return {
                     id: i + 1,
                     v: v,
@@ -1004,9 +1018,15 @@
                     ownerNames: ownerNames.length ? ownerNames : ['अज्ञात'],
                     area: parseFloat(o['क्षेत्रफल'] || 0).toFixed(3),
                     type: o['सिंचित / असिंचित'] || '',
-                    nistar: o['निस्तार पत्रक विवरण'] || '',
+                    nistar: nistarText,
                     charai: o['चराई भूमि है ?'] || '',
-                    ceiling: o['सीलिंग भूमि है ?'] || ''
+                    ceiling: o['सीलिंग भूमि है ?'] || '',
+                    kharifCrop: kharifCrop.trim(),
+                    rabiCrop: rabiCrop.trim(),
+                    cropName: cropName.trim(),
+                    naArea: naArea,
+                    fallowArea: fallowArea,
+                    isDufasali: isDufasali
                 };
             }).filter(r => r.v && r.kn);
             return records.length > 0;
@@ -1402,6 +1422,27 @@
               <span class="type-badge ${typeBadge}">${r.type || '—'}</span>
             </div>
           </div>
+          
+          <div style="border-top:1px solid var(--border); padding-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:4px;">फसल विवरण</div>
+              <div style="font-size:13px; font-weight:700; color:var(--text-main); line-height:1.4;">
+                ${r.isDufasali ? `<span style="background:#e0e7ff; color:#3730a3; border:1px solid #c7d2fe; border-radius:6px; padding:2px 6px; font-size:10px; font-weight:800; margin-right:4px;">🌾 दुफसली</span>` : ''}
+                ${r.cropName || (r.kharifCrop || r.rabiCrop ? [r.kharifCrop, r.rabiCrop].filter(Boolean).join(' + ') : '—')}
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div>
+                <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:2px;">NA रकबा</div>
+                <div style="font-size:13px; font-weight:600; color:var(--text-main);">${r.naArea || '—'}</div>
+              </div>
+              <div>
+                <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:2px;">पड़ती रकबा</div>
+                <div style="font-size:13px; font-weight:600; color:var(--text-main);">${r.fallowArea || '—'}</div>
+              </div>
+            </div>
+          </div>
+
           ${(r.charai || r.ceiling) ? `
           <div style="display:flex; gap:8px; flex-wrap:wrap; border-top:1px solid var(--border); padding-top:12px;">
             ${r.charai ? `<span style="background:#fef9c3; border:1px solid #fde047; color:#713f12; border-radius:8px; padding:5px 12px; font-size:12px; font-weight:700;">🌿 चराई: ${r.charai}</span>` : ''}
@@ -1460,6 +1501,9 @@
   <tr><th>👤 भूमिस्वामी</th><td>${r.owner}</td></tr>
   <tr><th>📐 क्षेत्रफल (हेक्टेयर)</th><td>${r.area} हे.</td></tr>
   <tr><th>🌱 भूमि का प्रकार</th><td>${r.type || '—'}</td></tr>
+  <tr><th>🌾 फसल विवरण</th><td>${r.isDufasali ? '<span style="color:#3730a3;font-weight:800;font-size:12px;">(दुफसली)</span> ' : ''}${r.cropName || (r.kharifCrop || r.rabiCrop ? [r.kharifCrop, r.rabiCrop].filter(Boolean).join(' + ') : '—')}</td></tr>
+  <tr><th>🏢 NA रकबा</th><td>${r.naArea || '—'}</td></tr>
+  <tr><th>🏜️ पड़ती रकबा</th><td>${r.fallowArea || '—'}</td></tr>
   ${r.charai ? `<tr><th>🌿 चराई भूमि</th><td>${r.charai}</td></tr>` : ''}
   ${r.ceiling ? `<tr><th>⚖️ सीलिंग भूमि</th><td>${r.ceiling}</td></tr>` : ''}
   ${r.nistar ? `<tr><th>📝 निस्तार विवरण</th><td>${r.nistar}</td></tr>` : ''}
@@ -1484,6 +1528,9 @@
                 <td>${r.owner}</td>
                 <td style="text-align:right;font-weight:800;">${r.area}</td>
                 <td>${r.type || '—'}</td>
+                <td>${r.isDufasali ? '<span style="color:#3730a3;font-weight:800;font-size:11px;">(दुफसली)</span><br>' : ''}${r.cropName || (r.kharifCrop || r.rabiCrop ? [r.kharifCrop, r.rabiCrop].filter(Boolean).join(' + ') : '—')}</td>
+                <td>${r.naArea || '—'}</td>
+                <td>${r.fallowArea || '—'}</td>
                 <td>${r.charai || '—'}</td>
                 <td>${r.ceiling || '—'}</td>
                 <td>${r.nistar || '—'}</td>
@@ -1521,7 +1568,7 @@
   <div class="summary-item orange"><div class="val">${asinchai}</div><div class="lbl">असिंचित</div></div>
 </div>
 <table>
-  <thead><tr><th>#</th><th>खसरा</th><th>भूमिस्वामी</th><th style="text-align:center;">क्षेत्रफल (हे.)</th><th>भूमि प्रकार</th><th>चराई भूमि</th><th>सीलिंग भूमि</th><th>निस्तार विवरण</th></tr></thead>
+  <thead><tr><th>#</th><th>खसरा</th><th>भूमिस्वामी</th><th style="text-align:center;">क्षेत्रफल (हे.)</th><th>भूमि प्रकार</th><th>फसल विवरण</th><th>NA रकबा</th><th>पड़ती रकबा</th><th>चराई भूमि</th><th>सीलिंग भूमि</th><th>निस्तार विवरण</th></tr></thead>
   <tbody>${rowsHtml}</tbody>
 </table>
 <p class="footer">भूमि रिकॉर्ड डैशबोर्ड — हल्का 43 एवं 28 | कम्प्यूटर जनित रिकॉर्ड — सत्यापन हेतु पटवारी कार्यालय से संपर्क करें</p>
@@ -1555,6 +1602,9 @@
                 <td style="text-align:center;">${r.bn}</td>
                 <td style="text-align:right;font-weight:800;">${r.area}</td>
                 <td>${r.type || '—'}</td>
+                <td>${r.isDufasali ? '<span style="color:#3730a3;font-weight:800;font-size:11px;">(दुफसली)</span><br>' : ''}${r.cropName || (r.kharifCrop || r.rabiCrop ? [r.kharifCrop, r.rabiCrop].filter(Boolean).join(' + ') : '—')}</td>
+                <td>${r.naArea || '—'}</td>
+                <td>${r.fallowArea || '—'}</td>
                 <td>${r.charai || '—'}</td>
                 <td>${r.ceiling || '—'}</td>
                 <td>${r.nistar || '—'}</td>
@@ -1611,6 +1661,9 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
       <th>बसरा</th>
       <th style="text-align:center;">क्षेत्रफल (हे.)</th>
       <th>भूमि प्रकार</th>
+      <th>फसल विवरण</th>
+      <th>NA रकबा</th>
+      <th>पड़ती रकबा</th>
       <th>चराई भूमि</th>
       <th>सीलिंग भूमि</th>
       <th>निस्तार विवरण</th>
