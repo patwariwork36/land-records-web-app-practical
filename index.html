@@ -1495,28 +1495,28 @@
               </div>` : ''}
               
               <!-- NA Land खरीफ — केवल Yes होने पर -->
-              ${r.naLandK === 'Yes' ? `
+              ${(r.finalKharifCrop && r.naLandK === 'Yes') ? `
               <div style="display:flex; justify-content:space-between; align-items:center; background:#fef3c7; border-radius:6px; padding:4px 8px;">
                 <span style="font-size:11px; font-weight:700; color:#92400e;">⚠️ NA Land (खरीफ): Yes</span>
                 <span style="font-size:12px; font-weight:700; color:#78350f;">${r.naAreaK} हे.</span>
               </div>` : ''}
               
               <!-- Fallow Land खरीफ — केवल Yes होने पर -->
-              ${r.fallowLandK === 'Yes' ? `
+              ${(r.finalKharifCrop && r.fallowLandK === 'Yes') ? `
               <div style="display:flex; justify-content:space-between; align-items:center; background:#fef3c7; border-radius:6px; padding:4px 8px;">
                 <span style="font-size:11px; font-weight:700; color:#92400e;">⚠️ Fallow Land (खरीफ): Yes</span>
                 <span style="font-size:12px; font-weight:700; color:#78350f;">${r.fallowAreaK} हे.</span>
               </div>` : ''}
               
               <!-- NA Land रबी — केवल Yes होने पर -->
-              ${r.naLandR === 'Yes' ? `
+              ${(r.finalRabiCrop && r.naLandR === 'Yes') ? `
               <div style="display:flex; justify-content:space-between; align-items:center; background:#dbeafe; border-radius:6px; padding:4px 8px;">
                 <span style="font-size:11px; font-weight:700; color:#1e40af;">⚠️ NA Land (रबी): Yes</span>
                 <span style="font-size:12px; font-weight:700; color:#1e3a8a;">${r.naAreaR} हे.</span>
               </div>` : ''}
               
               <!-- Fallow Land रबी — केवल Yes होने पर -->
-              ${r.fallowLandR === 'Yes' ? `
+              ${(r.finalRabiCrop && r.fallowLandR === 'Yes') ? `
               <div style="display:flex; justify-content:space-between; align-items:center; background:#dbeafe; border-radius:6px; padding:4px 8px;">
                 <span style="font-size:11px; font-weight:700; color:#1e40af;">⚠️ Fallow Land (रबी): Yes</span>
                 <span style="font-size:12px; font-weight:700; color:#1e3a8a;">${r.fallowAreaR} हे.</span>
