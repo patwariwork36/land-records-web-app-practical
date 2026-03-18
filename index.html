@@ -950,7 +950,6 @@
 
         <!-- Results -->
         <div id="resultsDiv"></div>
-        <div id="resultsDiv"></div>
         <!-- Statistics View -->
         <div id="statisticsDiv" style="display:none;"></div>
         <!-- Government Records View -->
@@ -1105,7 +1104,10 @@
                 switchTab('statistics');
             }
             function onError(msg) {
-                badge.innerHTML = `❌ लोड विफल &nbsp;<button onclick="loadData()" style="background:#1a1a6e;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:12px;cursor:pointer;font-weight:700;">🔄 पुनः प्रयास</button>`;
+                console.error('onError called:', msg);
+                badge.innerHTML = `❌ लोड विफल &nbsp;<button onclick="loadData()" style="background:#1a1a6e;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:12px;cursor:pointer;font-weight:700;">🔄 पुनः प्रयास</button>
+                <input type="file" id="manualCSV" style="display:none" onchange="handleManualUpload(event)">
+                <button onclick="document.getElementById('manualCSV').click()" style="background:#059669;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:12px;cursor:pointer;font-weight:700;margin-left:5px;">📁 फाइल अपलोड</button>`;
                 toast(msg || 'नेटवर्क त्रुटि — कृपया इंटरनेट जांचें', 'error');
             }
 
@@ -1119,27 +1121,107 @@
             const PROXY2 = 'https://corsproxy.io/?' + encodeURIComponent(SHEET_URL);
 
             // Step 1: Try allorigins.win proxy
+            console.log('Final Proxp Chain Start. URL:', SHEET_URL);
             fetch(PROXY1)
-                .then(res => { if (!res.ok) throw new Error('p1'); return res.text(); })
-                .then(csv => { if (tryParse(csv)) onSuccess(); else throw new Error('parse'); })
-                .catch(() => {
+                .then(res => { 
+                    console.log('P1 Status:', res.status);
+                    if (!res.ok) throw new Error('p1'); 
+                    return res.text(); 
+                })
+                .then(csv => { 
+                    console.log('P1 Success, length:', csv.length);
+                    if (tryParse(csv)) onSuccess(); else throw new Error('parse'); 
+                })
+                .catch(err => {
+                    console.warn('P1 Failed:', err.message);
                     // Step 2: Try corsproxy.io
                     fetch(PROXY2)
-                        .then(res => { if (!res.ok) throw new Error('p2'); return res.text(); })
-                        .then(csv => { if (tryParse(csv)) onSuccess(); else throw new Error('parse'); })
-                        .catch(() => {
-                            // Step 3: PapaParse direct download (last resort)
+                        .then(res => { 
+                            console.log('P2 Status:', res.status);
+                            if (!res.ok) throw new Error('p2'); 
+                            return res.text(); 
+                        })
+                        .then(csv => { 
+                            console.log('P2 Success, length:', csv.length);
+                            if (tryParse(csv)) onSuccess(); else throw new Error('parse'); 
+                        })
+                        .catch(err => {
+                            console.warn('P2 Failed:', err.message);
+                            // Step 3: PapaParse direct download (last resort for remote)
+                            console.log('Trying direct download...');
                             Papa.parse(SHEET_URL, {
                                 download: true, header: true, worker: false,
                                 skipEmptyLines: 'greedy',
                                 complete: function (results) {
+                                    console.log('Direct download complete, rows:', results.data?.length);
                                     if (processCSVResults(results)) onSuccess();
-                                    else onError('डेटा लोड विफल — "पुनः प्रयास" बटन दबाएं');
+                                    else {
+                                        console.log('Direct mapping failed, trying local fallback...');
+                                        tryLocal();
+                                    }
                                 },
-                                error: function () { onError('नेटवर्क त्रुटि — कृपया इंटरनेट जांचें'); }
+                                error: function (err) { 
+                                    console.warn('Direct download failed:', err);
+                                    tryLocal();
+                                }
                             });
                         });
                 });
+
+            function tryLocal() {
+                console.log('Trying local test_data.csv fallback...');
+                Papa.parse('test_data.csv', {
+                    download: true, header: true, worker: false,
+                    skipEmptyLines: 'greedy',
+                    complete: function (results) {
+                        console.log('Local load complete, rows:', results.data?.length);
+                        if (processCSVResults(results)) {
+                            onSuccess();
+                            toast('लोकल डेटा (test_data.csv) लोड किया गया', 'info');
+                        } else {
+                            tryJSON();
+                        }
+                    },
+                    error: function (err) { 
+                        console.warn('Local load failed:', err);
+                        tryJSON();
+                    }
+                });
+            }
+
+            function tryJSON() {
+                console.log('Trying JSON Proxy fallback...');
+                fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(SHEET_URL)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('JSON Proxy success, parsing content...');
+                        if (tryParse(data.contents)) onSuccess();
+                        else throw new Error('parse');
+                    })
+                    .catch(err => {
+                        console.error('All fetch methods failed:', err);
+                        onError('डेटा लोड विफल — इंटरनेट जांचें या CSV फाइल अपलोड करें');
+                    });
+            }
+        }
+
+        function handleManualUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            Papa.parse(file, {
+                header: true, skipEmptyLines: 'greedy',
+                complete: function (results) {
+                    if (processCSVResults(results)) {
+                        const badge = document.getElementById('recordCountBadge');
+                        fillVillages();
+                        badge.textContent = `✅ ${records.length} रिकॉर्ड लोड (मैनुअल)`;
+                        toast(`${records.length} रिकॉर्ड मैनुअल अपलोड से प्राप्त हुए`, 'success');
+                        switchTab('statistics');
+                    } else {
+                        toast('फाइल में सही डेटा नहीं मिला', 'error');
+                    }
+                }
+            });
         }
 
         function fillVillages() {
@@ -1951,7 +2033,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                             <div class="bar-fill" style="width:${pct}%;background:${grad};"></div>
                         </div>
                         <div class="bar-val">${area.toFixed(3)}</div>
-                    </div>\`;
+                    </div>`;
             }).join('')}
             </div>
 
@@ -2309,7 +2391,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                             कुल रकबा: <span style="color:var(--royal); font-weight:900;">${totalArea} हे.</span>
                           </div>
                         </div>
-                      \`;
+                      `;
                     }).join('')}
                   </div>
                 </div>
@@ -2499,7 +2581,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                 </div>
               </div>
 
-            </div>\`;
+            </div>`;
 
             statDiv.innerHTML = html;
         }
@@ -2682,7 +2764,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
 </table>
 <p class="footer">भूमि रिकॉर्ड डैशबोर्ड — कम्प्यूटर जनित फसल विवरण रिपोर्ट</p>
 <script>window.onload=function(){window.print();}<\/script>
-</body></html>\`);
+</body></html>`);
             pw.document.close();
         }
 
@@ -3081,7 +3163,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
 
         // ── Init ──────────────────────────────────────
 
-        switchTab('dashboard'); // Ensure dashboard is shown on load (hides search form)
+        switchTab('khasra');
         loadData();
 
     </script>
