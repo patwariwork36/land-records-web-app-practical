@@ -1010,47 +1010,79 @@
 
                 let nistarText = o['निस्तार पत्रक विवरण'] || '';
                 
-                // ── खरीफ block (columns K, M, N, O, P, Q) ──
-                let kharifCrop    = (o['खरीफ DCS में फसल '] || '').trim();
-                let kharifCropArea = parseFloat(o['Crop Area'] || 0);   // Col M — Kharif Crop Area
-                let naLandK       = (o['NA Land'] || '').trim();          // Col N
-                let naAreaK       = parseFloat(o['NA Area'] || 0);        // Col O
-                let fallowLandK   = (o['Fallow Land'] || '').trim();      // Col P
-                let fallowAreaK   = parseFloat(o['Fallow Area'] || 0);    // Col Q
+                // ── [CHANGE 1] Raw values — null = DCS row nahi, '--' = DCS row hai fasal nahi
+                let rawK = o['खरीफ DCS में फसल '];
+                let rawL = o['DCS में Plot Area'];
+                let rawM = o['Crop Area'];
+                let rawN = o['NA Land'];
+                let rawO = o['NA Area'];
+                let rawP = o['Fallow Land'];
+                let rawQ = o['Fallow Area'];
 
-                // ── रबी block (columns R, T, U, V, W, X) ──
-                let rabiCrop      = (o['रबी DCS में फसल '] || o['रबी DCS में फसल_1'] || o['रबी DCS में फसल 1'] || o['रबी DCS में फसल_R'] || '').trim();
-                let rabiCropArea  = parseFloat(o['Crop Area_1'] || o['Crop Area 1'] || o['Crop Area_R'] || 0);  // Col T — Rabi Crop Area
-                let naLandR       = (o['NA Land_1'] || o['NA Land 1'] || o['NA Land_R'] || '').trim();        // Col U
-                let naAreaR       = parseFloat(o['NA Area_1'] || o['NA Area 1'] || o['NA Area_R'] || 0);      // Col V
-                let fallowLandR   = (o['Fallow Land_1'] || o['Fallow Land 1'] || o['Fallow Land_R'] || '').trim();    // Col W
-                let fallowAreaR   = parseFloat(o['Fallow Area_1'] || o['Fallow Area 1'] || o['Fallow Area_R'] || 0);  // Col X
+                let rawR = o['रबी DCS में फसल '] || o['रबी DCS में फसल_1'] || o['रबी DCS में फसल 1'];
+                let rawT = o['Crop Area_1'] || o['Crop Area 1'] || o['Crop Area_R'];
+                let rawU = o['NA Land_1'] || o['NA Land 1'] || o['NA Land_R'];
+                let rawV = o['NA Area_1'] || o['NA Area 1'] || o['NA Area_R'];
+                let rawW = o['Fallow Land_1'] || o['Fallow Land 1'] || o['Fallow Land_R'];
+                let rawX = o['Fallow Area_1'] || o['Fallow Area 1'] || o['Fallow Area_R'];
 
-                // --- New explicit Raw Data Fields needed for the 'DCS Nahi' flag check ---
-                let rawKharifDCS = kharifCrop; // Since kharifCrop is already exactly 'o['खरीफ DCS में फसल ']'
-                let rawRabiDCS = rabiCrop;   // Same logic for Rabi
-
-                // ── फसल का नाम (Col Z — Kharif fallback only) ──
+                // Bhuiyya columns
                 let cropNameZ     = (o['फसल का नाम'] || '').trim();
+                let rakbaSinchit  = parseFloat(o['रकबा सिंचित फसल'] || 0);
+                let rakbaAsinchit = parseFloat(o['रकबा असिंचित फसल'] || 0);
 
-                // खरीफ फसल: पहले Col K, अगर blank/'--' तो Col Z (फसल का नाम)
+                // Blank check — K se Q tak sab null = Bhuiyya row
+                function isBl(v) { return v === null || v === undefined || v === ''; }
+                let kharifDCSBlank = isBl(rawK) && isBl(rawL) && isBl(rawM) && isBl(rawN) && isBl(rawO) && isBl(rawP) && isBl(rawQ);
+                let rabiDCSBlank   = isBl(rawR) && isBl(rawT) && isBl(rawU) && isBl(rawV) && isBl(rawW) && isBl(rawX);
+
+                // Parsed values
+                let kharifCropAreaDCS = parseFloat(rawM || 0);
+                let naLandK    = (rawN || '').toString().trim();
+                let naAreaK    = parseFloat(rawO || 0);
+                let fallowLandK= (rawP || '').toString().trim();
+                let fallowAreaK= parseFloat(rawQ || 0);
+                let rabiCropArea = parseFloat(rawT || 0);
+                let naLandR    = (rawU || '').toString().trim();
+                let naAreaR    = parseFloat(rawV || 0);
+                let fallowLandR= (rawW || '').toString().trim();
+                let fallowAreaR= parseFloat(rawX || 0);
+
+                // Kharif fasal + source
                 let finalKharifCrop = '';
-                if (kharifCrop && kharifCrop !== '--') {
-                    finalKharifCrop = kharifCrop;
-                } else if (cropNameZ && cropNameZ !== '--') {
-                    finalKharifCrop = cropNameZ;
+                let kharifSource    = '';
+                let rawKharifDCS    = '';
+                if (!kharifDCSBlank) {
+                    rawKharifDCS = (rawK || '').toString().trim();
+                    if (rawKharifDCS && rawKharifDCS !== '--') {
+                        finalKharifCrop = rawKharifDCS;
+                        kharifSource    = 'DCS';
+                    }
+                    // '--' = DCS row par fasal nahi — Bhuiyya se bhi mat lo
+                } else {
+                    // K-Q sab null = Bhuiyya row
+                    if (cropNameZ && cropNameZ !== '--') {
+                        finalKharifCrop = cropNameZ;
+                        kharifSource    = 'Bhuiyya';
+                    }
                 }
-                
-                // रबी फसल: केवल Col R से, Col Z से fallback नहीं
+
+                // Kharif rakba
+                let kharifCropArea = !kharifDCSBlank
+                    ? kharifCropAreaDCS
+                    : (rakbaSinchit > 0 ? rakbaSinchit : rakbaAsinchit);
+
+                // Rabi fasal
                 let finalRabiCrop = '';
-                if (rabiCrop && rabiCrop !== '--') {
-                    finalRabiCrop = rabiCrop;
+                let rawRabiDCS    = '';
+                if (!rabiDCSBlank) {
+                    rawRabiDCS = (rawR || '').toString().trim();
+                    if (rawRabiDCS && rawRabiDCS !== '--') {
+                        finalRabiCrop = rawRabiDCS;
+                    }
                 }
 
-                // Determine dufasali (double crop)
-                let isDufasali = (finalKharifCrop !== '' && finalRabiCrop !== '');
-
-                // दुफसली रकबा = दोनों Crop Area में से छोटा
+                let isDufasali   = (finalKharifCrop !== '' && finalRabiCrop !== '');
                 let dufasaliArea = isDufasali ? Math.min(kharifCropArea, rabiCropArea) : 0;
 
                 return {
@@ -1067,27 +1099,22 @@
                     charai: o['चराई भूमि है ?'] || '',
                     ceiling: o['सीलिंग भूमि है ?'] || '',
                     
-                    // नई फसल fields:
-                    rawKharifDCS: rawKharifDCS,
-                    rawRabiDCS: rawRabiDCS,
+                    // [CHANGE 2] fields
+                    kharifDCSBlank:  kharifDCSBlank,
+                    rabiDCSBlank:    rabiDCSBlank,
+                    kharifSource:    kharifSource,      // 'DCS' ya 'Bhuiyya' ya ''
+                    rawKharifDCS:    rawKharifDCS,
+                    rawRabiDCS:      rawRabiDCS,
                     finalKharifCrop: finalKharifCrop,
-                    kharifCropArea: kharifCropArea.toFixed(3),
-                    finalRabiCrop: finalRabiCrop,
-                    rabiCropArea: rabiCropArea.toFixed(3),
-                    isDufasali: isDufasali,
-                    dufasaliArea: dufasaliArea.toFixed(3),
-                    
-                    // खरीफ NA/Fallow:
-                    naLandK: naLandK,
-                    naAreaK: naAreaK.toFixed(3),
-                    fallowLandK: fallowLandK,
-                    fallowAreaK: fallowAreaK.toFixed(3),
-                    
-                    // रबी NA/Fallow:
-                    naLandR: naLandR,
-                    naAreaR: naAreaR.toFixed(3),
-                    fallowLandR: fallowLandR,
-                    fallowAreaR: fallowAreaR.toFixed(3),
+                    kharifCropArea:  kharifCropArea.toFixed(3),
+                    finalRabiCrop:   finalRabiCrop,
+                    rabiCropArea:    rabiCropArea.toFixed(3),
+                    isDufasali:      isDufasali,
+                    dufasaliArea:    dufasaliArea.toFixed(3),
+                    naLandK: naLandK, naAreaK: naAreaK.toFixed(3),
+                    fallowLandK: fallowLandK, fallowAreaK: fallowAreaK.toFixed(3),
+                    naLandR: naLandR, naAreaR: naAreaR.toFixed(3),
+                    fallowLandR: fallowLandR, fallowAreaR: fallowAreaR.toFixed(3),
                 };
             }).filter(r => r.v && r.kn);
             return records.length > 0;
@@ -1472,70 +1499,11 @@
             document.getElementById('btnLabel').textContent = on ? 'खोज रहे हैं...' : 'खोजें';
         }
 
-        // ── Render ────────────────────────────────────
-        function renderResults(found, v, val) {
-            const res = document.getElementById('resultsDiv');
-            const emp = document.getElementById('emptyDiv');
-            res.innerHTML = '';
-
-            if (!found.length) {
-                emp.style.display = '';
-                toast('कोई रिकॉर्ड नहीं मिला', 'error');
-                return;
-            }
-            emp.style.display = 'none';
-            toast(`${found.length} रिकॉर्ड मिले`, 'success');
-
-            // Portfolio banner for basra or nam
-            if (currentTab === 'basra' || currentTab === 'nam') {
-                const totalArea = found.reduce((s, r) => s + parseFloat(r.area), 0).toFixed(3);
-                const banner = document.createElement('div');
-                banner.className = 'portfolio-banner';
-                banner.style.marginBottom = '24px';
-
-                const subtitle = currentTab === 'basra'
-                    ? `ग्राम: ${v} &nbsp;|&nbsp; बसरा: ${val}`
-                    : `ग्राम: ${v} &nbsp;|&nbsp; भूमिस्वामी: ${val}`;
-
-                const ownerName = currentTab === 'basra' ? found[0].owner : val;
-
-                const printFn = currentTab === 'basra'
-                    ? `printPortfolio('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')`
-                    : `printFarmerPortfolio('${escJS(ownerName)}','${escJS(v)}')`;
-
-                banner.innerHTML = `
-        <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
-          <div>
-            <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px;">भूमिस्वामी पोर्टफोलियो</div>
-            <div style="font-size:22px; font-weight:900; line-height:1.1;">${ownerName}</div>
-            <div style="margin-top:6px; opacity:0.75; font-size:14px;">${subtitle}</div>
-          </div>
-          <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <div class="pf-stat">
-              <div class="pf-stat-label">कुल खसरा</div>
-              <div class="pf-stat-val">${found.length}</div>
-            </div>
-            <div class="pf-stat">
-              <div class="pf-stat-label">कुल क्षेत्रफल</div>
-              <div class="pf-stat-val">${totalArea} <span style="font-size:14px;font-weight:600;opacity:0.7;">हे.</span></div>
-            </div>
-          </div>
-          <button onclick="${printFn}" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;align-self:center;">🖨 Portfolio Print</button>
-          
-        </div>`;
-                res.appendChild(banner);
-            }
-
-            // Cards grid
-            const grid = document.createElement('div');
-            grid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px;';
-            found.forEach((r, idx) => {
-                const card = document.createElement('div');
-                card.className = 'result-card';
-                card.style.animationDelay = `${idx * 0.06}s`;
-                const hdrClass = currentTab === 'nam' ? 'card-header-khasra' : `card-header-${currentTab}`;
-                const typeBadge = r.type.includes('असिंचित') ? 'asinchai' : 'sinchai';
-                card.innerHTML = `
+        // ── [CHANGE 3 & 4 HELPER] Card HTML ─────────────────
+        function getCardHTML(r) {
+            const hdrClass = currentTab === 'nam' ? 'card-header-khasra' : `card-header-${currentTab}`;
+            const typeBadge = r.type.includes('असिंचित') ? 'asinchai' : 'sinchai';
+            return `
         <div class="${hdrClass}" style="padding:16px 20px; display:flex; justify-content:space-between; align-items:flex-start;">
           <div>
             <div style="font-size:10px; font-weight:700; color:rgba(255,255,255,0.65); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">
@@ -1580,15 +1548,24 @@
               <!-- खरीफ फसल -->
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:11px; font-weight:700; color:#065f46; background:#d1fae5; border-radius:5px; padding:2px 8px;">☀️ खरीफ</span>
-                <span style="font-size:13px; font-weight:700; color:var(--text-main);">${r.finalKharifCrop || '—'}</span>
-                <span style="font-size:12px; font-weight:600; color:var(--text-muted);">${r.finalKharifCrop ? r.kharifCropArea + ' हे.' : '—'}</span>
+                <div style="flex:1; display:flex; align-items:center; gap:8px; justify-content:flex-end;">
+                  <span style="font-size:13px; font-weight:700; color:var(--text-main);">${r.finalKharifCrop || '—'}</span>
+                  <span style="font-size:12px; font-weight:600; color:var(--text-muted);">${r.finalKharifCrop ? r.kharifCropArea + ' हे.' : '—'}</span>
+                  ${(r.kharifSource === 'DCS'
+                    ? '<span style="background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:800;">DCS</span>'
+                    : r.kharifSource === 'Bhuiyya'
+                    ? '<span style="background:#fef3c7;color:#92400e;border:1px solid #fcd34d;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:800;">Bhuiyya</span>'
+                    : '')}
+                </div>
               </div>
               
               <!-- रबी फसल -->
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:11px; font-weight:700; color:#1e40af; background:#dbeafe; border-radius:5px; padding:2px 8px;">❄️ रबी</span>
-                <span style="font-size:13px; font-weight:700; color:var(--text-main);">${r.finalRabiCrop || '—'}</span>
-                <span style="font-size:12px; font-weight:600; color:var(--text-muted);">${r.finalRabiCrop ? r.rabiCropArea + ' हे.' : '—'}</span>
+                <div style="flex:1; display:flex; align-items:center; gap:8px; justify-content:flex-end;">
+                  <span style="font-size:13px; font-weight:700; color:var(--text-main);">${r.finalRabiCrop || '—'}</span>
+                  <span style="font-size:12px; font-weight:600; color:var(--text-muted);">${r.finalRabiCrop ? r.rabiCropArea + ' हे.' : '—'}</span>
+                </div>
               </div>
               
               <!-- दुफसली — केवल तभी दिखाओ जब isDufasali = true -->
@@ -1640,9 +1617,115 @@
             <div style="font-size:14px; font-weight:700; color:#78350f; line-height:1.5; font-family:'Noto Sans Devanagari',Arial,sans-serif;">${r.nistar}</div>
           </div>` : ''}
         </div>`;
+        }
+
+        function filterDCSTab(type) {
+            const all = window.found_ref || [];
+            const filtered = type === 'all' ? all
+                : type === 'dcs' ? all.filter(r => !r.kharifDCSBlank)
+                : all.filter(r => r.kharifDCSBlank);
+
+            const colors = { all: '#1a1a6e', dcs: '#1e40af', nondcs: '#92400e' };
+            ['all', 'dcs', 'nondcs'].forEach(t => {
+                const b = document.getElementById('tab_' + t);
+                if (!b) return;
+                b.style.background = (t === type) ? colors[t] : '#fff';
+                b.style.color = (t === type) ? '#fff' : colors[t];
+            });
+
+            const grid = document.getElementById('dcsCardsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            if (!filtered.length) {
+                grid.innerHTML = '<div style="padding:40px 20px; text-align:center; color:var(--text-muted); font-weight:700; grid-column:1/-1;">कोई रिकॉर्ड नहीं</div>';
+                return;
+            }
+
+            filtered.forEach((r, idx) => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.style.animationDelay = (idx * 0.04) + 's';
+                card.innerHTML = getCardHTML(r);
                 grid.appendChild(card);
             });
+        }
+
+        // ── Render ────────────────────────────────────
+        function renderResults(found, v, val) {
+            const res = document.getElementById('resultsDiv');
+            const emp = document.getElementById('emptyDiv');
+            res.innerHTML = '';
+
+            if (!found.length) {
+                emp.style.display = '';
+                toast('कोई रिकॉर्ड नहीं मिला', 'error');
+                return;
+            }
+            emp.style.display = 'none';
+            toast(`${found.length} रिकॉर्ड मिले`, 'success');
+
+            // Portfolio banner for basra or nam
+            if (currentTab === 'basra' || currentTab === 'nam') {
+                const totalArea = found.reduce((s, r) => s + parseFloat(r.area), 0).toFixed(3);
+                const banner = document.createElement('div');
+                banner.className = 'portfolio-banner';
+                banner.style.marginBottom = '24px';
+                const subtitle = currentTab === 'basra' ? `ग्राम: ${v} &nbsp;|&nbsp; बसरा: ${val}` : `ग्राम: ${v} &nbsp;|&nbsp; भूमिस्वामी: ${val}`;
+                const ownerName = currentTab === 'basra' ? found[0].owner : val;
+                const printFn = currentTab === 'basra' ? `printPortfolio('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')` : `printFarmerPortfolio('${escJS(ownerName)}','${escJS(v)}')`;
+                banner.innerHTML = `
+                    <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
+                      <div>
+                        <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px;">भूमिस्वामी पोर्टफोलियो</div>
+                        <div style="font-size:22px; font-weight:900; line-height:1.1;">${ownerName}</div>
+                        <div style="margin-top:6px; opacity:0.75; font-size:14px;">${subtitle}</div>
+                      </div>
+                      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <div class="pf-stat">
+                          <div class="pf-stat-label">कुल खसरा</div>
+                          <div class="pf-stat-val">${found.length}</div>
+                        </div>
+                        <div class="pf-stat">
+                          <div class="pf-stat-label">कुल क्षेत्रफल</div>
+                          <div class="pf-stat-val">${totalArea} <span style="font-size:14px;font-weight:600;opacity:0.7;">हे.</span></div>
+                        </div>
+                      </div>
+                      <button onclick="${printFn}" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;align-self:center;">🖨 Portfolio Print</button>
+                    </div>`;
+                res.appendChild(banner);
+            }
+
+            // [CHANGE 4] DCS / Non-DCS counts
+            const dcsRecs     = found.filter(r => !r.kharifDCSBlank);
+            const nonDcsRecs  = found.filter(r => r.kharifDCSBlank);
+            const dcsCount    = dcsRecs.length;
+            const dcsRakba    = dcsRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
+            const nonDcsCount = nonDcsRecs.length;
+            const nonDcsRakba = nonDcsRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
+            const totalCount  = found.length;
+            const totalRakba  = found.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
+
+            window.found_ref = found;
+
+            const tabBar = document.createElement('div');
+            tabBar.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;';
+            tabBar.innerHTML =
+              '<button id="tab_all" onclick="filterDCSTab(\'all\')" style="padding:6px 14px;border-radius:8px;border:2px solid #1a1a6e;background:#1a1a6e;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">' +
+              'सभी — ' + totalCount + ' खसरे | ' + totalRakba + ' हे.</button>' +
+              '<button id="tab_dcs" onclick="filterDCSTab(\'dcs\')" style="padding:6px 14px;border-radius:8px;border:2px solid #1e40af;background:#fff;color:#1e40af;font-size:12px;font-weight:700;cursor:pointer;">' +
+              '📋 DCS Data — ' + dcsCount + ' खसरे | ' + dcsRakba + ' हे.</button>' +
+              '<button id="tab_nondcs" onclick="filterDCSTab(\'nondcs\')" style="padding:6px 14px;border-radius:8px;border:2px solid #92400e;background:#fff;color:#92400e;font-size:12px;font-weight:700;cursor:pointer;">' +
+              '📄 Non DCS Data — ' + nonDcsCount + ' खसरे | ' + nonDcsRakba + ' हे.</button>';
+            res.appendChild(tabBar);
+
+            // Cards grid
+            const grid = document.createElement('div');
+            grid.id = 'dcsCardsGrid';
+            grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;';
             res.appendChild(grid);
+
+            // Initial render
+            filterDCSTab('all');
         }
 
         function escJS(s) { return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r/g, '').replace(/\n/g, ' '); }
