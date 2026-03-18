@@ -2703,24 +2703,45 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             actions.style.display = 'flex';
             tbody.innerHTML = '';
 
+            // DCS / Non-DCS counts
+            const dcsRecs     = gramRecs.filter(r => r.kharifSource === 'DCS');
+            const bhuiyyaRecs = gramRecs.filter(r => r.kharifSource === 'Bhuiyya');
+            const dcsCount    = dcsRecs.length;
+            const dcsRakba    = dcsRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
+            const bhuiyyaCount= bhuiyyaRecs.length;
+            const bhuiyyaRakba= bhuiyyaRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
+            const totalCount  = gramRecs.length;
+            const totalRakba  = gramRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
+
+            // Tab bar (insert before table, inside cropSummaryContainer)
+            const existingTabBar = document.getElementById('cropFilterTabBar');
+            if (existingTabBar) existingTabBar.remove();
+
+            const tabBar = document.createElement('div');
+            tabBar.id = 'cropFilterTabBar';
+            tabBar.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;';
+            tabBar.innerHTML =
+                '<button id="ctab_all" onclick="filterCropTab(\'all\')" style="padding:6px 14px;border-radius:8px;border:2px solid #1a1a6e;background:#1a1a6e;color:#fff;font-size:12px;font-weight:700;cursor:pointer;">' +
+                'सभी — ' + totalCount + ' खसरे | ' + totalRakba + ' हे.</button>' +
+                '<button id="ctab_dcs" onclick="filterCropTab(\'dcs\')" style="padding:6px 14px;border-radius:8px;border:2px solid #1e40af;background:#fff;color:#1e40af;font-size:12px;font-weight:700;cursor:pointer;">' +
+                '📋 DCS Data — ' + dcsCount + ' खसरे | ' + dcsRakba + ' हे.</button>' +
+                '<button id="ctab_bhuiyya" onclick="filterCropTab(\'bhuiyya\')" style="padding:6px 14px;border-radius:8px;border:2px solid #92400e;background:#fff;color:#92400e;font-size:12px;font-weight:700;cursor:pointer;">' +
+                '📄 Non DCS Data — ' + bhuiyyaCount + ' खसरे | ' + bhuiyyaRakba + ' हे.</button>';
+
+            cont.insertBefore(tabBar, cont.firstChild);
+            window.currentCropAllRecs = gramRecs;
+
             if (gramRecs.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:20px; color:#64748b; font-weight:600;">कोई डेटा नहीं मिला</td></tr>`;
                 return;
             }
 
             const rowsHtml = gramRecs.map((r, i) => {
-                // Compute source flag
-                let sourceFlag = '';
-                const hasDCSKharif = r.rawKharifDCS && r.rawKharifDCS !== '--';
-                const hasDCSRabi = r.rawRabiDCS && r.rawRabiDCS !== '--';
-
-                if (hasDCSKharif || hasDCSRabi) {
-                    sourceFlag = '<span style="color:#059669; font-weight:800; background:#d1fae5; padding:4px 8px; border-radius:6px; font-size:11px;">DCS</span>';
-                } else if (!r.finalKharifCrop && !r.finalRabiCrop) {
-                    sourceFlag = '—';
-                } else {
-                    sourceFlag = '<span style="color:#dc2626; font-weight:800; background:#fee2e2; padding:4px 8px; border-radius:6px; font-size:11px;">DCS नहीं</span>';
-                }
+                let sourceFlag = r.kharifSource === 'DCS'
+                    ? '<span style="color:#1e40af;font-weight:800;background:#dbeafe;padding:4px 8px;border-radius:6px;font-size:11px;">DCS</span>'
+                    : r.kharifSource === 'Bhuiyya'
+                    ? '<span style="color:#92400e;font-weight:800;background:#fef3c7;padding:4px 8px;border-radius:6px;font-size:11px;">Bhuiyya</span>'
+                    : '—';
 
                 return `
                 <tr style="background:${i % 2 === 0 ? '#f8fafc' : '#ffffff'}; border-bottom:1px solid #f1f5f9;">
@@ -2751,12 +2772,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             csvContent += headers.join(",") + "\n";
 
             currentCropData.forEach((r, i) => {
-                let sourceText = '';
-                const hasDCSKharif = r.rawKharifDCS && r.rawKharifDCS !== '--';
-                const hasDCSRabi = r.rawRabiDCS && r.rawRabiDCS !== '--';
-                if (hasDCSKharif || hasDCSRabi) sourceText = 'DCS';
-                else if (!r.finalKharifCrop && !r.finalRabiCrop) sourceText = '-';
-                else sourceText = 'DCS नहीं';
+                let sourceText = r.kharifSource === 'DCS' ? 'DCS' : r.kharifSource === 'Bhuiyya' ? 'Bhuiyya' : '—';
 
                 const row = [
                     i + 1,
@@ -2788,12 +2804,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             if (!currentCropData.length) return;
 
             const rowsHtml = currentCropData.map((r, i) => {
-                let sourceText = '';
-                const hasDCSKharif = r.rawKharifDCS && r.rawKharifDCS !== '--';
-                const hasDCSRabi = r.rawRabiDCS && r.rawRabiDCS !== '--';
-                if (hasDCSKharif || hasDCSRabi) sourceText = '<span style="color:#059669; font-weight:800;">DCS</span>';
-                else if (!r.finalKharifCrop && !r.finalRabiCrop) sourceText = '—';
-                else sourceText = '<span style="color:#dc2626; font-weight:800;">DCS नहीं</span>';
+                let sourceText = r.kharifSource === 'DCS' ? 'DCS' : r.kharifSource === 'Bhuiyya' ? 'Bhuiyya' : '—';
 
                 return `
                 <tr style="background:${i % 2 === 0 ? '#f8fafc' : '#ffffff'};">
@@ -2849,6 +2860,51 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
 <script>window.onload=function(){window.print();}<\/script>
 </body></html>`);
             pw.document.close();
+        }
+
+        function filterCropTab(type) {
+            const all = window.currentCropAllRecs || [];
+            const filtered = type === 'all' ? all 
+                : type === 'dcs' ? all.filter(r => r.kharifSource === 'DCS') 
+                : all.filter(r => r.kharifSource === 'Bhuiyya');
+
+            // Active tab styling
+            const colors = { all:'#1a1a6e', dcs:'#1e40af', bhuiyya:'#92400e' };
+            ['all','dcs','bhuiyya'].forEach(t => {
+                const b = document.getElementById('ctab_' + t);
+                if (!b) return;
+                b.style.background = t === type ? colors[t] : '#fff';
+                b.style.color = t === type ? '#fff' : colors[t];
+            });
+
+            // Rebuild table rows
+            const tbody = document.getElementById('cropSummaryBody');
+            if (!tbody) return;
+
+            if (!filtered.length) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:20px;color:#64748b;font-weight:600;">कोई रिकॉर्ड नहीं</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((r, i) => {
+                let sourceFlag = r.kharifSource === 'DCS' 
+                    ? '<span style="color:#1e40af;font-weight:800;background:#dbeafe;padding:4px 8px;border-radius:6px;font-size:11px;">DCS</span>'
+                    : r.kharifSource === 'Bhuiyya'
+                    ? '<span style="color:#92400e;font-weight:800;background:#fef3c7;padding:4px 8px;border-radius:6px;font-size:11px;">Bhuiyya</span>'
+                    : '—';
+                return '<tr style="background:' + (i % 2 === 0 ? '#f8fafc' : '#fff') + ';border-bottom:1px solid #f1f5f9;">' +
+                    '<td style="padding:10px 8px;font-weight:800;color:#64748b;">' + (i + 1) + '</td>' +
+                    '<td style="padding:10px 8px;font-weight:800;color:#1e40af;">' + r.kn + '</td>' +
+                    '<td style="padding:10px 8px;color:#475569;">' + (r.bn || '—') + '</td>' +
+                    '<td style="padding:10px 8px;font-weight:700;color:#1e293b;">' + r.owner + '</td>' +
+                    '<td style="padding:10px 8px;color:#065f46;font-weight:600;">' + (r.finalKharifCrop || '—') + '</td>' +
+                    '<td style="padding:10px 8px;color:#065f46;font-weight:700;">' + (parseFloat(r.kharifCropArea) > 0 ? r.kharifCropArea : '—') + '</td>' +
+                    '<td style="padding:10px 8px;color:#1e40af;font-weight:600;">' + (r.finalRabiCrop || '—') + '</td>' +
+                    '<td style="padding:10px 8px;color:#1e40af;font-weight:700;">' + (parseFloat(r.rabiCropArea) > 0 ? r.rabiCropArea : '—') + '</td>' +
+                    '<td style="padding:10px 8px;color:#3730a3;font-weight:800;">' + (r.isDufasali ? r.dufasaliArea : '—') + '</td>' +
+                    '<td style="padding:10px 8px;">' + sourceFlag + '</td>' +
+                    '</tr>';
+            }).join('');
         }
 
         // ── Government Records Page ────────────────────────────
