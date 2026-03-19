@@ -1621,12 +1621,14 @@
 
         function filterDCSTab(type) {
             const all = window.found_ref || [];
-            const filtered = type === 'all' ? all
-                : type === 'dcs' ? all.filter(r => !r.kharifDCSBlank)
-                : all.filter(r => r.kharifDCSBlank);
+            const filtered = type === 'all'   ? all
+                : type === 'dcs'              ? all.filter(r => !r.kharifDCSBlank)
+                : type === 'nondcs'           ? all.filter(r => r.kharifDCSBlank && r.kharifSource === 'Bhuiyya')
+                : type === 'blank'            ? all.filter(r => r.kharifDCSBlank && r.kharifSource === '')
+                : all;
 
-            const colors = { all: '#1a1a6e', dcs: '#1e40af', nondcs: '#92400e' };
-            ['all', 'dcs', 'nondcs'].forEach(t => {
+            const colors = { all: '#1a1a6e', dcs: '#1e40af', nondcs: '#92400e', blank: '#64748b' };
+            ['all', 'dcs', 'nondcs', 'blank'].forEach(t => {
                 const b = document.getElementById('tab_' + t);
                 if (!b) return;
                 b.style.background = (t === type) ? colors[t] : '#fff';
@@ -1697,11 +1699,15 @@
 
             // [CHANGE 4] DCS / Non-DCS counts
             const dcsRecs     = found.filter(r => !r.kharifDCSBlank);
-            const nonDcsRecs  = found.filter(r => r.kharifDCSBlank);
+            const nonDcsRecs  = found.filter(r => r.kharifDCSBlank && r.kharifSource === 'Bhuiyya');
+            const blankRecs2  = found.filter(r => r.kharifDCSBlank && r.kharifSource === '');
+
             const dcsCount    = dcsRecs.length;
             const dcsRakba    = dcsRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
             const nonDcsCount = nonDcsRecs.length;
             const nonDcsRakba = nonDcsRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
+            const blankCount2 = blankRecs2.length;
+            const blankRakba2 = blankRecs2.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
             const totalCount  = found.length;
             const totalRakba  = found.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
 
@@ -1715,7 +1721,9 @@
               '<button id="tab_dcs" onclick="filterDCSTab(\'dcs\')" style="padding:6px 14px;border-radius:8px;border:2px solid #1e40af;background:#fff;color:#1e40af;font-size:12px;font-weight:700;cursor:pointer;">' +
               '📋 DCS Data — ' + dcsCount + ' खसरे | ' + dcsRakba + ' हे.</button>' +
               '<button id="tab_nondcs" onclick="filterDCSTab(\'nondcs\')" style="padding:6px 14px;border-radius:8px;border:2px solid #92400e;background:#fff;color:#92400e;font-size:12px;font-weight:700;cursor:pointer;">' +
-              '📄 Non DCS Data — ' + nonDcsCount + ' खसरे | ' + nonDcsRakba + ' हे.</button>';
+              '📄 Non DCS Data — ' + nonDcsCount + ' खसरे | ' + nonDcsRakba + ' हे.</button>' +
+              '<button id="tab_blank" onclick="filterDCSTab(\'blank\')" style="padding:6px 14px;border-radius:8px;border:2px solid #64748b;background:#fff;color:#64748b;font-size:12px;font-weight:700;cursor:pointer;">' +
+              '📭 फसल रहित — ' + blankCount2 + ' खसरे | ' + blankRakba2 + ' हे.</button>';
             res.appendChild(tabBar);
 
             // Cards grid
@@ -2706,10 +2714,14 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             // DCS / Non-DCS counts
             const dcsRecs     = gramRecs.filter(r => r.kharifSource === 'DCS');
             const bhuiyyaRecs = gramRecs.filter(r => r.kharifSource === 'Bhuiyya');
+            const blankRecs   = gramRecs.filter(r => r.kharifDCSBlank === true && r.kharifSource === '');
+
             const dcsCount    = dcsRecs.length;
             const dcsRakba    = dcsRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
             const bhuiyyaCount= bhuiyyaRecs.length;
             const bhuiyyaRakba= bhuiyyaRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
+            const blankCount  = blankRecs.length;
+            const blankRakba  = blankRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
             const totalCount  = gramRecs.length;
             const totalRakba  = gramRecs.reduce((s,r) => s + parseFloat(r.kharifCropArea||0), 0).toFixed(3);
 
@@ -2726,7 +2738,9 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                 '<button id="ctab_dcs" onclick="filterCropTab(\'dcs\')" style="padding:6px 14px;border-radius:8px;border:2px solid #1e40af;background:#fff;color:#1e40af;font-size:12px;font-weight:700;cursor:pointer;">' +
                 '📋 DCS Data — ' + dcsCount + ' खसरे | ' + dcsRakba + ' हे.</button>' +
                 '<button id="ctab_bhuiyya" onclick="filterCropTab(\'bhuiyya\')" style="padding:6px 14px;border-radius:8px;border:2px solid #92400e;background:#fff;color:#92400e;font-size:12px;font-weight:700;cursor:pointer;">' +
-                '📄 Non DCS Data — ' + bhuiyyaCount + ' खसरे | ' + bhuiyyaRakba + ' हे.</button>';
+                '📄 Non DCS Data — ' + bhuiyyaCount + ' खसरे | ' + bhuiyyaRakba + ' हे.</button>' +
+                '<button id="ctab_blank" onclick="filterCropTab(\'blank\')" style="padding:6px 14px;border-radius:8px;border:2px solid #64748b;background:#fff;color:#64748b;font-size:12px;font-weight:700;cursor:pointer;">' +
+                '📭 फसल रहित — ' + blankCount + ' खसरे | ' + blankRakba + ' हे.</button>';
 
             cont.insertBefore(tabBar, cont.firstChild);
             window.currentCropAllRecs = gramRecs;
@@ -2864,13 +2878,15 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
 
         function filterCropTab(type) {
             const all = window.currentCropAllRecs || [];
-            const filtered = type === 'all' ? all 
-                : type === 'dcs' ? all.filter(r => r.kharifSource === 'DCS') 
-                : all.filter(r => r.kharifSource === 'Bhuiyya');
+            const filtered = type === 'all'    ? all 
+                : type === 'dcs'               ? all.filter(r => r.kharifSource === 'DCS') 
+                : type === 'bhuiyya'           ? all.filter(r => r.kharifSource === 'Bhuiyya')
+                : type === 'blank'             ? all.filter(r => r.kharifDCSBlank && r.kharifSource === '')
+                : all;
 
             // Active tab styling
-            const colors = { all:'#1a1a6e', dcs:'#1e40af', bhuiyya:'#92400e' };
-            ['all','dcs','bhuiyya'].forEach(t => {
+            const colors = { all:'#1a1a6e', dcs:'#1e40af', bhuiyya:'#92400e', blank:'#64748b' };
+            ['all','dcs','bhuiyya','blank'].forEach(t => {
                 const b = document.getElementById('ctab_' + t);
                 if (!b) return;
                 b.style.background = t === type ? colors[t] : '#fff';
