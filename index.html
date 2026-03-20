@@ -861,6 +861,9 @@
                 <button class="tab-btn" id="tab-statistics" onclick="switchTab('statistics')">
                     📊 आँकड़े
                 </button>
+                <button class="tab-btn" id="tab-crop" onclick="switchTab('crop')">
+                    🌾 फसल विवरण
+                </button>
                 <button class="tab-btn" id="tab-gov" onclick="switchTab('gov')">
                     🏛️ शासकीय भूमि
                 </button>
@@ -952,6 +955,8 @@
         <div id="resultsDiv"></div>
         <!-- Statistics View -->
         <div id="statisticsDiv" style="display:none;"></div>
+        <!-- Crop Details View -->
+        <div id="cropDiv" style="display:none;"></div>
         <!-- Government Records View -->
         <div id="govDiv" style="display:none;"></div>
 
@@ -1418,6 +1423,7 @@
             currentTab = tab;
             const isSearch = ['khasra', 'basra', 'nam'].includes(tab);
             const isStat = tab === 'statistics';
+            const isCrop = tab === 'crop';
             const isGov = tab === 'gov';
 
             // Show/hide search form
@@ -1426,7 +1432,7 @@
             document.getElementById('basraGroup').style.display = tab === 'basra' ? '' : 'none';
             document.getElementById('namGroup').style.display = tab === 'nam' ? '' : 'none';
 
-            ['khasra', 'basra', 'nam', 'statistics', 'gov'].forEach(t => {
+            ['khasra', 'basra', 'nam', 'statistics', 'crop', 'gov'].forEach(t => {
                 const el = document.getElementById('tab-' + t);
                 if (el) el.className = 'tab-btn' + (tab === t ? ' active' : '');
             });
@@ -1435,10 +1441,15 @@
             document.getElementById('resultsDiv').innerHTML = '';
             document.getElementById('emptyDiv').style.display = 'none';
             document.getElementById('statisticsDiv').style.display = isStat ? '' : 'none';
+            document.getElementById('cropDiv').style.display = isCrop ? '' : 'none';
             document.getElementById('govDiv').style.display = isGov ? '' : 'none';
 
             if (isStat) {
                 showStatistics();
+                return;
+            }
+            if (isCrop) {
+                showCropRecords();
                 const cropSel = document.getElementById('statCropSelect');
                 if (cropSel && cropSel.value) updateCropSummary();
                 return;
@@ -2657,10 +2668,34 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                         </div>
                         <div style="font-size:18px;opacity:0.6;">📐</div>
                       </div>
-                    </div>
                   </div>
                 </div>
-                <div class="dash-section-title">🌾 संपूर्ण फसल विवरण (ग्रामवार)</div>
+            </div>`;
+
+            statDiv.innerHTML = html;
+        }
+
+        // ── Crop Records Page ────────────────────────────
+        function showCropRecords() {
+            const cropDiv = document.getElementById('cropDiv');
+            cropDiv.style.display = '';
+
+            if (!records.length) {
+                cropDiv.innerHTML = `<div style="text-align:center;padding:60px 0;color:var(--text-muted);font-size:16px;font-weight:600;">⏳ पहले डेटा लोड होने दें...</div>`;
+                return;
+            }
+
+            // Aggregate gram-wise list (alphabetical)
+            const grams = [...new Set(records.map(r => r.v).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'hi'));
+
+            let html = `
+            <div style="animation:slideUp 0.4s ease both; max-width:900px; margin:0 auto;">
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+                    <h2 style="font-size:22px;font-weight:900;color:var(--royal);font-family:'Noto Sans Devanagari',sans-serif;">
+                      🌾 संपूर्ण फसल विवरण (ग्रामवार)
+                    </h2>
+                </div>
+
                 <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:24px;padding:26px 28px;box-shadow:0 8px 32px rgba(0,0,0,0.22);position:relative;overflow:hidden;margin-top:16px;">
                   <div style="position:relative;z-index:1;">
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
@@ -2716,11 +2751,9 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
 
                   </div>
                 </div>
-              </div>
-
             </div>`;
 
-            statDiv.innerHTML = html;
+            cropDiv.innerHTML = html;
         }
 
         // ── Card Function: Update Crop Details ──
