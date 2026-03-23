@@ -1125,7 +1125,20 @@
             return records.length > 0;
         }
 
-        function loadData() {
+        let cachedRecords = null;
+
+        async function loadData() {
+            // Return cached data instantly to prevent redundant network requests
+            if (cachedRecords) {
+                records = cachedRecords;
+                fillVillages();
+                const badge = document.getElementById('recordCountBadge');
+                badge.textContent = `✅ ${records.length} रिकॉर्ड लोड (कैशड)`;
+                toast(`${records.length} रिकॉर्ड कैश से प्राप्त हुए`, 'success');
+                switchTab('statistics');
+                return records;
+            }
+
             const badge = document.getElementById('recordCountBadge');
             badge.textContent = '⏳ डेटा लोड हो रहा है...';
 
@@ -1135,6 +1148,7 @@
                 toast(`${records.length} रिकॉर्ड सफलतापूर्वक लोड हुए`, 'success');
                 switchTab('statistics');
             }
+
             function onError(msg) {
                 console.error('onError called:', msg);
                 badge.innerHTML = `❌ लोड विफल &nbsp;<button onclick="loadData()" style="background:#1a1a6e;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:12px;cursor:pointer;font-weight:700;">🔄 पुनः प्रयास</button>
@@ -1143,62 +1157,65 @@
                 toast(msg || 'नेटवर्क त्रुटि — कृपया इंटरनेट जांचें', 'error');
             }
 
-            // CORS-safe proxy chain for file:// protocol support
             function tryParse(csvText) {
                 const r = Papa.parse(csvText, { header: true, skipEmptyLines: 'greedy' });
                 return processCSVResults(r);
             }
 
-            const PROXY1 = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_URL);
-            const PROXY2 = 'https://corsproxy.io/?' + encodeURIComponent(SHEET_URL);
+            // Racing strategy: all proxies + direct fetch run simultaneously
+            const PROXIES = [
+                'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_URL),
+                'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(SHEET_URL),
+                'https://corsproxy.io/?' + encodeURIComponent(SHEET_URL)
+            ];
 
-            // Step 1: Try allorigins.win proxy
-            console.log('Final Proxp Chain Start. URL:', SHEET_URL);
-            fetch(PROXY1)
-                .then(res => { 
-                    console.log('P1 Status:', res.status);
-                    if (!res.ok) throw new Error('p1'); 
-                    return res.text(); 
-                })
-                .then(csv => { 
-                    console.log('P1 Success, length:', csv.length);
-                    if (tryParse(csv)) onSuccess(); else throw new Error('parse'); 
-                })
-                .catch(err => {
-                    console.warn('P1 Failed:', err.message);
-                    // Step 2: Try corsproxy.io
-                    fetch(PROXY2)
-                        .then(res => { 
-                            console.log('P2 Status:', res.status);
-                            if (!res.ok) throw new Error('p2'); 
-                            return res.text(); 
-                        })
-                        .then(csv => { 
-                            console.log('P2 Success, length:', csv.length);
-                            if (tryParse(csv)) onSuccess(); else throw new Error('parse'); 
-                        })
-                        .catch(err => {
-                            console.warn('P2 Failed:', err.message);
-                            // Step 3: PapaParse direct download (last resort for remote)
-                            console.log('Trying direct download...');
-                            Papa.parse(SHEET_URL, {
-                                download: true, header: true, worker: false,
-                                skipEmptyLines: 'greedy',
-                                complete: function (results) {
-                                    console.log('Direct download complete, rows:', results.data?.length);
-                                    if (processCSVResults(results)) onSuccess();
-                                    else {
-                                        console.log('Direct mapping failed, trying local fallback...');
-                                        tryLocal();
-                                    }
-                                },
-                                error: function (err) { 
-                                    console.warn('Direct download failed:', err);
-                                    tryLocal();
-                                }
-                            });
-                        });
+            const proxyPromises = PROXIES.map(url =>
+                fetch(url, { signal: AbortSignal.timeout(10000) })
+                    .then(res => { 
+                        if (!res.ok) throw new Error('Not OK'); 
+                        return res.text(); 
+                    })
+                    .then(csv => {
+                        if (tryParse(csv)) {
+                            console.log('Proxy Success:', url.split('?')[0]);
+                            return records;
+                        }
+                        throw new Error('Empty');
+                    })
+            );
+
+            const directPromise = new Promise((resolve, reject) => {
+                Papa.parse(SHEET_URL, {
+                    download: true, header: true, skipEmptyLines: 'greedy',
+                    complete: (results) => {
+                        if (processCSVResults(results)) {
+                            console.log('Direct PapaParse Success');
+                            resolve(records);
+                        } else reject(new Error('Empty'));
+                    },
+                    error: () => reject(new Error('Network error')),
                 });
+            });
+
+            try {
+                // First to resolve wins
+                const allPromises = [...proxyPromises, directPromise];
+                const winningRecords = await new Promise((resolve, reject) => {
+                    let rejectedCount = 0;
+                    allPromises.forEach(p =>
+                        p.then(resolve).catch(e => {
+                            rejectedCount++;
+                            if (rejectedCount === allPromises.length) reject(new Error('All failed'));
+                        })
+                    );
+                });
+
+                cachedRecords = winningRecords;
+                onSuccess();
+            } catch (err) {
+                console.warn('All live methods failed, trying local fallback:', err);
+                tryLocal();
+            }
 
             function tryLocal() {
                 console.log('Trying local test_data.csv fallback...');
@@ -1206,34 +1223,17 @@
                     download: true, header: true, worker: false,
                     skipEmptyLines: 'greedy',
                     complete: function (results) {
-                        console.log('Local load complete, rows:', results.data?.length);
                         if (processCSVResults(results)) {
                             onSuccess();
                             toast('लोकल डेटा (test_data.csv) लोड किया गया', 'info');
                         } else {
-                            tryJSON();
+                            onError('डेटा लोड विफल — स्थानीय फाइल भी नहीं मिली');
                         }
                     },
                     error: function (err) { 
-                        console.warn('Local load failed:', err);
-                        tryJSON();
+                        onError('डेटा लोड विफल — इंटरनेट जांचें या CSV फाइल अपलोड करें');
                     }
                 });
-            }
-
-            function tryJSON() {
-                console.log('Trying JSON Proxy fallback...');
-                fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(SHEET_URL)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log('JSON Proxy success, parsing content...');
-                        if (tryParse(data.contents)) onSuccess();
-                        else throw new Error('parse');
-                    })
-                    .catch(err => {
-                        console.error('All fetch methods failed:', err);
-                        onError('डेटा लोड विफल — इंटरनेट जांचें या CSV फाइल अपलोड करें');
-                    });
             }
         }
 
