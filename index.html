@@ -1659,18 +1659,17 @@
             const asinchai = basraRecs.length - sinchai;
 
             const rowsHtml = basraRecs.map((r, i) => `
-              <tr>
+              <tr style="background:${i % 2 === 0 ? '#f8fafc' : '#fff'}">
                 <td style="text-align:center;font-weight:800;">${i + 1}</td>
                 <td style="font-weight:800;text-align:center;">${r.kn}</td>
                 <td>${r.owner}</td>
                 <td style="text-align:right;font-weight:800;">${r.area}</td>
                 <td>${r.type || '—'}</td>
-                <td>
-                  ${r.isDufasali ? '<span style="color:#3730a3;font-weight:800;font-size:11px;">(दुफसली)</span><br>' : ''}
-                  ${r.finalKharifCrop ? '<span style="font-size:11px;color:#065f46;">खरीफ:</span> ' + r.finalKharifCrop + '<br>' : ''}
-                  ${r.finalRabiCrop ? '<span style="font-size:11px;color:#1e40af;">रबी:</span> ' + r.finalRabiCrop : ''}
-                  ${!r.finalKharifCrop && !r.finalRabiCrop ? '—' : ''}
-                </td>
+                <td>${r.finalKharifCrop || '—'}</td>
+                <td style="text-align:right;">${r.kharifCropArea || '0'}</td>
+                <td>${r.finalRabiCrop || '—'}</td>
+                <td style="text-align:right;">${r.rabiCropArea || '0'}</td>
+                <td style="text-align:right; font-weight:800; color:#3730a3;">${r.dufasaliArea || '0'}</td>
                 <td>${r.naLandK === 'Yes' ? r.naAreaK + ' हे.' : '—'}</td>
                 <td>${r.fallowLandK === 'Yes' ? r.fallowAreaK + ' हे.' : '—'}</td>
                 <td>${r.naLandR === 'Yes' ? r.naAreaR + ' हे.' : '—'}</td>
@@ -1743,7 +1742,7 @@
   <div class="summary-item" style="background:#ede9fe; border-color:#c4b5fd;"><div class="val" style="font-size:18px; color:#5b21b6;">${basraRecs.reduce((s, r) => s + parseFloat(r.dufasaliArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">दुफसली रकबा</div></div>
 </div>
 <table>
-  <thead><tr><th>#</th><th>खसरा</th><th>भूमिस्वामी</th><th style="text-align:center;">क्षेत्रफल (हे.)</th><th>भूमि प्रकार</th><th>फसल विवरण</th><th>NA Land (खरीफ)</th><th>Fallow (खरीफ)</th><th>NA Land (रबी)</th><th>Fallow (रabi)</th><th>चराई भूमि</th><th>सीलिंग भूमि</th><th>निस्तार विवरण</th></tr></thead>
+  <thead><tr><th>#</th><th>खसरा</th><th>भूमिस्वामी</th><th style="text-align:center;">क्षेत्रफल (हे.)</th><th>भूमि प्रकार</th><th>खरीफ फसल</th><th>खरीफ रकबा</th><th>रबी फसल</th><th>रबी रकबा</th><th>दुफसली रकबा</th><th>NA Land (खरीफ)</th><th>Fallow (खरीफ)</th><th>NA Land (रबी)</th><th>Fallow (रबी)</th><th>चराई भूमि</th><th>सीलिंग भूमि</th><th>निस्तार विवरण</th></tr></thead>
   <tbody>${rowsHtml}</tbody>
 </table>
 <p class="footer">भूमि रिकॉर्ड डैशबोर्ड — हल्का 43 एवं 28 | कम्प्यूटर जनित रिकॉर्ड — सत्यापन हेतु पटवारी कार्यालय से संपर्क करें</p>
@@ -1777,12 +1776,11 @@
                 <td style="text-align:center;">${r.bn}</td>
                 <td style="text-align:right;font-weight:800;">${r.area}</td>
                 <td>${r.type || '—'}</td>
-                <td>
-                  ${r.isDufasali ? '<span style="color:#3730a3;font-weight:800;font-size:11px;">(दुफसली)</span><br>' : ''}
-                  ${r.finalKharifCrop ? '<span style="font-size:11px;color:#065f46;">खरीफ:</span> ' + r.finalKharifCrop + '<br>' : ''}
-                  ${r.finalRabiCrop ? '<span style="font-size:11px;color:#1e40af;">रबी:</span> ' + r.finalRabiCrop : ''}
-                  ${!r.finalKharifCrop && !r.finalRabiCrop ? '—' : ''}
-                </td>
+                <td>${r.finalKharifCrop || '—'}</td>
+                <td style="text-align:right;">${r.kharifCropArea || '0'}</td>
+                <td>${r.finalRabiCrop || '—'}</td>
+                <td style="text-align:right;">${r.rabiCropArea || '0'}</td>
+                <td style="text-align:right; font-weight:800; color:#3730a3;">${r.dufasaliArea || '0'}</td>
                 <td>${r.naLandK === 'Yes' ? r.naAreaK + ' हे.' : '—'}</td>
                 <td>${r.fallowLandK === 'Yes' ? r.fallowAreaK + ' हे.' : '—'}</td>
                 <td>${r.naLandR === 'Yes' ? r.naAreaR + ' हे.' : '—'}</td>
@@ -1874,7 +1872,11 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
       <th>बसरा</th>
       <th style="text-align:center;">क्षेत्रफल (हे.)</th>
       <th>भूमि प्रकार</th>
-      <th>फसल विवरण</th>
+      <th>खरीफ फसल</th>
+      <th>खरीफ रकबा</th>
+      <th>रबी फसल</th>
+      <th>रबी रकबा</th>
+      <th>दुफसली रकबा</th>
       <th>NA Land (खरीफ)</th>
       <th>Fallow (खरीफ)</th>
       <th>NA Land (रबी)</th>
@@ -1916,21 +1918,20 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             csvContent += `रबी फसल,${rCrops},रबी रकबा,${rArea} हे.\n`;
             csvContent += `दुफसली रकबा,${dArea} हे.\n\n`;
 
-            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,फसल विवरण,NA (खरीफ),Fallow (खरीफ),NA (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
+            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,खरीफ फसल,खरीफ रकबा,रबी फसल,रबी रकबा,दुफसली रकबा,NA (खरीफ),Fallow (खरीफ),NA (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
 
             basraRecs.forEach((r, i) => {
-                const crops = [
-                    r.finalKharifCrop ? `खरीफ: ${r.finalKharifCrop}` : '',
-                    r.finalRabiCrop ? `रबी: ${r.finalRabiCrop}` : ''
-                ].filter(Boolean).join(' | ');
-
                 const row = [
                     i + 1,
                     r.kn,
                     r.bn,
                     r.area,
                     r.type || '—',
-                    crops || '—',
+                    r.finalKharifCrop || '—',
+                    r.kharifCropArea || '0',
+                    r.finalRabiCrop || '—',
+                    r.rabiCropArea || '0',
+                    r.dufasaliArea || '0',
                     r.naLandK === 'Yes' ? r.naAreaK : '—',
                     r.fallowLandK === 'Yes' ? r.fallowAreaK : '—',
                     r.naLandR === 'Yes' ? r.naAreaR : '—',
@@ -1983,21 +1984,20 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             csvContent += `रबी फसल,${rCrops},रबी रकबा,${rArea} हे.\n`;
             csvContent += `दुफसली रकबा,${dArea} हे.\n\n`;
 
-            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,फसल विवरण,NA (खरीफ),Fallow (खरीफ),NA (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
+            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,खरीफ फसल,खरीफ रकबा,रबी फसल,रबी रकबा,दुफसली रकबा,NA (खरीफ),Fallow (खरीफ),NA (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
 
             farmerRecs.forEach((r, i) => {
-                const crops = [
-                    r.finalKharifCrop ? `खरीफ: ${r.finalKharifCrop}` : '',
-                    r.finalRabiCrop ? `रबी: ${r.finalRabiCrop}` : ''
-                ].filter(Boolean).join(' | ');
-
                 const row = [
                     i + 1,
                     r.kn,
                     r.bn,
                     r.area,
                     r.type || '—',
-                    crops || '—',
+                    r.finalKharifCrop || '—',
+                    r.kharifCropArea || '0',
+                    r.finalRabiCrop || '—',
+                    r.rabiCropArea || '0',
+                    r.dufasaliArea || '0',
                     r.naLandK === 'Yes' ? r.naAreaK : '—',
                     r.fallowLandK === 'Yes' ? r.fallowAreaK : '—',
                     r.naLandR === 'Yes' ? r.naAreaR : '—',
