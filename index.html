@@ -1487,20 +1487,48 @@
             // Portfolio banner for basra or nam
             if (currentTab === 'basra' || currentTab === 'nam') {
                 const totalArea = found.reduce((s, r) => s + parseFloat(r.area), 0).toFixed(3);
+                
+                // Crop Summary for Portfolio
+                const kArea = found.reduce((s, r) => s + parseFloat(r.kharifCropArea || 0), 0).toFixed(3);
+                const rArea = found.reduce((s, r) => s + parseFloat(r.rabiCropArea || 0), 0).toFixed(3);
+                const kCrops = [...new Set(found.map(r => r.finalKharifCrop).filter(Boolean))].join(', ') || '—';
+                const rCrops = [...new Set(found.map(r => r.finalRabiCrop).filter(Boolean))].join(', ') || '—';
+
                 const banner = document.createElement('div');
                 banner.className = 'portfolio-banner';
                 banner.style.marginBottom = '24px';
                 const subtitle = currentTab === 'basra' ? `ग्राम: ${v} &nbsp;|&nbsp; बसरा: ${val}` : `ग्राम: ${v} &nbsp;|&nbsp; भूमिस्वामी: ${val}`;
                 const ownerName = currentTab === 'basra' ? getFullOwner(found[0]) : val;
                 const printFn = currentTab === 'basra' ? `printPortfolio('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')` : `printFarmerPortfolio('${escJS(ownerName)}','${escJS(v)}')`;
+                
                 banner.innerHTML = `
                     <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
-                      <div>
+                      <div style="flex:1; min-width:200px;">
                         <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px;">भूमिस्वामी पोर्टफोलियो</div>
                         <div style="font-size:22px; font-weight:900; line-height:1.1;">${ownerName}</div>
                         <div style="margin-top:6px; opacity:0.75; font-size:14px;">${subtitle}</div>
+                        
+                        <!-- 4 New Crop Fields -->
+                        <div style="margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; background:rgba(255,255,255,0.1); border-radius:12px; padding:10px 14px; border:1px solid rgba(255,255,255,0.15);">
+                            <div>
+                                <div style="font-size:9px; font-weight:700; opacity:0.6; text-transform:uppercase;">☀️ खरीफ फसल</div>
+                                <div style="font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${kCrops}">${kCrops}</div>
+                            </div>
+                            <div>
+                                <div style="font-size:9px; font-weight:700; opacity:0.6; text-transform:uppercase;">☀️ खरीफ रकबा</div>
+                                <div style="font-size:13px; font-weight:800;">${kArea} हे.</div>
+                            </div>
+                            <div>
+                                <div style="font-size:9px; font-weight:700; opacity:0.6; text-transform:uppercase;">❄️ रबी फसल</div>
+                                <div style="font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${rCrops}">${rCrops}</div>
+                            </div>
+                            <div>
+                                <div style="font-size:9px; font-weight:700; opacity:0.6; text-transform:uppercase;">❄️ रबी रकबा</div>
+                                <div style="font-size:13px; font-weight:800;">${rArea} हे.</div>
+                            </div>
+                        </div>
                       </div>
-                      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
                         <div class="pf-stat">
                           <div class="pf-stat-label">कुल खसरा</div>
                           <div class="pf-stat-val">${found.length}</div>
@@ -1509,8 +1537,11 @@
                           <div class="pf-stat-label">कुल क्षेत्रफल</div>
                           <div class="pf-stat-val">${totalArea} <span style="font-size:14px;font-weight:600;opacity:0.7;">हे.</span></div>
                         </div>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            <button onclick="${printFn}" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">🖨 Portfolio Print</button>
+                            ${currentTab === 'basra' ? `<button onclick="exportBasraExcel('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')" style="background:#059669;border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">📊 Export Excel</button>` : `<button onclick="exportFarmerExcel('${escJS(ownerName)}','${escJS(v)}')" style="background:#059669;border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">📊 Export Excel</button>`}
+                        </div>
                       </div>
-                      <button onclick="${printFn}" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;align-self:center;">🖨 Portfolio Print</button>
                     </div>`;
                 res.appendChild(banner);
             }
@@ -1699,6 +1730,12 @@
   <div class="summary-item green"><div class="val">${sinchai}</div><div class="lbl">सिंचित</div></div>
   <div class="summary-item orange"><div class="val">${asinchai}</div><div class="lbl">असिंचित</div></div>
 </div>
+<div class="summary" style="margin-top:-10px; margin-bottom:28px;">
+  <div class="summary-item" style="background:#d1fae5; border-color:#6ee7b7;"><div class="val" style="font-size:16px; color:#065f46;">${[...new Set(basraRecs.map(r => r.finalKharifCrop).filter(Boolean))].join(', ') || '—'}</div><div class="lbl">खरीफ फसल</div></div>
+  <div class="summary-item" style="background:#d1fae5; border-color:#6ee7b7;"><div class="val" style="font-size:18px; color:#065f46;">${basraRecs.reduce((s, r) => s + parseFloat(r.kharifCropArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">खरीफ रकबा</div></div>
+  <div class="summary-item" style="background:#dbeafe; border-color:#93c5fd;"><div class="val" style="font-size:16px; color:#1e40af;">${[...new Set(basraRecs.map(r => r.finalRabiCrop).filter(Boolean))].join(', ') || '—'}</div><div class="lbl">रबी फसल</div></div>
+  <div class="summary-item" style="background:#dbeafe; border-color:#93c5fd;"><div class="val" style="font-size:18px; color:#1e40af;">${basraRecs.reduce((s, r) => s + parseFloat(r.rabiCropArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">रबी रकबा</div></div>
+</div>
 <table>
   <thead><tr><th>#</th><th>खसरा</th><th>भूमिस्वामी</th><th style="text-align:center;">क्षेत्रफल (हे.)</th><th>भूमि प्रकार</th><th>फसल विवरण</th><th>NA Land (खरीफ)</th><th>Fallow (खरीफ)</th><th>NA Land (रबी)</th><th>Fallow (रabi)</th><th>चराई भूमि</th><th>सीलिंग भूमि</th><th>निस्तार विवरण</th></tr></thead>
   <tbody>${rowsHtml}</tbody>
@@ -1728,13 +1765,18 @@
             const uniqueBasras = [...new Set(farmerRecs.map(r => r.bn).filter(Boolean))].join(', ');
 
             const rowsHtml = farmerRecs.map((r, i) => `
-              <tr>
+              <tr style="background:${i % 2 === 0 ? '#f8fafc' : '#fff'}">
                 <td style="text-align:center;font-weight:800;">${i + 1}</td>
                 <td style="font-weight:800;text-align:center;">${r.kn}</td>
                 <td style="text-align:center;">${r.bn}</td>
                 <td style="text-align:right;font-weight:800;">${r.area}</td>
                 <td>${r.type || '—'}</td>
-                <td>${r.isDufasali ? '<span style="color:#3730a3;font-weight:800;font-size:11px;">(दुफसली)</span><br>' : ''}${r.cropName || (r.kharifCrop || r.rabiCrop ? [r.kharifCrop, r.rabiCrop].filter(Boolean).join(' + ') : '—')}</td>
+                <td>
+                  ${r.isDufasali ? '<span style="color:#3730a3;font-weight:800;font-size:11px;">(दुफसली)</span><br>' : ''}
+                  ${r.finalKharifCrop ? '<span style="font-size:11px;color:#065f46;">खरीफ:</span> ' + r.finalKharifCrop + '<br>' : ''}
+                  ${r.finalRabiCrop ? '<span style="font-size:11px;color:#1e40af;">रबी:</span> ' + r.finalRabiCrop : ''}
+                  ${!r.finalKharifCrop && !r.finalRabiCrop ? '—' : ''}
+                </td>
                 <td>${r.naLandK === 'Yes' ? r.naAreaK + ' हे.' : '—'}</td>
                 <td>${r.fallowLandK === 'Yes' ? r.fallowAreaK + ' हे.' : '—'}</td>
                 <td>${r.naLandR === 'Yes' ? r.naAreaR + ' हे.' : '—'}</td>
@@ -1810,6 +1852,12 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
   <div class="summary-item green">   <div class="val">${sinchai}</div>          <div class="lbl">सिंचित</div></div>
   <div class="summary-item orange">  <div class="val">${asinchai}</div>         <div class="lbl">असिंचित</div></div>
 </div>
+<div class="summary" style="margin-top:-10px; margin-bottom:28px;">
+  <div class="summary-item" style="background:#d1fae5; border-color:#6ee7b7;"><div class="val" style="font-size:16px; color:#065f46;">${[...new Set(farmerRecs.map(r => r.finalKharifCrop).filter(Boolean))].join(', ') || '—'}</div><div class="lbl">खरीफ फसल</div></div>
+  <div class="summary-item" style="background:#d1fae5; border-color:#6ee7b7;"><div class="val" style="font-size:18px; color:#065f46;">${farmerRecs.reduce((s, r) => s + parseFloat(r.kharifCropArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">खरीफ रकबा</div></div>
+  <div class="summary-item" style="background:#dbeafe; border-color:#93c5fd;"><div class="val" style="font-size:16px; color:#1e40af;">${[...new Set(farmerRecs.map(r => r.finalRabiCrop).filter(Boolean))].join(', ') || '—'}</div><div class="lbl">रबी फसल</div></div>
+  <div class="summary-item" style="background:#dbeafe; border-color:#93c5fd;"><div class="val" style="font-size:18px; color:#1e40af;">${farmerRecs.reduce((s, r) => s + parseFloat(r.rabiCropArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">रबी रकबा</div></div>
+</div>
 
 <table>
   <thead>
@@ -1841,24 +1889,133 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             pw.document.close();
         }
 
+        // ─── Export Basra Portfolio to Excel ────────────────────────
+        function exportBasraExcel(owner, village, basraNo) {
+            const basraRecs = records.filter(r => r.v === village && r.bn === basraNo);
+            if (!basraRecs.length) return;
+
+            const totalArea = basraRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
+            const kArea = basraRecs.reduce((s, r) => s + parseFloat(r.kharifCropArea || 0), 0).toFixed(3);
+            const rArea = basraRecs.reduce((s, r) => s + parseFloat(r.rabiCropArea || 0), 0).toFixed(3);
+            const kCrops = [...new Set(basraRecs.map(r => r.finalKharifCrop).filter(Boolean))].join(' / ') || '—';
+            const rCrops = [...new Set(basraRecs.map(r => r.finalRabiCrop).filter(Boolean))].join(' / ') || '—';
+
+            let csvContent = "\uFEFF"; // BOM for Excel UTF-8
+            csvContent += `पोर्टफोलियो रिपोर्ट: ${owner}\n`;
+            csvContent += `ग्राम: ${village}, बसरा नंबर: ${basraNo}, दिनांक: ${new Date().toLocaleDateString('hi-IN')}\n\n`;
+            
+            // Subheading summary lines as requested
+            csvContent += `खरीफ फसल,${kCrops},खरीफ रकबा,${kArea} हे.\n`;
+            csvContent += `रबी फसल,${rCrops},रबी रकबा,${rArea} हे.\n\n`;
+
+            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,फसल विवरण,NA (खरीफ),Fallow (खरीफ),NA (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
+
+            basraRecs.forEach((r, i) => {
+                const crops = [
+                    r.finalKharifCrop ? `खरीफ: ${r.finalKharifCrop}` : '',
+                    r.finalRabiCrop ? `रबी: ${r.finalRabiCrop}` : ''
+                ].filter(Boolean).join(' | ');
+
+                const row = [
+                    i + 1,
+                    r.kn,
+                    r.bn,
+                    r.area,
+                    r.type || '—',
+                    crops || '—',
+                    r.naLandK === 'Yes' ? r.naAreaK : '—',
+                    r.fallowLandK === 'Yes' ? r.fallowAreaK : '—',
+                    r.naLandR === 'Yes' ? r.naAreaR : '—',
+                    r.fallowLandR === 'Yes' ? r.fallowAreaR : '—',
+                    r.charai || '—',
+                    r.ceiling || '—',
+                    `"${(r.nistar || '—').replace(/"/g, '""')}"`
+                ];
+                csvContent += row.join(",") + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const fileName = `Portfolio_${village}_Basra_${basraNo}.csv`;
+            
+            if (navigator.msSaveBlob) { 
+                navigator.msSaveBlob(blob, fileName);
+            } else {
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute("download", fileName);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            toast('Excel एक्सपोर्ट सफल', 'success');
+        }
+
+        // ─── Export Farmer Portfolio to Excel ───────────────────────
+        function exportFarmerExcel(owner, village) {
+            const ownerNorm = owner.replace(/\s+/g, ' ').trim();
+            const nameMatched = records.filter(r => r.v === village && r.ownerNames.includes(ownerNorm));
+            const basraSet = new Set(nameMatched.map(r => r.bn).filter(Boolean));
+            const farmerRecs = basraSet.size > 0
+                ? records.filter(r => r.v === village && basraSet.has(r.bn))
+                : nameMatched;
+            
+            if (!farmerRecs.length) return;
+
+            const totalArea = farmerRecs.reduce((s, r) => s + parseFloat(r.area || 0), 0).toFixed(3);
+            const kArea = farmerRecs.reduce((s, r) => s + parseFloat(r.kharifCropArea || 0), 0).toFixed(3);
+            const rArea = farmerRecs.reduce((s, r) => s + parseFloat(r.rabiCropArea || 0), 0).toFixed(3);
+            const kCrops = [...new Set(farmerRecs.map(r => r.finalKharifCrop).filter(Boolean))].join(' / ') || '—';
+            const rCrops = [...new Set(farmerRecs.map(r => r.finalRabiCrop).filter(Boolean))].join(' / ') || '—';
+
+            let csvContent = "\uFEFF"; // BOM for Excel UTF-8
+            csvContent += `किसान पोर्टफोलियो रिपोर्ट: ${owner}\n`;
+            csvContent += `ग्राम: ${village}, दिनांक: ${new Date().toLocaleDateString('hi-IN')}\n\n`;
+            
+            csvContent += `खरीफ फसल,${kCrops},खरीफ रकबा,${kArea} हे.\n`;
+            csvContent += `रबी फसल,${rCrops},रबी रकबा,${rArea} हे.\n\n`;
+
+            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,फसल विवरण,NA (खरीफ),Fallow (खरीफ),NA (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
+
+            farmerRecs.forEach((r, i) => {
+                const crops = [
+                    r.finalKharifCrop ? `खरीफ: ${r.finalKharifCrop}` : '',
+                    r.finalRabiCrop ? `रबी: ${r.finalRabiCrop}` : ''
+                ].filter(Boolean).join(' | ');
+
+                const row = [
+                    i + 1,
+                    r.kn,
+                    r.bn,
+                    r.area,
+                    r.type || '—',
+                    crops || '—',
+                    r.naLandK === 'Yes' ? r.naAreaK : '—',
+                    r.fallowLandK === 'Yes' ? r.fallowAreaK : '—',
+                    r.naLandR === 'Yes' ? r.naAreaR : '—',
+                    r.fallowLandR === 'Yes' ? r.fallowAreaR : '—',
+                    r.charai || '—',
+                    r.ceiling || '—',
+                    `"${(r.nistar || '—').replace(/"/g, '""')}"`
+                ];
+                csvContent += row.join(",") + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const fileName = `Farmer_Portfolio_${village}_${owner.replace(/\s+/g, '_')}.csv`;
+            
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            toast('Excel एक्सपोर्ट सफल', 'success');
+        }
+
 
         // ══════════════════════════════════════════════
 
-        const GRAM_GRADIENTS = [
-            'linear-gradient(135deg,#1a1a6e,#3b5bdb)',
-            'linear-gradient(135deg,#065f46,#059669)',
-            'linear-gradient(135deg,#7c2d12,#ea580c)',
-            'linear-gradient(135deg,#4c1d95,#7c3aed)',
-            'linear-gradient(135deg,#831843,#db2777)',
-            'linear-gradient(135deg,#1e3a5f,#0ea5e9)',
-            'linear-gradient(135deg,#14532d,#16a34a)',
-            'linear-gradient(135deg,#7f1d1d,#dc2626)',
-            'linear-gradient(135deg,#134e4a,#0d9488)',
-            'linear-gradient(135deg,#312e81,#6366f1)',
-        ];
-
-
-        // ── Statistics Page ────────────────────────────
+        // Statistics Page ────────────────────────────
         function showStatistics() {
             const statDiv = document.getElementById('statisticsDiv');
             statDiv.style.display = '';
