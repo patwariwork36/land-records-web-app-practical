@@ -1453,20 +1453,41 @@
                 b.style.color = (t === type) ? '#fff' : colors[t];
             });
 
-            const grid = document.getElementById('dcsCardsGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
+            const tbody = document.getElementById('dcsResultsBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            
             if (!filtered.length) {
-                grid.innerHTML = '<div style="padding:40px 20px; text-align:center; color:var(--text-muted); font-weight:700; grid-column:1/-1;">कोई रिकॉर्ड नहीं</div>';
+                tbody.innerHTML = '<tr><td colspan="17" style="padding:40px; text-align:center; color:#64748b; font-weight:700;">कोई रिकॉर्ड नहीं</td></tr>';
                 return;
             }
 
+            const isBasra = currentTab === 'basra';
             filtered.forEach((r, idx) => {
-                const card = document.createElement('div');
-                card.className = 'result-card';
-                card.style.animationDelay = (idx * 0.04) + 's';
-                card.innerHTML = getCardHTML(r);
-                grid.appendChild(card);
+                const tr = document.createElement('tr');
+                tr.style.background = idx % 2 === 0 ? '#f8fafc' : '#fff';
+                tr.style.borderBottom = '1px solid #e2e8f0';
+                
+                tr.innerHTML = `
+                    <td style="padding:10px 8px;text-align:center;font-weight:700;">${idx + 1}</td>
+                    <td style="padding:10px 8px;font-weight:800;color:var(--royal);cursor:pointer;" onclick="printSingleRecord(${JSON.stringify(r).replace(/"/g, '&quot;')})">🔍 ${r.kn}</td>
+                    <td style="padding:10px 8px;">${isBasra ? getFullOwner(r) : r.bn}</td>
+                    <td style="padding:10px 8px;text-align:center;font-weight:700;">${r.area}</td>
+                    <td style="padding:10px 8px;font-size:11px;">${r.type || '—'}</td>
+                    <td style="padding:10px 8px;color:#065f46;font-weight:700;">${r.finalKharifCrop || '—'}</td>
+                    <td style="padding:10px 8px;text-align:center;">${r.kharifCropArea || '0'}</td>
+                    <td style="padding:10px 8px;color:#1e40af;font-weight:700;">${r.finalRabiCrop || '—'}</td>
+                    <td style="padding:10px 8px;text-align:center;">${r.rabiCropArea || '0'}</td>
+                    <td style="padding:10px 8px;text-align:center;font-weight:800;color:#5b21b6;">${r.dufasaliArea || '0'}</td>
+                    <td style="padding:10px 8px;">${r.naLandK === 'Yes' ? r.naAreaK : '—'}</td>
+                    <td style="padding:10px 8px;">${r.fallowLandK === 'Yes' ? r.fallowAreaK : '—'}</td>
+                    <td style="padding:10px 8px;">${r.naLandR === 'Yes' ? r.naAreaR : '—'}</td>
+                    <td style="padding:10px 8px;">${r.fallowLandR === 'Yes' ? r.fallowAreaR : '—'}</td>
+                    <td style="padding:10px 8px;font-size:11px;">${r.charai || '—'}</td>
+                    <td style="padding:10px 8px;font-size:11px;">${r.ceiling || '—'}</td>
+                    <td style="padding:10px 8px;font-size:11px;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${r.nistar || ''}">${r.nistar || '—'}</td>
+                `;
+                tbody.appendChild(tr);
             });
         }
 
@@ -1508,30 +1529,6 @@
                         <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px;">भूमिस्वामी पोर्टफोलियो</div>
                         <div style="font-size:22px; font-weight:900; line-height:1.1;">${ownerName}</div>
                         <div style="margin-top:6px; opacity:0.75; font-size:14px;">${subtitle}</div>
-                        
-                        <!-- 4 New Crop Fields -->
-                        <div style="margin-top:14px; display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:8px 16px; background:rgba(255,255,255,0.1); border-radius:12px; padding:10px 14px; border:1px solid rgba(255,255,255,0.15);">
-                            <div>
-                                <div style="font-size:9px; font-weight:700; opacity:0.6; text-transform:uppercase;">☀️ खरीफ फसल</div>
-                                <div style="font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${kCrops}">${kCrops}</div>
-                            </div>
-                            <div>
-                                <div style="font-size:9px; font-weight:700; opacity:0.6; text-transform:uppercase;">☀️ खरीफ रकबा</div>
-                                <div style="font-size:13px; font-weight:800;">${kArea} हे.</div>
-                            </div>
-                            <div>
-                                <div style="font-size:9px; font-weight:700; opacity:0.6; text-transform:uppercase;">❄️ रबी फसल</div>
-                                <div style="font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${rCrops}">${rCrops}</div>
-                            </div>
-                            <div>
-                                <div style="font-size:9px; font-weight:700; opacity:0.6; text-transform:uppercase;">❄️ रबी रकबा</div>
-                                <div style="font-size:13px; font-weight:800;">${rArea} हे.</div>
-                            </div>
-                            <div>
-                                <div style="font-size:9px; font-weight:700; opacity:0.6; text-transform:uppercase;">🌾 दुफसली रकबा</div>
-                                <div style="font-size:13px; font-weight:900; color:#fde68a;">${dArea} हे.</div>
-                            </div>
-                        </div>
                       </div>
                       <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
                         <div class="pf-stat">
@@ -1580,11 +1577,38 @@
               '📭 फसल रहित — ' + blankCount2 + ' खसरे | ' + blankRakba2 + ' हे.</button>';
             res.appendChild(tabBar);
 
-            // Cards grid
-            const grid = document.createElement('div');
-            grid.id = 'dcsCardsGrid';
-            grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;';
-            res.appendChild(grid);
+            // Table Container
+            const tableCont = document.createElement('div');
+            tableCont.style.cssText = 'background:#fff;border-radius:18px;padding:12px;overflow-x:auto;box-shadow:0 4px 20px rgba(0,0,0,0.08);border:1px solid #e2e8f0;';
+            
+            const isBasra = currentTab === 'basra';
+            tableCont.innerHTML = `
+              <table style="width:100%;border-collapse:collapse;font-size:12px;text-align:left;min-width:1400px;">
+                <thead style="background:#f8fafc;border-bottom:2px solid #e2e8f0;">
+                  <tr>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">#</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">खसरा</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">${isBasra ? 'भूमिस्वामी' : 'बसरा'}</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;text-align:center;">क्षेत्रफल (हे.)</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">भूमि प्रकार</th>
+                    <th style="padding:12px 8px;color:#065f46;font-weight:800;border:1px solid #e2e8f0;">खरीफ फसल</th>
+                    <th style="padding:12px 8px;color:#065f46;font-weight:800;border:1px solid #e2e8f0;text-align:center;">खरीफ रकबा</th>
+                    <th style="padding:12px 8px;color:#1e40af;font-weight:800;border:1px solid #e2e8f0;">रबी फसल</th>
+                    <th style="padding:12px 8px;color:#1e40af;font-weight:800;border:1px solid #e2e8f0;text-align:center;">रबी रकबा</th>
+                    <th style="padding:12px 8px;color:#5b21b6;font-weight:800;border:1px solid #e2e8f0;text-align:center;">दुफसली (हे.)</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">NA Land (K)</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">Fallow (K)</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">NA Land (R)</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">Fallow (R)</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">चराई</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">सीलिंग</th>
+                    <th style="padding:12px 8px;color:#475569;font-weight:800;border:1px solid #e2e8f0;">निस्तार</th>
+                  </tr>
+                </thead>
+                <tbody id="dcsResultsBody"></tbody>
+              </table>
+            `;
+            res.appendChild(tableCont);
 
             // Initial render
             filterDCSTab('all');
@@ -1734,12 +1758,6 @@
   <div class="summary-item green"><div class="val">${sinchai}</div><div class="lbl">सिंचित</div></div>
   <div class="summary-item orange"><div class="val">${asinchai}</div><div class="lbl">असिंचित</div></div>
 </div>
-<div class="summary" style="margin-top:-10px; margin-bottom:28px;">
-  <div class="summary-item" style="background:#d1fae5; border-color:#6ee7b7;"><div class="val" style="font-size:16px; color:#065f46;">${[...new Set(basraRecs.map(r => r.finalKharifCrop).filter(Boolean))].join(', ') || '—'}</div><div class="lbl">खरीफ फसल</div></div>
-  <div class="summary-item" style="background:#d1fae5; border-color:#6ee7b7;"><div class="val" style="font-size:18px; color:#065f46;">${basraRecs.reduce((s, r) => s + parseFloat(r.kharifCropArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">खरीफ रकबा</div></div>
-  <div class="summary-item" style="background:#dbeafe; border-color:#93c5fd;"><div class="val" style="font-size:16px; color:#1e40af;">${[...new Set(basraRecs.map(r => r.finalRabiCrop).filter(Boolean))].join(', ') || '—'}</div><div class="lbl">रबी फसल</div></div>
-  <div class="summary-item" style="background:#dbeafe; border-color:#93c5fd;"><div class="val" style="font-size:18px; color:#1e40af;">${basraRecs.reduce((s, r) => s + parseFloat(r.rabiCropArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">रबी रकबा</div></div>
-  <div class="summary-item" style="background:#ede9fe; border-color:#c4b5fd;"><div class="val" style="font-size:18px; color:#5b21b6;">${basraRecs.reduce((s, r) => s + parseFloat(r.dufasaliArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">दुफसली रकबा</div></div>
 </div>
 <table>
   <thead><tr><th>#</th><th>खसरा</th><th>भूमिस्वामी</th><th style="text-align:center;">क्षेत्रफल (हे.)</th><th>भूमि प्रकार</th><th>खरीफ फसल</th><th>खरीफ रकबा</th><th>रबी फसल</th><th>रबी रकबा</th><th>दुफसली रकबा</th><th>NA Land (खरीफ)</th><th>Fallow (खरीफ)</th><th>NA Land (रबी)</th><th>Fallow (रबी)</th><th>चराई भूमि</th><th>सीलिंग भूमि</th><th>निस्तार विवरण</th></tr></thead>
@@ -1856,12 +1874,6 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
   <div class="summary-item green">   <div class="val">${sinchai}</div>          <div class="lbl">सिंचित</div></div>
   <div class="summary-item orange">  <div class="val">${asinchai}</div>         <div class="lbl">असिंचित</div></div>
 </div>
-<div class="summary" style="margin-top:-10px; margin-bottom:28px;">
-  <div class="summary-item" style="background:#d1fae5; border-color:#6ee7b7;"><div class="val" style="font-size:16px; color:#065f46;">${[...new Set(farmerRecs.map(r => r.finalKharifCrop).filter(Boolean))].join(', ') || '—'}</div><div class="lbl">खरीफ फसल</div></div>
-  <div class="summary-item" style="background:#d1fae5; border-color:#6ee7b7;"><div class="val" style="font-size:18px; color:#065f46;">${farmerRecs.reduce((s, r) => s + parseFloat(r.kharifCropArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">खरीफ रकबा</div></div>
-  <div class="summary-item" style="background:#dbeafe; border-color:#93c5fd;"><div class="val" style="font-size:16px; color:#1e40af;">${[...new Set(farmerRecs.map(r => r.finalRabiCrop).filter(Boolean))].join(', ') || '—'}</div><div class="lbl">रबी फसल</div></div>
-  <div class="summary-item" style="background:#dbeafe; border-color:#93c5fd;"><div class="val" style="font-size:18px; color:#1e40af;">${farmerRecs.reduce((s, r) => s + parseFloat(r.rabiCropArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">रबी रकबा</div></div>
-  <div class="summary-item" style="background:#ede9fe; border-color:#c4b5fd;"><div class="val" style="font-size:18px; color:#5b21b6;">${farmerRecs.reduce((s, r) => s + parseFloat(r.dufasaliArea || 0), 0).toFixed(3)} हे.</div><div class="lbl">दुफसली रकबा</div></div>
 </div>
 
 <table>
