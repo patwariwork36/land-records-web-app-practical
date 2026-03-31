@@ -14,19 +14,16 @@
         rel="stylesheet">
     <style>
         :root {
-            --royal: #1a1a6e;
-            --royal-mid: #2d2db0;
-            --gold: #f0a500;
-            --gold-light: #ffd966;
-            --cream: #fffdf5;
+            --irctc-blue: #213d77;
+            --irctc-orange: #fb792b;
+            --irctc-bg: #f2f2f2;
             --surface: #ffffff;
-            --text-main: #1a1a2e;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --green: #059669;
-            --orange: #d97706;
-            --shadow-card: 0 4px 24px rgba(26, 26, 110, 0.10);
-            --shadow-hover: 0 12px 40px rgba(26, 26, 110, 0.18);
+            --text-main: #213d77;
+            --text-muted: #666666;
+            --border: #dfdfdf;
+            --green: #2ecc71;
+            --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 5px 20px rgba(0, 0, 0, 0.15);
         }
 
         * {
@@ -36,8 +33,8 @@
         }
 
         body {
-            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
-            background: var(--cream);
+            font-family: 'Roboto', 'Inter', 'Noto Sans Devanagari', sans-serif;
+            background: var(--irctc-bg);
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
@@ -45,29 +42,25 @@
 
         /* ── Background ── */
         .bg-mesh {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background:
-                radial-gradient(ellipse 80% 50% at 10% 5%, rgba(45, 45, 176, 0.10) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 40% at 90% 90%, rgba(240, 165, 0, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+            display: none; /* IRCTC uses a clean flat background */
         }
 
         /* ── Header ── */
         .site-header {
-            background: linear-gradient(135deg, var(--royal) 0%, #2d2db0 60%, #1e3a8a 100%);
+            background: #ffffff;
+            border-bottom: 5px solid var(--irctc-blue);
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 32px rgba(26, 26, 110, 0.35);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .site-header::before {
+        .site-header::after {
             content: '';
             position: absolute;
-            inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--irctc-blue), var(--irctc-orange));
         }
 
         .header-gold-bar {
@@ -77,78 +70,84 @@
 
         /* ── Emblem ── */
         .emblem {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, var(--gold) 0%, var(--gold-light) 100%);
+            width: 80px;
+            height: 80px;
+            background: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            box-shadow: 0 0 0 4px rgba(240, 165, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.3);
+            font-size: 40px;
             flex-shrink: 0;
+            border: 2px solid var(--irctc-blue);
+            border-radius: 8px;
         }
 
         /* ── Tab Bar ── */
         .tab-bar {
-            background: #fff;
-            border-radius: 16px;
-            padding: 6px;
-            display: inline-flex;
-            gap: 6px;
-            box-shadow: var(--shadow-card);
-            border: 1px solid var(--border);
+            background: var(--irctc-blue);
+            border-radius: 0;
+            padding: 0;
+            display: flex;
+            width: 100%;
+            box-shadow: none;
+            border: none;
         }
 
         .tab-btn {
-            padding: 10px 28px;
-            border-radius: 12px;
+            flex: 1;
+            padding: 15px 10px;
+            border-radius: 0;
             border: none;
             cursor: pointer;
-            font-weight: 700;
-            font-size: 15px;
-            transition: all 0.25s;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
             outline: none;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 4px;
+            background: transparent;
+            color: #ffffff;
+            border-right: 1px solid rgba(255,255,255,0.1);
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, var(--royal), var(--royal-mid));
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(26, 26, 110, 0.30);
-        }
-
-        .tab-btn:not(.active) {
-            background: transparent;
-            color: var(--text-muted);
+            background: #ffffff;
+            color: var(--irctc-blue);
+            box-shadow: none;
+            font-weight: 800;
         }
 
         .tab-btn:not(.active):hover {
-            background: #f1f5f9;
-            color: var(--royal);
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
         }
 
         /* ── Search Card ── */
         .search-card {
-            background: #fff;
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-card);
-            padding: 36px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 30px;
             position: relative;
-            overflow: hidden;
         }
 
         .search-card::before {
-            content: '';
+            content: 'Book Ticket';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--royal), var(--royal-mid), var(--gold));
+            background: var(--irctc-blue);
+            color: #fff;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 700;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
 
         /* ── Form Controls ── */
@@ -165,25 +164,22 @@
         .form-select,
         .form-input {
             width: 100%;
-            padding: 14px 18px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
             font-family: inherit;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-main);
-            background: #f8fafc;
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            background: #fff;
             outline: none;
             transition: all 0.2s;
-            appearance: none;
-            -webkit-appearance: none;
         }
 
         .form-select:focus,
         .form-input:focus {
-            border-color: var(--royal-mid);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(45, 45, 176, 0.10);
+            border-color: var(--irctc-orange);
+            box-shadow: 0 0 5px rgba(251, 121, 43, 0.3);
         }
 
         .form-select[disabled] {
@@ -210,26 +206,23 @@
         /* ── Search Button ── */
         .btn-search {
             width: 100%;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, var(--royal) 0%, var(--royal-mid) 100%);
+            padding: 14px;
+            background: var(--irctc-orange);
             color: #fff;
             border: none;
-            border-radius: 14px;
+            border-radius: 4px;
             font-family: inherit;
-            font-size: 17px;
-            font-weight: 800;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 20px rgba(26, 26, 110, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            text-transform: uppercase;
         }
 
         .btn-search:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(26, 26, 110, 0.45);
+            background: #e66a1f;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
         .btn-search:active {
@@ -281,11 +274,13 @@
         }
 
         .card-header-khasra {
-            background: linear-gradient(135deg, #1a1a6e, #2563eb);
+            background: var(--irctc-blue);
+            border-bottom: 3px solid var(--irctc-orange);
         }
 
         .card-header-basra {
-            background: linear-gradient(135deg, #065f46, #059669);
+            background: var(--irctc-blue);
+            border-bottom: 3px solid var(--irctc-orange);
         }
 
         .card-kn {
@@ -295,24 +290,25 @@
         }
 
         .stat-chip {
-            background: #f1f5f9;
-            border-radius: 10px;
+            background: #fdf2f2;
+            border-radius: 4px;
             padding: 10px 14px;
             text-align: center;
+            border: 1px solid var(--border);
         }
 
         .stat-chip-label {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.07em;
+            letter-spacing: 0.05em;
         }
 
         .stat-chip-val {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 900;
-            color: var(--text-main);
+            color: var(--irctc-orange);
             margin-top: 2px;
         }
 
@@ -360,14 +356,14 @@
 
         /* ── Portfolio Banner ── */
         .portfolio-banner {
-            background: linear-gradient(135deg, var(--royal) 0%, #1e40af 60%, #1e3a8a 100%);
-            border-radius: 20px;
+            background: var(--irctc-blue);
+            border-radius: 0;
             color: #fff;
             padding: 28px;
-            box-shadow: 0 8px 32px rgba(26, 26, 110, 0.30);
+            box-shadow: none;
             position: relative;
             overflow: hidden;
-            animation: slideUp 0.4s ease both;
+            border-bottom: 4px solid var(--irctc-orange);
         }
 
         .portfolio-banner::before {
@@ -383,9 +379,9 @@
         }
 
         .pf-stat {
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.20);
-            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
             padding: 16px 20px;
             text-align: center;
         }
@@ -393,22 +389,22 @@
         .pf-stat-label {
             font-size: 11px;
             font-weight: 700;
-            opacity: 0.7;
+            opacity: 0.8;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
         }
 
         .pf-stat-val {
             font-size: 30px;
             font-weight: 900;
             margin-top: 4px;
+            color: var(--irctc-orange);
         }
 
         .btn-portfolio-pdf {
-            background: var(--gold);
-            color: var(--royal);
+            background: var(--irctc-orange);
+            color: #fff;
             padding: 12px 22px;
-            border-radius: 12px;
+            border-radius: 4px;
             border: none;
             font-family: inherit;
             font-size: 14px;
@@ -419,7 +415,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 16px rgba(240, 165, 0, 0.40);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .btn-portfolio-pdf:hover {
@@ -594,22 +590,39 @@
         /* Section card */
         .dash-section {
             background: #fff;
-            border-radius: 20px;
+            border-radius: 8px;
             border: 1px solid var(--border);
-            box-shadow: var(--shadow-card);
+            box-shadow: none;
             padding: 24px;
             margin-bottom: 24px;
-            animation: slideUp 0.4s ease both;
         }
 
         .dash-section-title {
             font-size: 16px;
             font-weight: 900;
-            color: var(--royal);
+            color: var(--irctc-blue);
             margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 8px;
+            border-left: 4px solid var(--irctc-orange);
+            padding-left: 10px;
+        }
+
+        table {
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: var(--irctc-blue) !important;
+            color: #ffffff !important;
+            font-weight: 700;
+            padding: 12px 10px !important;
+        }
+
+        td {
+            border-bottom: 1px solid #eee;
+            padding: 10px !important;
         }
     </style>
     <!-- PapaParse for ultra-fast CSV streaming -->
@@ -623,32 +636,20 @@
     <!-- ═══════════════════ HEADER ═══════════════════ -->
     <div class="header-gold-bar"></div>
     <header class="site-header">
-        <div style="max-width:900px; margin:0 auto; padding:clamp(16px,4vw,28px) clamp(12px,3vw,24px);">
-            <div style="display:flex; align-items:center; gap:clamp(8px,2vw,16px); flex-wrap:wrap;">
-                <div class="emblem">🌾</div>
-                <div style="flex:1; min-width:min(200px,55vw);">
-                    <div
-                        style="font-size:12px; color:rgba(255,255,255,0.55); font-weight:600; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:4px;">
-                        छत्तीसगढ़ शासन – राजस्व विभाग
-                    </div>
-                    <h1
-                        style="font-size:clamp(20px,4vw,30px); font-weight:900; color:#fff; line-height:1.1; font-family:'Noto Sans Devanagari',sans-serif;">
-                        भूमि रिकॉर्ड खोज प्रणाली
-                    </h1>
-                    <div style="margin-top:4px; font-size:clamp(14px,2.5vw,18px); color:#e2e8f0; font-weight:700; font-family:'Noto Sans Devanagari',sans-serif;">
-                        तहसील पलारी जिला बलौदाबाज़ार-भाटापारा छ०ग०
-                    </div>
-                    <div style="margin-top:4px; font-size:14px; color:var(--gold-light); font-weight:600;">
-                        हल्का 43 एवं 28 — ग्रामवार खसरा / बसरा सूची
-                    </div>
+        <div style="max-width:1200px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div class="emblem" style="background:#fff; border:none; width:60px; height:60px; font-size:40px;">🇮🇳</div>
+                <div>
+                    <h1 style="font-size:22px; font-weight:900; color:var(--irctc-blue); margin:0; line-height:1.2;">IRCTC</h1>
+                    <div style="font-size:12px; color:var(--irctc-blue); font-weight:700; opacity:0.8;">LAND RECORDS SEARCH</div>
                 </div>
-                <div
-                    style="text-align:right; display:flex; flex-direction:column; gap:4px; color:rgba(255,255,255,0.6); font-size:12px;">
-                    <span id="recordCountBadge"
-                        style="background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.20); border-radius:8px; padding:6px 14px; font-weight:700; color:#fff; font-size:13px;">
-                        डेटा लोड हो रहा है...
-                    </span>
+            </div>
+            <div style="display:flex; align-items:center; gap:20px;">
+                <div style="text-align:right;">
+                    <div style="font-size:16px; font-weight:900; color:var(--irctc-blue);">छत्तीसगढ़ शासन</div>
+                    <div id="recordCountBadge" style="font-size:11px; font-weight:700; color:var(--irctc-orange);">डेटा लोड हो रहा है...</div>
                 </div>
+                <div class="emblem" style="font-size:30px; width:50px; height:50px;">🌾</div>
             </div>
         </div>
     </header>
@@ -657,33 +658,39 @@
     <main
         style="max-width:900px; margin:0 auto; padding:clamp(20px,4vw,32px) clamp(12px,3vw,16px) 80px; position:relative; z-index:1;">
 
-        <!-- Tab Bar -->
-        <div class="tab-bar-wrap fade-in" style="margin-bottom:28px;">
-            <div class="tab-bar">
-                <button class="tab-btn active" id="tab-khasra" onclick="switchTab('khasra')">
-                    📄 खसरा खोज
-                </button>
-                <button class="tab-btn" id="tab-basra" onclick="switchTab('basra')">
-                    👥 बसरा खोज
-                </button>
-                <button class="tab-btn" id="tab-nam" onclick="switchTab('nam')">
-                    👤 नाम खोज
-                </button>
-                <button class="tab-btn" id="tab-statistics" onclick="switchTab('statistics')">
-                    📊 आँकड़े
-                </button>
-                <button class="tab-btn" id="tab-crop" onclick="switchTab('crop')">
-                    🌾 फसल विवरण
-                </button>
-                <button class="tab-btn" id="tab-gov" onclick="switchTab('gov')">
-                    🏛️ शासकीय भूमि
-                </button>
+        <!-- Tab Bar Moved inside search container style -->
+        <div style="max-width:640px; margin:0 auto;">
+            <div class="tab-bar-wrap fade-in" style="margin-bottom:0;">
+                <div class="tab-bar">
+                    <button class="tab-btn active" id="tab-khasra" onclick="switchTab('khasra')">
+                        <span style="font-size:20px;">📄</span>
+                        <span>खसरा</span>
+                    </button>
+                    <button class="tab-btn" id="tab-basra" onclick="switchTab('basra')">
+                        <span style="font-size:20px;">👥</span>
+                        <span>बसरा</span>
+                    </button>
+                    <button class="tab-btn" id="tab-nam" onclick="switchTab('nam')">
+                        <span style="font-size:20px;">👤</span>
+                        <span>नाम</span>
+                    </button>
+                    <button class="tab-btn" id="tab-statistics" onclick="switchTab('statistics')">
+                        <span style="font-size:20px;">📊</span>
+                        <span>आँकड़े</span>
+                    </button>
+                    <button class="tab-btn" id="tab-crop" onclick="switchTab('crop')">
+                        <span style="font-size:20px;">🌾</span>
+                        <span>फसल</span>
+                    </button>
+                    <button class="tab-btn" id="tab-gov" onclick="switchTab('gov')">
+                        <span style="font-size:20px;">🏛️</span>
+                        <span>शासकीय</span>
+                    </button>
+                </div>
             </div>
-        </div>
-
-        <!-- Search Card -->
-        <div class="search-card fade-in" style="max-width:640px; margin:0 auto 32px;">
-            <form id="searchForm" onsubmit="handleSearch(event)">
+            
+            <div class="search-card fade-in" style="margin-top:0; border-top:none; border-top-left-radius:0; border-top-right-radius:0; padding-top:50px;">
+                <form id="searchForm" onsubmit="handleSearch(event)">
                 <div style="display:grid; gap:18px;">
 
                     <!-- Village -->
@@ -1371,6 +1378,7 @@
 
             if (isStat) {
                 showStatistics();
+                toast('सांख्यिकी लोड हो रही है...', 'info');
                 return;
             }
             if (isCrop) {
@@ -3027,7 +3035,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                 : all;
 
             // Active tab styling
-            const colors = { all:'#1a1a6e', dcs:'#1e40af', bhuiyya:'#92400e', blank:'#64748b' };
+            const colors = { all:'var(--irctc-blue)', dcs:'#1e40af', bhuiyya:'#92400e', blank:'#64748b' };
             ['all','dcs','bhuiyya','blank'].forEach(t => {
                 const b = document.getElementById('ctab_' + t);
                 if (!b) return;
@@ -3088,8 +3096,8 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             let html = `
             <div style="animation:slideUp 0.4s ease both; max-width:900px; margin:0 auto;">
               <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
-                <h2 style="font-size:22px;font-weight:900;color:var(--royal);font-family:'Noto Sans Devanagari',sans-serif;">
-                  🏛️ शासकीय भूमि रिकॉर्ड्स (हल्का 28 एवं 43)
+                <h2 style="font-size:22px;font-weight:900;color:var(--irctc-blue);font-family:'Noto Sans Devanagari',sans-serif;">
+                  🏛️ शासकीय भूमि रिकॉर्ड्स
                 </h2>
               </div>
 
@@ -3139,7 +3147,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
               <!-- Results Area -->
               <div id="govTableContainer" style="display:none; animation:slideUp 0.4s ease both;">
                  <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-                    <h3 id="govTableTitle" style="font-size:18px; font-weight:800; color:var(--royal);"></h3>
+                    <h3 id="govTableTitle" style="font-size:18px; font-weight:800; color:var(--irctc-blue);"></h3>
                     <div style="display:flex; gap:10px;">
                        <button onclick="exportGovTableCSV()" style="background:#059669;color:#fff;border:none;border-radius:10px;padding:8px 16px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 14px rgba(5,150,105,0.3);display:flex;align-items:center;gap:6px;">
                          📊 Excel/CSV
@@ -3152,9 +3160,9 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                  
                  <!-- Summary Cards -->
                  <div id="govSummaryCards" style="display:none; gap:14px; margin-bottom:20px; flex-wrap:wrap;">
-                    <div class="stat-chip" style="flex:1; min-width:120px; background:#f0f4ff; border:1px solid #d1d9ff; padding:16px 20px;">
-                        <div class="stat-chip-label" style="color:#1a1a6e; opacity:0.8; font-size:14px;">कुल खसरे</div>
-                        <div class="stat-chip-val" id="govSumCount" style="color:#1a1a6e; font-size:32px;">0</div>
+                    <div class="stat-chip" style="flex:1; min-width:120px; background:#fff; border:1px solid var(--border); padding:16px 20px;">
+                        <div class="stat-chip-label" style="color:var(--irctc-blue); opacity:0.8; font-size:14px;">कुल खसरे</div>
+                        <div class="stat-chip-val" id="govSumCount" style="color:var(--irctc-orange); font-size:32px;">0</div>
                     </div>
                     <div class="stat-chip" style="flex:1; min-width:120px; background:#f8fafc; border:1px solid #cbd5e1; padding:16px 20px;">
                         <div class="stat-chip-label" style="color:#0f766e; opacity:0.8; font-size:14px;">कुल रकबा (हे.)</div>
@@ -3290,7 +3298,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
                 tr.style.background = idx % 2 === 0 ? '#f8fafc' : '#fff';
                 tr.innerHTML = `
                     <td style="padding:14px 16px; font-weight:800; color:var(--text-muted);">${idx + 1}</td>
-                    <td style="padding:14px 16px; font-weight:800; color:var(--royal);">${r.kn}</td>
+                    <td style="padding:14px 16px; font-weight:800; color:var(--irctc-blue);">${r.kn}</td>
                     <td style="padding:14px 16px; font-weight:600;">${r.bn || '—'}</td>
                     <td style="padding:14px 16px; font-weight:800; text-align:right;">${r.area}</td>
                     <td style="padding:14px 16px; font-weight:700; color:var(--text-main);">${r.owner}</td>
