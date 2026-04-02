@@ -14,178 +14,214 @@
         rel="stylesheet">
     <style>
         :root {
-            --irctc-blue: #213d77;
-            --irctc-orange: #fb792b;
-            --irctc-bg: #f2f2f2;
-            --surface: #ffffff;
-            --text-main: #213d77;
-            --text-muted: #666666;
-            --border: #dfdfdf;
-            --green: #2ecc71;
-            --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 5px 20px rgba(0, 0, 0, 0.15);
+            --bg: #020617;
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Roboto', 'Inter', 'Noto Sans Devanagari', sans-serif;
-            background: var(--irctc-bg);
-            color: var(--text-main);
+            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
             min-height: 100vh;
-            overflow-x: hidden;
+            line-height: 1.5;
         }
 
-        /* ── Background ── */
-        .bg-mesh {
-            display: none; /* IRCTC uses a clean flat background */
+        /* ── Custom Scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
         }
 
         /* ── Header ── */
         .site-header {
-            background: #ffffff;
-            border-bottom: 5px solid var(--irctc-blue);
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 0 20px;
         }
 
-        .site-header::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, var(--irctc-blue), var(--irctc-orange));
+        .nav-pill {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--card-shadow);
         }
 
-        .header-gold-bar {
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        /* ── Emblem ── */
-        .emblem {
-            width: 80px;
-            height: 80px;
-            background: #fff;
+        .emblem-glass {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            flex-shrink: 0;
-            border: 2px solid var(--irctc-blue);
-            border-radius: 8px;
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .header-title h1 {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* ── Tab Bar ── */
-        .tab-bar {
-            background: var(--irctc-blue);
-            border-radius: 0;
-            padding: 0;
+        .tab-bar-container {
+            margin-top: 32px;
             display: flex;
-            width: 100%;
-            box-shadow: none;
-            border: none;
+            justify-content: center;
+        }
+
+        .tab-bar {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            padding: 4px;
+            border-radius: 16px;
+            display: flex;
+            gap: 4px;
         }
 
         .tab-btn {
-            flex: 1;
-            padding: 15px 10px;
-            border-radius: 0;
+            padding: 10px 20px;
+            border-radius: 12px;
             border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s;
-            outline: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
             background: transparent;
-            color: #ffffff;
-            border-right: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .tab-btn.active {
-            background: #ffffff;
-            color: var(--irctc-blue);
-            box-shadow: none;
-            font-weight: 800;
-        }
-
-        .tab-btn:not(.active):hover {
-            background: rgba(255,255,255,0.1);
-            color: #ffffff;
+            background: var(--accent-gradient);
+            color: #fff;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
         }
 
         /* ── Search Card ── */
         .search-card {
-            background: #ffffff;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            padding: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--card-shadow);
+            margin-top: 24px;
             position: relative;
+            overflow: hidden;
         }
 
         .search-card::before {
-            content: 'Book Ticket';
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            background: var(--irctc-blue);
-            color: #fff;
-            padding: 8px 15px;
-            font-size: 14px;
-            font-weight: 700;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+            height: 2px;
+            background: var(--accent-gradient);
+            opacity: 0.5;
+        }
+
+        .search-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         /* ── Form Controls ── */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
         .form-label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.05em;
             margin-bottom: 8px;
+            margin-left: 4px;
         }
 
-        .form-select,
-        .form-input {
+        .form-input-glass {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: inherit;
+            background: rgba(2, 6, 23, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            color: #fff;
             font-size: 15px;
             font-weight: 500;
-            color: #333;
-            background: #fff;
             outline: none;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
 
-        .form-select:focus,
-        .form-input:focus {
-            border-color: var(--irctc-orange);
-            box-shadow: 0 0 5px rgba(251, 121, 43, 0.3);
-        }
-
-        .form-select[disabled] {
-            background: #f1f5f9;
-            color: #94a3b8;
-            cursor: not-allowed;
+        .form-input-glass:focus {
+            border-color: var(--accent);
+            background: rgba(2, 6, 23, 0.8);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
         .select-wrap {
@@ -193,436 +229,197 @@
         }
 
         .select-wrap::after {
-            content: '▾';
+            content: '↓';
             position: absolute;
             right: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 18px;
+            color: var(--text-secondary);
             pointer-events: none;
+            font-size: 12px;
         }
 
-        /* ── Search Button ── */
-        .btn-search {
+        /* ── Action Buttons ── */
+        .btn-indigo {
             width: 100%;
-            padding: 14px;
-            background: var(--irctc-orange);
+            padding: 16px;
+            background: var(--accent-gradient);
             color: #fff;
             border: none;
-            border-radius: 4px;
-            font-family: inherit;
+            border-radius: 14px;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            text-transform: uppercase;
+            transition: all 0.3s;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .btn-search:hover {
-            background: #e66a1f;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        .btn-indigo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+            filter: brightness(1.1);
         }
 
-        .btn-search:active {
+        .btn-indigo:active {
             transform: translateY(0);
-        }
-
-        /* ── Loading Spinner ── */
-        .spinner {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 4px solid #e2e8f0;
-            border-top-color: var(--royal-mid);
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
         }
 
         /* ── Result Cards ── */
         .result-card {
-            background: #fff;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
             border-radius: 20px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-card);
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            animation: slideUp 0.4s ease both;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+            transition: all 0.3s;
         }
 
         .result-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .card-accent-bar {
+            width: 40px;
+            height: 4px;
+            background: var(--accent-gradient);
+            border-radius: 2px;
+            margin-bottom: 16px;
         }
 
-        .card-header-khasra {
-            background: var(--irctc-blue);
-            border-bottom: 3px solid var(--irctc-orange);
+        /* ── Typography Enhancements ── */
+        .text-gradient {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .card-header-basra {
-            background: var(--irctc-blue);
-            border-bottom: 3px solid var(--irctc-orange);
-        }
-
-        .card-kn {
-            font-size: 28px;
-            font-weight: 900;
-            line-height: 1;
-        }
-
-        .stat-chip {
-            background: #fdf2f2;
-            border-radius: 4px;
-            padding: 10px 14px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .stat-chip-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .stat-chip-val {
-            font-size: 22px;
-            font-weight: 900;
-            color: var(--irctc-orange);
-            margin-top: 2px;
-        }
-
-        .type-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .type-badge.sinchai {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .type-badge.asinchai {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        /* ── PDF Button ── */
-        .btn-pdf {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 9px 18px;
-            border-radius: 10px;
-            border: none;
-            background: rgba(255, 255, 255, 0.20);
-            color: #fff;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.30);
-            transition: all 0.2s;
-        }
-
-        .btn-pdf:hover {
-            background: rgba(255, 255, 255, 0.35);
-            transform: scale(1.04);
-        }
-
-        /* ── Portfolio Banner ── */
-        .portfolio-banner {
-            background: var(--irctc-blue);
-            border-radius: 0;
-            color: #fff;
-            padding: 28px;
-            box-shadow: none;
-            position: relative;
+        /* ── Tables ── */
+        .table-container {
+            border-radius: 16px;
             overflow: hidden;
-            border-bottom: 4px solid var(--irctc-orange);
-        }
-
-        .portfolio-banner::before {
-            content: '';
-            position: absolute;
-            top: -60%;
-            right: -10%;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            pointer-events: none;
-        }
-
-        .pf-stat {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            padding: 16px 20px;
-            text-align: center;
-        }
-
-        .pf-stat-label {
-            font-size: 11px;
-            font-weight: 700;
-            opacity: 0.8;
-            text-transform: uppercase;
-        }
-
-        .pf-stat-val {
-            font-size: 30px;
-            font-weight: 900;
-            margin-top: 4px;
-            color: var(--irctc-orange);
-        }
-
-        .btn-portfolio-pdf {
-            background: var(--irctc-orange);
-            color: #fff;
-            padding: 12px 22px;
-            border-radius: 4px;
-            border: none;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .btn-portfolio-pdf:hover {
-            background: var(--gold-light);
-            transform: translateY(-2px);
-        }
-
-        /* ── Empty State ── */
-        .empty-box {
-            text-align: center;
-            padding: 64px 32px;
-            background: #fff;
-            border-radius: 20px;
-            border: 2px dashed var(--border);
-            animation: slideUp 0.4s ease both;
-        }
-
-        /* ── Animate in ── */
-        .fade-in {
-            animation: fadeIn 0.5s ease both;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* ══ RESPONSIVE ══════════════════════════════════════════════ */
-
-        /* ── Tab bar: horizontally scrollable on all small screens ── */
-        .tab-bar-wrap {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            display: flex;
-            justify-content: flex-start;
-            /* flex-start fixes Android left-clip bug */
-            padding-bottom: 4px;
-            scrollbar-width: none;
-            /* Firefox */
-        }
-
-        .tab-bar-wrap::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Center tab-bar via margin:auto — works even when overflow-x is active */
-        .tab-bar {
-            flex-shrink: 0;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* ── Tablet (≤ 900px) ── */
-        @media (max-width: 900px) {
-            .tab-btn {
-                padding: 10px 18px;
-                font-size: 14px;
-            }
-        }
-
-        /* ── Small tablet / large phone (≤ 680px) ── */
-        @media (max-width: 680px) {
-            .tab-btn {
-                padding: 9px 14px;
-                font-size: 13px;
-                gap: 5px;
-            }
-
-            .search-card {
-                padding: 24px 16px;
-            }
-
-            .pf-stat-val {
-                font-size: 24px;
-            }
-        }
-
-        /* ── Mobile (≤ 480px) ── */
-        @media (max-width: 480px) {
-
-            /* Header */
-            .emblem {
-                width: 54px;
-                height: 54px;
-                font-size: 26px;
-            }
-
-            /* Tab buttons — even more compact */
-            .tab-btn {
-                padding: 8px 11px;
-                font-size: 12px;
-                gap: 4px;
-                border-radius: 10px;
-            }
-
-            /* Search card */
-            .search-card {
-                padding: 20px 14px;
-            }
-
-            /* Form inputs */
-            .form-select,
-            .form-input {
-                padding: 12px 14px;
-                font-size: 15px;
-            }
-
-            /* Search button */
-            .btn-search {
-                padding: 14px 20px;
-                font-size: 15px;
-            }
-
-            /* Result card grid → single column */
-            #resultsDiv>div[style*="grid"] {
-                grid-template-columns: 1fr !important;
-            }
-
-            /* Bar chart label narrower */
-            .bar-label {
-                width: 90px;
-                font-size: 12px;
-            }
-
-            /* Section card padding */
-            .dash-section {
-                padding: 18px 14px;
-            }
-
-            /* Leaderboard row */
-            .lb-row {
-                padding: 10px 12px;
-                gap: 10px;
-            }
-
-            /* Stats page village cards → single column */
-            #statisticsDiv>div>div[style*="grid"] {
-                grid-template-columns: 1fr !important;
-            }
-
-            /* Responsive fix for Village Summary Card */
-            .stats-summary-card {
-                padding: 20px 16px !important;
-                border-radius: 16px !important;
-            }
-            .stats-grid-main {
-                grid-template-columns: 1fr !important;
-                gap: 12px !important;
-            }
-            .stats-grid-inner {
-                grid-template-columns: 1fr 1fr !important;
-            }
-        }
-
-        /* Map Animations */
-        @keyframes pulseRing {
-            0% { transform:scale(0.8); opacity:0.8; }
-            100% { transform:scale(2.5); opacity:0; }
-        }
-        @keyframes pinBounce {
-            0%,100% { transform:translateY(0); }
-            50% { transform:translateY(-8px); }
-        }
-        .map-pin { animation: pinBounce 2s infinite ease-in-out; }
-
-        /* Section card */
-        .dash-section {
-            background: #fff;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            box-shadow: none;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .dash-section-title {
-            font-size: 16px;
-            font-weight: 900;
-            color: var(--irctc-blue);
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-left: 4px solid var(--irctc-orange);
-            padding-left: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.3);
         }
 
         table {
-            border: 1px solid #ddd;
+            width: 100%;
+            border-collapse: collapse;
         }
 
         th {
-            background: var(--irctc-blue) !important;
-            color: #ffffff !important;
-            font-weight: 700;
-            padding: 12px 10px !important;
+            background: rgba(30, 41, 59, 0.8) !important;
+            color: var(--text-secondary) !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            text-align: left !important;
+            padding: 16px !important;
+            border-bottom: 1px solid var(--glass-border) !important;
         }
 
         td {
-            border-bottom: 1px solid #eee;
-            padding: 10px !important;
+            padding: 16px !important;
+            color: var(--text-primary) !important;
+            border-bottom: 1px solid var(--glass-border) !important;
+            font-size: 14px !important;
+        }
+
+        tr:last-child td {
+            border-bottom: none !important;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* ── Stats & chips ── */
+        .stat-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* ── Badges ── */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .badge-warning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+
+        /* ── Animations ── */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* ── Search Suggestions ── */
+        #khasraSuggest {
+            position: absolute;
+            background: #1e293b;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-top: 5px;
+            width: 100%;
+            z-index: 1000;
+            max-height: 250px;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .suggest-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .suggest-item:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .site-header { top: 10px; padding: 0 10px; }
+            .nav-pill { padding: 8px 16px; }
+            .header-title h1 { font-size: 14px; }
+            .tab-btn { padding: 8px 12px; font-size: 12px; }
+            .search-card { padding: 20px; }
+            .stat-value { font-size: 24px; }
         }
     </style>
     <!-- PapaParse for ultra-fast CSV streaming -->
@@ -634,150 +431,134 @@
     <div class="bg-mesh"></div>
 
     <!-- ═══════════════════ HEADER ═══════════════════ -->
-    <div class="header-gold-bar"></div>
     <header class="site-header">
-        <div style="max-width:1200px; margin:0 auto; padding:10px 20px; display:flex; align-items:center; justify-content:space-between;">
-            <div style="display:flex; align-items:center; gap:15px;">
-                <div class="emblem" style="background:#fff; border:none; width:60px; height:60px; font-size:40px;">🇮🇳</div>
-                <div>
-                    <h1 style="font-size:22px; font-weight:900; color:var(--irctc-blue); margin:0; line-height:1.2;">IRCTC</h1>
-                    <div style="font-size:12px; color:var(--irctc-blue); font-weight:700; opacity:0.8;">LAND RECORDS SEARCH</div>
+        <div class="nav-pill">
+            <div class="header-logo">
+                <div class="emblem-glass">🇮🇳</div>
+                <div class="header-title">
+                    <h1>भूमि क्वेस्ट <span class="text-gradient">Bhoomi Quest</span></h1>
                 </div>
             </div>
-            <div style="display:flex; align-items:center; gap:20px;">
-                <div style="text-align:right;">
-                    <div style="font-size:16px; font-weight:900; color:var(--irctc-blue);">छत्तीसगढ़ शासन</div>
-                    <div id="recordCountBadge" style="font-size:11px; font-weight:700; color:var(--irctc-orange);">डेटा लोड हो रहा है...</div>
+            <div id="recordCountBadge" style="font-size: 11px; font-weight: 700; color: var(--text-secondary); opacity: 0.8;">
+                डेटा लोड हो रहा है...
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="hidden sm:block" style="text-align: right;">
+                    <div style="font-size: 14px; font-weight: 800; color: #fff;">छत्तीसगढ़ शासन</div>
+                    <div style="font-size: 10px; font-weight: 600; color: var(--text-secondary);">तहसील पलारी</div>
                 </div>
-                <div class="emblem" style="font-size:30px; width:50px; height:50px;">🌾</div>
+                <div class="emblem-glass" style="font-size: 20px;">🌾</div>
             </div>
         </div>
     </header>
 
     <!-- ═══════════════════ MAIN ═══════════════════ -->
-    <main
-        style="max-width:900px; margin:0 auto; padding:clamp(20px,4vw,32px) clamp(12px,3vw,16px) 80px; position:relative; z-index:1;">
+    <!-- ═══════════════════ MAIN ═══════════════════ -->
+    <main style="max-width:1000px; margin:0 auto; padding:40px 20px 100px;">
 
-        <!-- Tab Bar Moved inside search container style -->
-        <div style="max-width:640px; margin:0 auto;">
-            <div class="tab-bar-wrap fade-in" style="margin-bottom:0;">
-                <div class="tab-bar">
-                    <button class="tab-btn active" id="tab-khasra" onclick="switchTab('khasra')">
-                        <span style="font-size:20px;">📄</span>
-                        <span>खसरा</span>
-                    </button>
-                    <button class="tab-btn" id="tab-basra" onclick="switchTab('basra')">
-                        <span style="font-size:20px;">👥</span>
-                        <span>बसरा</span>
-                    </button>
-                    <button class="tab-btn" id="tab-nam" onclick="switchTab('nam')">
-                        <span style="font-size:20px;">👤</span>
-                        <span>नाम</span>
-                    </button>
-                    <button class="tab-btn" id="tab-statistics" onclick="switchTab('statistics')">
-                        <span style="font-size:20px;">📊</span>
-                        <span>आँकड़े</span>
-                    </button>
-                    <button class="tab-btn" id="tab-crop" onclick="switchTab('crop')">
-                        <span style="font-size:20px;">🌾</span>
-                        <span>फसल</span>
-                    </button>
-                    <button class="tab-btn" id="tab-gov" onclick="switchTab('gov')">
-                        <span style="font-size:20px;">🏛️</span>
-                        <span>शासकीय</span>
-                    </button>
-                </div>
+        <!-- Tab Bar Container -->
+        <div class="tab-bar-container animate-slide-up">
+            <div class="tab-bar">
+                <button class="tab-btn active" id="tab-khasra" onclick="switchTab('khasra')">
+                    <span>📄</span>
+                    <span class="tab-label">खसरा</span>
+                </button>
+                <button class="tab-btn" id="tab-basra" onclick="switchTab('basra')">
+                    <span>👥</span>
+                    <span class="tab-label">बसरा</span>
+                </button>
+                <button class="tab-btn" id="tab-nam" onclick="switchTab('nam')">
+                    <span>👤</span>
+                    <span class="tab-label">नाम</span>
+                </button>
+                <button class="tab-btn" id="tab-statistics" onclick="switchTab('statistics')">
+                    <span>📊</span>
+                    <span class="tab-label">आँकड़े</span>
+                </button>
+                <button class="tab-btn" id="tab-crop" onclick="switchTab('crop')">
+                    <span>🌾</span>
+                    <span class="tab-label">फसल</span>
+                </button>
+                <button class="tab-btn" id="tab-gov" onclick="switchTab('gov')">
+                    <span>🏛️</span>
+                    <span class="tab-label">शासकीय</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Card -->
+        <div class="search-card animate-slide-up" style="max-width: 640px; margin: 32px auto;">
+            <div class="search-title">
+                <div class="emblem-glass" style="width: 32px; height: 32px; font-size: 16px;">🔍</div>
+                <span>खोजें – <span class="text-gradient">Land Search</span></span>
             </div>
             
-            <div class="search-card fade-in" style="margin-top:0; border-top:none; border-top-left-radius:0; border-top-right-radius:0; padding-top:50px;">
-                <form id="searchForm" onsubmit="handleSearch(event)">
-                <div style="display:grid; gap:18px;">
-
-                    <!-- Village -->
-                    <div>
-                        <label class="form-label">🏘️ ग्राम का नाम</label>
+            <form id="searchForm" onsubmit="handleSearch(event)">
+                <div style="display: grid; gap: 20px;">
+                    <!-- Village Selection -->
+                    <div class="form-group">
+                        <label class="form-label">🏘️ ग्राम का चयन (Select Village)</label>
                         <div class="select-wrap">
-                            <select id="villageInput" class="form-select" required>
+                            <select id="villageInput" class="form-input-glass" onchange="handleVillageChange()" required>
                                 <option value="" disabled selected>— ग्राम चुनें —</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Khasra Input -->
-                    <div id="khasraGroup" style="position:relative;">
-                        <label class="form-label">📄 खसरा नंबर</label>
-                        <input type="text" id="khasraVal" class="form-input" placeholder="उदाहरण: 123 या 45/1" autocomplete="off">
-                        <div id="khasraSuggest" style="
-                            display:none;
-                            position:fixed;
-                            z-index:9999;
-                            background:#fff;
-                            border:1px solid var(--border);
-                            border-radius:12px;
-                            box-shadow:0 8px 32px rgba(26,26,110,0.18);
-                            max-height:240px;
-                            overflow-y:auto;
-                            padding-bottom:4px;
-                        "></div>
-                    </div>
+                    <!-- Search Input Area -->
+                    <div id="searchInputArea">
+                        <!-- Khasra Input -->
+                        <div id="khasraInputWrap">
+                            <label class="form-label">📄 खसरा नंबर (Khasra No.)</label>
+                            <div style="position: relative;">
+                                <input type="text" id="khasraVal" class="form-input-glass" placeholder="उदा. 43 या 43/1"
+                                    autocomplete="off" onfocus="handleKhasraFocus()" oninput="handleKhasraInput()">
+                                <div id="khasraSuggest" style="display:none;"></div>
+                            </div>
+                        </div>
 
-                    <!-- Basra Input -->
-                    <div id="basraGroup" style="display:none;">
-                        <label class="form-label">📋 बसरा नंबर</label>
-                        <div class="select-wrap">
-                            <select id="basraVal" class="form-select" disabled>
-                                <option value="" disabled selected>— पहले ग्राम चुनें —</option>
-                            </select>
+                        <!-- Basra Input -->
+                        <div id="basraInputWrap" style="display:none;">
+                            <label class="form-label">👥 बसरा नंबर (Basra No.)</label>
+                            <div class="select-wrap">
+                                <select id="basraVal" class="form-input-glass">
+                                    <option value="" disabled selected>— पहले ग्राम चुनें —</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Name Input -->
+                        <div id="namInputWrap" style="display:none;">
+                            <label class="form-label">👤 भूमिस्वामी का नाम (Owner Name)</label>
+                            <input type="text" id="namVal" class="form-input-glass"
+                                placeholder="नाम टाइप करें...">
                         </div>
                     </div>
 
-                    <!-- Nam Input -->
-                    <div id="namGroup" style="display:none;">
-                        <label class="form-label">👤 भूमिस्वामी का नाम</label>
-                        <input type="text" id="namVal" list="farmerList" class="form-input"
-                            placeholder="पूरा या आंशिक नाम टाइप करें (जैसे: उत्तरा)" disabled>
-                        <datalist id="farmerList"></datalist>
-                    </div>
-
-                    <!-- Button -->
-                    <button type="submit" class="btn-search" id="searchBtn" style="margin-top:4px;">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"
-                            viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.35-4.35" />
-                        </svg>
-                        <span id="btnLabel">खोजें</span>
+                    <button type="submit" class="btn-indigo">
+                        <span id="btnLabel">खोजें (Search)</span>
                     </button>
-
                 </div>
             </form>
         </div>
 
-        <!-- Loading -->
-        <div id="loadingDiv" style="display:none; text-align:center; padding:48px 0;" class="fade-in">
-            <div class="spinner" style="margin:0 auto 16px;"></div>
-            <p style="color:var(--text-muted); font-weight:600;">खोज जारी है...</p>
+        <!-- Status Containers -->
+        <div id="loadingDiv" style="display:none; text-align:center; padding:60px 0;">
+            <div class="emblem-glass animate-spin" style="width:50px; height:50px; margin:0 auto 20px;">⏳</div>
+            <p style="color:var(--text-secondary); font-weight:600;">डेटा खोजा जा रहा है...</p>
         </div>
 
-        <!-- Empty State -->
-        <div id="emptyDiv" style="display:none; max-width:640px; margin:0 auto;">
-            <div class="empty-box">
-                <div style="font-size:56px; margin-bottom:16px;">🔍</div>
-                <h3 style="font-size:20px; font-weight:800; color:var(--text-main); margin-bottom:8px;">कोई रिकॉर्ड नहीं
-                    मिला</h3>
-                <p style="color:var(--text-muted); font-size:14px;">कृपया ग्राम और नंबर की जांच करके दोबारा खोजें।</p>
-            </div>
+        <div id="emptyDiv" style="display:none; text-align:center; padding:60px 0;">
+            <div style="font-size:64px; margin-bottom:20px;">🔍</div>
+            <h3 style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">कोई रिकॉर्ड नहीं मिला</h3>
+            <p style="color:var(--text-secondary); max-width:400px; margin:0 auto;">कृपया ग्राम और नंबर की जाँच करके दोबारा प्रयास करें।</p>
         </div>
 
-        <!-- Results -->
+        <!-- Dynamic Content Sections -->
         <div id="resultsDiv"></div>
-        <!-- Statistics View -->
         <div id="statisticsDiv" style="display:none;"></div>
-        <!-- Crop Details View -->
         <div id="cropDiv" style="display:none;"></div>
-        <!-- Government Records View -->
         <div id="govDiv" style="display:none;"></div>
-
     </main>
 
     <!-- ═══════════════════ SCRIPT ═══════════════════ -->
@@ -1237,120 +1018,7 @@
             });
 
             if (currentTab === 'basra') toast(`${basras.length} बसरा उपलब्ध`, 'info');
-            else if (currentTab === 'nam') toast(`${farmerList.options.length} भूमिस्वामी उपलब्ध`, 'info');
-            else if (currentTab === 'khasra') toast(`${window._khasraList.length} खसरे उपलब्ध`, 'info');
-        });
-
-        // ── Khasra Autocomplete ───────────────────────────────────
-        (function () {
-            const inp = document.getElementById('khasraVal');
-            const box = document.getElementById('khasraSuggest');
-
-            function positionBox() {
-                const rect = inp.getBoundingClientRect();
-                box.style.top    = (rect.bottom + 4) + 'px';
-                box.style.left   = rect.left + 'px';
-                box.style.width  = rect.width + 'px';
-            }
-
-            function showSuggestions(q) {
-                const list = window._khasraList || [];
-                if (!q || !list.length) { box.style.display = 'none'; return; }
-
-                const qNum = q.replace(/\s/g, '');
-                const matched = list.filter(kn => {
-                    const s = String(kn);
-                    return s === qNum || s.startsWith(qNum + '/');
-                }).slice(0, 50);
-
-                if (!matched.length) { box.style.display = 'none'; return; }
-
-                box.innerHTML = matched.map((kn, i) =>
-                    `<div data-kn="${kn}" style="
-                        padding:10px 16px;
-                        font-size:14px;
-                        font-weight:700;
-                        color:var(--royal);
-                        cursor:pointer;
-                        border-bottom:${i < matched.length - 1 ? '1px solid var(--border)' : 'none'};
-                        font-family:'Noto Sans Devanagari',sans-serif;
-                        transition:background 0.15s;
-                    " onmouseenter="this.style.background='#f0f4ff'" onmouseleave="this.style.background=''">${kn}</div>`
-                ).join('');
-                positionBox();
-                box.style.display = 'block';
-            }
-
-            inp.addEventListener('input', function () {
-                showSuggestions(this.value.trim());
-            });
-
-            inp.addEventListener('focus', function () {
-                if (this.value.trim()) showSuggestions(this.value.trim());
-            });
-
-            box.addEventListener('mousedown', function (e) {
-                const item = e.target.closest('[data-kn]');
-                if (item) {
-                    inp.value = item.dataset.kn;
-                    box.style.display = 'none';
-                    inp.focus();
-                }
-            });
-
-            document.addEventListener('click', function (e) {
-                if (!inp.contains(e.target) && !box.contains(e.target)) {
-                    box.style.display = 'none';
-                }
-            });
-
-            // ── Prevent page scroll when scrolling inside dropdown ──
-            box.addEventListener('wheel', function (e) {
-                const atTop = this.scrollTop === 0;
-                const atBottom = this.scrollTop + this.clientHeight >= this.scrollHeight;
-                if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) return;
-                e.stopPropagation();
-                e.preventDefault();
-                this.scrollTop += e.deltaY;
-            }, { passive: false });
-
-            // ── Reposition on resize ──
-            window.addEventListener('resize', function () {
-                if (box.style.display !== 'none') positionBox();
-            });
-
-            inp.addEventListener('keydown', function (e) {
-                if (!box.style.display || box.style.display === 'none') return;
-                const items = box.querySelectorAll('[data-kn]');
-                const active = box.querySelector('[data-kn][style*="background:#f0f4ff"]') ||
-                               box.querySelector('[data-kn].ksg-active');
-                let idx = [...items].indexOf(active);
-
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    if (active) active.style.background = '';
-                    const next = items[Math.min(idx + 1, items.length - 1)];
-                    next.style.background = '#f0f4ff';
-                    next.scrollIntoView({ block: 'nearest' });
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    if (active) active.style.background = '';
-                    const prev = items[Math.max(idx - 1, 0)];
-                    prev.style.background = '#f0f4ff';
-                    prev.scrollIntoView({ block: 'nearest' });
-                } else if (e.key === 'Enter') {
-                    if (active) {
-                        inp.value = active.dataset.kn;
-                        box.style.display = 'none';
-                    }
-                } else if (e.key === 'Escape') {
-                    box.style.display = 'none';
-                }
-            });
-        })();
-
-
-        // ── Tab Switch ────────────────────────────────
+            else if (currentTab === 'nam') toast(`${        // ── Tab Switch ────────────────────────────────
         function switchTab(tab) {
             currentTab = tab;
             const isSearch = ['khasra', 'basra', 'nam'].includes(tab);
@@ -1359,22 +1027,30 @@
             const isGov = tab === 'gov';
 
             // Show/hide search form
-            document.getElementById('searchForm').closest('.search-card').style.display = isSearch ? '' : 'none';
-            document.getElementById('khasraGroup').style.display = tab === 'khasra' ? '' : 'none';
-            document.getElementById('basraGroup').style.display = tab === 'basra' ? '' : 'none';
-            document.getElementById('namGroup').style.display = tab === 'nam' ? '' : 'none';
+            const searchCard = document.getElementById('searchForm').closest('.search-card');
+            if (searchCard) searchCard.style.display = isSearch ? '' : 'none';
 
+            // Show/hide specific search inputs
+            const kWrap = document.getElementById('khasraInputWrap');
+            const bWrap = document.getElementById('basraInputWrap');
+            const nWrap = document.getElementById('namInputWrap');
+
+            if (kWrap) kWrap.style.display = tab === 'khasra' ? 'block' : 'none';
+            if (bWrap) bWrap.style.display = tab === 'basra' ? 'block' : 'none';
+            if (nWrap) nWrap.style.display = tab === 'nam' ? 'block' : 'none';
+
+            // Tab Buttons active state
             ['khasra', 'basra', 'nam', 'statistics', 'crop', 'gov'].forEach(t => {
                 const el = document.getElementById('tab-' + t);
                 if (el) el.className = 'tab-btn' + (tab === t ? ' active' : '');
             });
 
-            // Show/hide panels
+            // Show/hide result panels
             document.getElementById('resultsDiv').innerHTML = '';
             document.getElementById('emptyDiv').style.display = 'none';
-            document.getElementById('statisticsDiv').style.display = isStat ? '' : 'none';
-            document.getElementById('cropDiv').style.display = isCrop ? '' : 'none';
-            document.getElementById('govDiv').style.display = isGov ? '' : 'none';
+            document.getElementById('statisticsDiv').style.display = isStat ? 'block' : 'none';
+            document.getElementById('cropDiv').style.display = isCrop ? 'block' : 'none';
+            document.getElementById('govDiv').style.display = isGov ? 'block' : 'none';
 
             if (isStat) {
                 showStatistics();
@@ -1389,18 +1065,16 @@
             }
             if (isGov) { showGovRecords(); return; }
 
-            // If village already chosen, re-populate basra / farmerList
+            // If village already chosen, re-populate basra / farmer suggestions if needed
             if (tab === 'basra' || tab === 'nam') {
                 const v = document.getElementById('villageInput').value;
                 if (v) document.getElementById('villageInput').dispatchEvent(new Event('change'));
             }
         }
 
-
-
-        // ── Search ────────────────────────────────────
+        // ── Search Logic ──────────────────────────────
         function handleSearch(e) {
-            e.preventDefault();
+            if (e) e.preventDefault();
             const v = document.getElementById('villageInput').value;
             let val = '';
 
@@ -1422,14 +1096,11 @@
                 else if (currentTab === 'basra') found = records.filter(r => r.v === v && r.bn == val);
                 else if (currentTab === 'nam') {
                     const nval = val.replace(/\s+/g, ' ').trim();
-                    // Step 1: exact name match
                     const nameMatched = records.filter(r => r.v === v && r.ownerNames.includes(nval));
-                    // Step 2: collect basra numbers from matched records
                     const basraSet = new Set(nameMatched.map(r => r.bn).filter(Boolean));
-                    // Step 3: show ALL khasras of those basras
                     found = basraSet.size > 0
                         ? records.filter(r => r.v === v && basraSet.has(r.bn))
-                        : nameMatched; // if no basra, just show name-matched records
+                        : nameMatched; 
                 }
 
                 setLoading(false);
@@ -1438,12 +1109,13 @@
         }
 
         function setLoading(on) {
-            document.getElementById('loadingDiv').style.display = on ? '' : 'none';
-            document.getElementById('searchBtn').disabled = on;
-            document.getElementById('btnLabel').textContent = on ? 'खोज रहे हैं...' : 'खोजें';
+            document.getElementById('loadingDiv').style.display = on ? 'block' : 'none';
+            const btn = document.getElementById('searchBtn') || document.querySelector('.btn-indigo[type="submit"]');
+            if (btn) btn.disabled = on;
+            const lbl = document.getElementById('btnLabel');
+            if (lbl) lbl.textContent = on ? 'खोज रहे हैं...' : 'खोजें';
         }
 
-        // ── [CHANGE 3 & 4 HELPER] Card HTML ─────────────────
         function getFullOwner(r) {
             if (!r.owner.includes('(ज. ब. न.)')) return r.owner;
             const mool = records.find(rec =>
@@ -1455,47 +1127,210 @@
         }
 
         function getCardHTML(r) {
-            const hdrClass = currentTab === 'nam' ? 'card-header-khasra' : `card-header-${currentTab}`;
-            const typeBadge = r.type.includes('असिंचित') ? 'asinchai' : 'sinchai';
+            const typeBadge = r.type.includes('असिंचित') ? 'badge-warning' : 'badge-success';
             return `
-        <div class="${hdrClass}" style="padding:16px 20px; display:flex; justify-content:space-between; align-items:flex-start;">
-          <div>
-            <div style="font-size:10px; font-weight:700; color:rgba(255,255,255,0.65); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">
-              ${currentTab === 'khasra' ? 'खसरा नंबर' : currentTab === 'basra' ? 'बसरा नंबर' : 'खसरा नंबर'}
-            </div>
-            <div class="card-kn" style="color:#fff;">${currentTab === 'basra' ? r.bn : r.kn}</div>
-            <div style="font-size:13px; color:rgba(255,255,255,0.7); margin-top:4px; font-weight:600;">${r.v}${getHalka(r.v) ? ` &nbsp;<span style="background:rgba(255,255,255,0.18);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:800;letter-spacing:0.05em;">${getHalka(r.v)}</span>` : ''}</div>
-          </div>
-          <button onclick="event.stopPropagation();printSingleRecord(${JSON.stringify(r).replace(/"/g, '&quot;')})" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">🖨 Print</button>
-        </div>
-        <div style="padding:18px 20px; display:flex; flex-direction:column; gap:14px;">
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div class="stat-chip">
-              <div class="stat-chip-label">खसरा नं.</div>
-              <div class="stat-chip-val">${r.kn}</div>
-            </div>
-            <div class="stat-chip">
-              <div class="stat-chip-label">बसरा नं.</div>
-              <div class="stat-chip-val">${r.bn}</div>
-            </div>
-          </div>
-          <div style="border-top:1px solid var(--border); padding-top:12px;">
-            <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:6px;">भूमिस्वामी</div>
-            <div style="font-size:14px; font-weight:700; color:var(--text-main); line-height:1.4;">${getFullOwner(r)}</div>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; border-top:1px solid var(--border); padding-top:12px;">
-            <div>
-              <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:4px;">क्षेत्रफल (हे.)</div>
-              <div style="font-size:18px; font-weight:900; color:var(--text-main);">${r.area}</div>
-            </div>
-            <div>
-              <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:6px;">प्रकार</div>
-              <span class="type-badge ${typeBadge}">${r.type || '—'}</span>
-            </div>
-          </div>
-          
-          <div style="border-top:1px solid var(--border); padding-top:12px;">
-            <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:8px;">🌾 फसल विवरण</div>
+                <div class="card-accent-bar"></div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+                    <div>
+                        <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">
+                            ${currentTab === 'khasra' ? 'खसरा नंबर' : currentTab === 'basra' ? 'बसरा नंबर' : 'खसरा नंबर'}
+                        </div>
+                        <div style="font-size:32px; font-weight:900; color:#fff; line-height:1;">${currentTab === 'basra' ? r.bn : r.kn}</div>
+                        <div style="font-size:14px; color:var(--text-secondary); margin-top:8px; display:flex; align-items:center; gap:6px;">
+                            <span>📍 ${r.v}</span>
+                            ${getHalka(r.v) ? `<span class="badge" style="background:rgba(99,102,241,0.1); color:var(--accent); border:1px solid rgba(99,102,241,0.2);">${getHalka(r.v)}</span>` : ''}
+                        </div>
+                    </div>
+                    <button onclick="event.stopPropagation();printSingleRecord(${JSON.stringify(r).replace(/"/g, '&quot;')})" 
+                        class="btn-indigo" style="width:auto; padding:8px 16px; font-size:13px; border-radius:10px;">
+                        <span>🖨️ Print</span>
+                    </button>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+                    <div class="stat-card">
+                        <div class="stat-label">खसरा नं.</div>
+                        <div class="stat-value" style="font-size:20px;">${r.kn}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">बसरा नं.</div>
+                        <div class="stat-value" style="font-size:20px;">${r.bn}</div>
+                    </div>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.03); border-radius:16px; padding:16px; border:1px solid var(--glass-border); margin-bottom:20px;">
+                    <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;">मलिक/स्वामी (Owner)</div>
+                    <div style="font-size:16px; font-weight:700; color:#fff; line-height:1.4;">${getFullOwner(r)}</div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+                    <div style="padding:4px;">
+                        <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; margin-bottom:4px;">क्षेत्रफल (Area)</div>
+                        <div style="font-size:22px; font-weight:900; color:var(--accent);">${r.area} <span style="font-size:12px; opacity:0.7;">हे.</span></div>
+                    </div>
+                    <div style="padding:4px;">
+                        <div style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; margin-bottom:8px;">प्रकार (Type)</div>
+                        <span class="badge ${typeBadge}">${r.type || '—'}</span>
+                    </div>
+                </div>
+
+                <div style="border-top:1px solid var(--glass-border); padding-top:20px;">
+                    <div style="font-size:12px; font-weight:800; color:#fff; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                        <span>🌾</span> फसल विवरण (Crop Details)
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(16,185,129,0.05); padding:10px 14px; border-radius:12px; border:1px solid rgba(16,185,129,0.1);">
+                            <span style="font-size:12px; font-weight:800; color:#10b981;">☀️ खरीफ</span>
+                            <div style="text-align:right;">
+                                <div style="font-size:14px; font-weight:700; color:#fff;">${r.finalKharifCrop || '—'}</div>
+                                <div style="font-size:12px; color:var(--text-secondary);">${r.finalKharifCrop ? r.kharifCropArea + ' हे.' : '—'}</div>
+                            </div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(99,102,241,0.05); padding:10px 14px; border-radius:12px; border:1px solid rgba(99,102,241,0.1);">
+                            <span style="font-size:12px; font-weight:800; color:var(--accent);">❄️ रबी</span>
+                            <div style="text-align:right;">
+                                <div style="font-size:14px; font-weight:700; color:#fff;">${r.finalRabiCrop || '—'}</div>
+                                <div style="font-size:12px; color:var(--text-secondary);">${r.finalRabiCrop ? r.rabiCropArea + ' हे.' : '—'}</div>
+                            </div>
+                        </div>
+                        ${r.isDufasali ? `
+                        <div style="background:var(--accent-gradient); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 12px rgba(99,102,241,0.2);">
+                            <span style="font-size:12px; font-weight:800; color:#fff;">🌾 दुफसली रकबा</span>
+                            <span style="font-size:16px; font-weight:900; color:#fff;">${r.dufasaliArea} हे.</span>
+                        </div>` : ''}
+                    </div>
+                </div>
+                ${(r.charai || r.ceiling) ? `
+                <div style="display:flex; gap:8px; flex-wrap:wrap; border-top:1px solid var(--glass-border); padding-top:20px; margin-top:20px;">
+                    ${r.charai ? `<span class="badge" style="background:rgba(245,158,11,0.1); color:#f59e0b; border:1px solid rgba(245,158,11,0.2);">🌿 चराई: ${r.charai}</span>` : ''}
+                    ${r.ceiling ? `<span class="badge" style="background:rgba(236,72,153,0.1); color:#ec4899; border:1px solid rgba(236,72,153,0.2);">⚖️ सीलिंग: ${r.ceiling}</span>` : ''}
+                </div>` : ''}
+                ${r.nistar ? `
+                <div style="background:rgba(255,255,255,0.02); border:1px solid var(--glass-border); border-radius:16px; padding:16px; margin-top:20px;">
+                    <div style="font-size:11px; font-weight:800; color:var(--text-secondary); text-transform:uppercase; margin-bottom:8px;">📜 निस्तार विवरण</div>
+                    <div style="font-size:14px; color:#fff; line-height:1.6;">${r.nistar}</div>
+                </div>` : ''}
+            `;
+        }
+
+        function filterDCSTab(type) {
+            const all = window.found_ref || [];
+            const filtered = type === 'all'   ? all
+                : type === 'dcs'              ? all.filter(r => !r.kharifDCSBlank)
+                : type === 'nondcs'           ? all.filter(r => r.kharifDCSBlank && r.kharifSource === 'Bhuiyya')
+                : type === 'blank'            ? all.filter(r => r.kharifDCSBlank && r.kharifSource === '')
+                : all;
+
+            const btnColors = { all: 'var(--accent)', dcs: '#10b981', nondcs: '#f59e0b', blank: '#64748b' };
+            ['all', 'dcs', 'nondcs', 'blank'].forEach(t => {
+                const b = document.getElementById('tab_' + t);
+                if (!b) return;
+                b.style.background = (t === type) ? btnColors[t] : 'rgba(255,255,255,0.05)';
+                b.style.color = '#fff';
+                b.style.borderColor = (t === type) ? btnColors[t] : 'transparent';
+            });
+
+            const grid = document.getElementById('dcsCardsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            if (!filtered.length) {
+                grid.innerHTML = '<div style="padding:60px 20px; text-align:center; color:var(--text-secondary); font-weight:700; grid-column:1/-1;">कोई रिकॉर्ड नहीं मिला</div>';
+                return;
+            }
+
+            filtered.forEach((r, idx) => {
+                const card = document.createElement('div');
+                card.className = 'result-card animate-slide-up';
+                card.style.animationDelay = (idx * 0.05) + 's';
+                card.innerHTML = getCardHTML(r);
+                grid.appendChild(card);
+            });
+        }
+
+        // ── Render ────────────────────────────────────
+        function renderResults(found, v, val) {
+            const res = document.getElementById('resultsDiv');
+            const emp = document.getElementById('emptyDiv');
+            res.innerHTML = '';
+
+            if (!found.length) {
+                emp.style.display = 'block';
+                toast('कोई रिकॉर्ड नहीं मिला', 'error');
+                return;
+            }
+            emp.style.display = 'none';
+            toast(`${found.length} रिकॉर्ड मिले`, 'success');
+
+            const ownerName = currentTab === 'basra' ? getFullOwner(found[0]) : val;
+            const totalArea = found.reduce((s, r) => s + parseFloat(r.area), 0).toFixed(3);
+
+            if (currentTab === 'basra' || currentTab === 'nam') {
+                const portfolio = document.createElement('div');
+                portfolio.className = 'search-card animate-slide-up';
+                portfolio.style.background = 'var(--accent-gradient)';
+                portfolio.style.color = '#fff';
+                portfolio.style.marginBottom = '32px';
+                portfolio.style.padding = '32px';
+                portfolio.style.borderRadius = '24px';
+                
+                const printFn = currentTab === 'basra' ? `printPortfolio('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')` : `printFarmerPortfolio('${escJS(ownerName)}','${escJS(v)}')`;
+                const excelFn = currentTab === 'basra' ? `exportBasraExcel('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')` : `exportFarmerExcel('${escJS(ownerName)}','${escJS(v)}')`;
+
+                portfolio.innerHTML = `
+                    <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:center; justify-content:space-between;">
+                        <div style="flex:1; min-width:260px;">
+                            <div style="font-size:12px; font-weight:800; opacity:0.8; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">📁 भूमिस्वामी पोर्टफोलियो (Owner Portfolio)</div>
+                            <div style="font-size:28px; font-weight:900; line-height:1.1; margin-bottom:12px;">${ownerName}</div>
+                            <div style="display:flex; align-items:center; gap:12px; opacity:0.9; font-size:15px; font-weight:600;">
+                                <span>📍 ${v}</span>
+                                <span style="opacity:0.6;">|</span>
+                                <span>${currentTab === 'basra' ? `🆔 बसरा: ${val}` : `👤 स्वामी: ${val}`}</span>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+                            <div style="text-align:center; background:rgba(255,255,255,0.15); padding:12px 20px; border-radius:16px; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2);">
+                                <div style="font-size:11px; font-weight:800; opacity:0.8; text-transform:uppercase;">कुल खसरा</div>
+                                <div style="font-size:24px; font-weight:900;">${found.length}</div>
+                            </div>
+                            <div style="text-align:center; background:rgba(255,255,255,0.15); padding:12px 20px; border-radius:16px; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2);">
+                                <div style="font-size:11px; font-weight:800; opacity:0.8; text-transform:uppercase;">कुल रकबा</div>
+                                <div style="font-size:24px; font-weight:900;">${totalArea} <span style="font-size:14px; opacity:0.7;">हे.</span></div>
+                            </div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:10px; min-width:180px;">
+                            <button onclick="${printFn}" class="btn-indigo" style="background:#fff; color:var(--accent); border:none; padding:12px 20px; font-size:14px; box-shadow:0 10px 20px rgba(0,0,0,0.1);">
+                                <span>🖨️ पोर्टफोलियो प्रिंट</span>
+                            </button>
+                            <button onclick="${excelFn}" class="btn-indigo" style="background:rgba(16,185,129,0.9); border:none; padding:12px 20px; font-size:14px;">📊 Excel निर्यात</button>
+                        </div>
+                    </div>`;
+                res.appendChild(portfolio);
+            }
+
+            const dcsRecs     = found.filter(r => !r.kharifDCSBlank);
+            const nonDcsRecs  = found.filter(r => r.kharifDCSBlank && r.kharifSource === 'Bhuiyya');
+            const blankRecs   = found.filter(r => r.kharifDCSBlank && r.kharifSource === '');
+
+            window.found_ref = found;
+
+            const tabs = document.createElement('div');
+            tabs.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;';
+            tabs.innerHTML = `
+                <button id="tab_all" onclick="filterDCSTab('all')" class="badge" style="padding:10px 18px; font-weight:800; cursor:pointer;">कुल खसरा (${found.length})</button>
+                <button id="tab_dcs" onclick="filterDCSTab('dcs')" class="badge" style="padding:10px 18px; font-weight:800; cursor:pointer;">DCS प्रविष्टि (${dcsRecs.length})</button>
+                <button id="tab_nondcs" onclick="filterDCSTab('nondcs')" class="badge" style="padding:10px 18px; font-weight:800; cursor:pointer;">केवल भुइँया (${nonDcsRecs.length})</button>
+                <button id="tab_blank" onclick="filterDCSTab('blank')" class="badge" style="padding:10px 18px; font-weight:800; cursor:pointer;">निरंक (${blankRecs.length})</button>
+            `;
+            res.appendChild(tabs);
+
+            const grid = document.createElement('div');
+            grid.id = 'dcsCardsGrid';
+            grid.className = 'results-grid';
+            res.appendChild(grid);
+
+            filterDCSTab('all');
+        }�िवरण</div>
             
             <div style="display:flex; flex-direction:column; gap:6px;">
               
@@ -1620,34 +1455,42 @@
                 const kCrops = [...new Set(found.map(r => r.finalKharifCrop).filter(Boolean))].join(', ') || '—';
                 const rCrops = [...new Set(found.map(r => r.finalRabiCrop).filter(Boolean))].join(', ') || '—';
 
-                const banner = document.createElement('div');
-                banner.className = 'portfolio-banner';
-                banner.style.marginBottom = '24px';
-                const subtitle = currentTab === 'basra' ? `ग्राम: ${v} &nbsp;|&nbsp; बसरा: ${val}` : `ग्राम: ${v} &nbsp;|&nbsp; भूमिस्वामी: ${val}`;
-                const ownerName = currentTab === 'basra' ? getFullOwner(found[0]) : val;
-                const printFn = currentTab === 'basra' ? `printPortfolio('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')` : `printFarmerPortfolio('${escJS(ownerName)}','${escJS(v)}')`;
+                banner.className = 'search-card animate-slide-up';
+                banner.style.background = 'var(--accent-gradient)';
+                banner.style.color = '#fff';
+                banner.style.marginBottom = '32px';
+                banner.style.padding = '32px';
+                banner.style.borderRadius = '24px';
                 
                 banner.innerHTML = `
-                    <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
-                      <div style="flex:1; min-width:200px;">
-                        <div style="font-size:11px; font-weight:700; opacity:0.6; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px;">भूमिस्वामी पोर्टफोलियो</div>
-                        <div style="font-size:22px; font-weight:900; line-height:1.1;">${ownerName}</div>
-                        <div style="margin-top:6px; opacity:0.75; font-size:14px;">${subtitle}</div>
-                      </div>
-                      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
-                        <div class="pf-stat">
-                          <div class="pf-stat-label">कुल खसरा</div>
-                          <div class="pf-stat-val">${found.length}</div>
+                    <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:center; justify-content:space-between;">
+                        <div style="flex:1; min-width:260px;">
+                            <div style="font-size:12px; font-weight:800; opacity:0.8; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">📁 भूमिस्वामी पोर्टफोलियो (Owner Portfolio)</div>
+                            <div style="font-size:28px; font-weight:900; line-height:1.1; margin-bottom:12px;">${ownerName}</div>
+                            <div style="display:flex; align-items:center; gap:12px; opacity:0.9; font-size:15px; font-weight:600;">
+                                <span>📍 ${v}</span>
+                                <span style="opacity:0.6;">|</span>
+                                <span>${currentTab === 'basra' ? `🆔 बसरा: ${val}` : `👤 स्वामी: ${val}`}</span>
+                            </div>
                         </div>
-                        <div class="pf-stat">
-                          <div class="pf-stat-label">कुल क्षेत्रफल</div>
-                          <div class="pf-stat-val">${totalArea} <span style="font-size:14px;font-weight:600;opacity:0.7;">हे.</span></div>
+                        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+                            <div style="text-align:center; background:rgba(255,255,255,0.15); padding:12px 20px; border-radius:16px; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2);">
+                                <div style="font-size:11px; font-weight:800; opacity:0.8; text-transform:uppercase;">कुल खसरा</div>
+                                <div style="font-size:24px; font-weight:900;">${found.length}</div>
+                            </div>
+                            <div style="text-align:center; background:rgba(255,255,255,0.15); padding:12px 20px; border-radius:16px; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2);">
+                                <div style="font-size:11px; font-weight:800; opacity:0.8; text-transform:uppercase;">कुल रकबा</div>
+                                <div style="font-size:24px; font-weight:900;">${totalArea} <span style="font-size:14px; opacity:0.7;">हे.</span></div>
+                            </div>
                         </div>
-                        <div style="display:flex; flex-direction:column; gap:8px;">
-                            <button onclick="${printFn}" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">🖨 Portfolio Print</button>
-                            ${currentTab === 'basra' ? `<button onclick="exportBasraExcel('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')" style="background:#059669;border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">📊 Export Excel</button>` : `<button onclick="exportFarmerExcel('${escJS(ownerName)}','${escJS(v)}')" style="background:#059669;border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">📊 Export Excel</button>`}
+                        <div style="display:flex; flex-direction:column; gap:10px; min-width:180px;">
+                            <button onclick="${printFn}" class="btn-indigo" style="background:#fff; color:var(--accent); border:none; padding:12px 20px; font-size:14px; box-shadow:0 10px 20px rgba(0,0,0,0.1);">
+                                <span>🖨️ पोर्टफोलियो प्रिंट</span>
+                            </button>
+                            ${currentTab === 'basra' 
+                                ? `<button onclick="exportBasraExcel('${escJS(ownerName)}','${escJS(v)}','${escJS(val)}')" class="btn-indigo" style="background:rgba(16,185,129,0.9); border:none; padding:12px 20px; font-size:14px;">📊 Excel निर्यात</button>` 
+                                : `<button onclick="exportFarmerExcel('${escJS(ownerName)}','${escJS(v)}')" class="btn-indigo" style="background:rgba(16,185,129,0.9); border:none; padding:12px 20px; font-size:14px;">📊 Excel निर्यात</button>`}
                         </div>
-                      </div>
                     </div>`;
                 res.appendChild(banner);
             }

@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>भूमि रिकॉर्ड खोज प्रणाली – हल्का 43 एवं 28</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020617;
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* ── Custom Scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* ── Header ── */
+        .site-header {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        .nav-pill {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--card-shadow);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .emblem-glass {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .header-title h1 {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ── Tab Bar ── */
+        .tab-bar-container {
+            margin-top: 32px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tab-bar {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            padding: 4px;
+            border-radius: 16px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-gradient);
+            color: #fff;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+
+        /* ── Search Card ── */
+        .search-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--card-shadow);
+            margin-top: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            opacity: 0.5;
+        }
+
+        .search-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ── Form Controls ── */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            margin-left: 4px;
+        }
+
+        .form-input-glass {
+            width: 100%;
+            background: rgba(2, 6, 23, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-input-glass:focus {
+            border-color: var(--accent);
+            background: rgba(2, 6, 23, 0.8);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .select-wrap {
+            position: relative;
+        }
+
+        .select-wrap::after {
+            content: '↓';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+        /* ── Action Buttons ── */
+        .btn-indigo {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-indigo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-indigo:active {
+            transform: translateY(0);
+        }
+
+        /* ── Result Cards ── */
+        .result-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .card-accent-bar {
+            width: 40px;
+            height: 4px;
+            background: var(--accent-gradient);
+            border-radius: 2px;
+            margin-bottom: 16px;
+        }
+
+        /* ── Typography Enhancements ── */
+        .text-gradient {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ── Tables ── */
+        .table-container {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(30, 41, 59, 0.8) !important;
+            color: var(--text-secondary) !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            text-align: left !important;
+            padding: 16px !important;
+            border-bottom: 1px solid var(--glass-border) !important;
+        }
+
+        td {
+            padding: 16px !important;
+            color: var(--text-primary) !important;
+            border-bottom: 1px solid var(--glass-border) !important;
+            font-size: 14px !important;
+        }
+
+        tr:last-child td {
+            border-bottom: none !important;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* ── Stats & chips ── */
+        .stat-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* ── Badges ── */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .badge-warning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+
+        /* ── Animations ── */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* ── Search Suggestions ── */
+        #khasraSuggest {
+            position: absolute;
+            background: #1e293b;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-top: 5px;
+            width: 100%;
+            z-index: 1000;
+            max-height: 250px;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .suggest-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .suggest-item:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .site-header { top: 10px; padding: 0 10px; }
+            .nav-pill { padding: 8px 16px; }
+            .header-title h1 { font-size: 14px; }
+            .tab-btn { padding: 8px 12px; font-size: 12px; }
+            .search-card { padding: 20px; }
+            .stat-value { font-size: 24px; }
+        }
+    </style>
+    <!-- PapaParse for ultra-fast CSV streaming -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+
+<body>
+
+    <div class="bg-mesh"></div>
+
+    <!-- ═══════════════════ HEADER ═══════════════════ -->
+    <header class="site-header">
+        <div class="nav-pill">
+            <div class="header-logo">
+                <div class="emblem-glass">🇮🇳</div>
+                <div class="header-title">
+                    <h1>भूमि क्वेस्ट <span class="text-gradient">Bhoomi Quest</span></h1>
+                </div>
+            </div>
+            <div id="recordCountBadge" style="font-size: 11px; font-weight: 700; color: var(--text-secondary); opacity: 0.8;">
+                डेटा लोड हो रहा है...
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="hidden sm:block" style="text-align: right;">
+                    <div style="font-size: 14px; font-weight: 800; color: #fff;">छत्तीसगढ़ शासन</div>
+                    <div style="font-size: 10px; font-weight: 600; color: var(--text-secondary);">तहसील पलारी</div>
+                </div>
+                <div class="emblem-glass" style="font-size: 20px;">🌾</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════════════ MAIN ═══════════════════ -->
+    <!-- ═══════════════════ MAIN ═══════════════════ -->
+    <main style="max-width:1000px; margin:0 auto; padding:40px 20px 100px;">
+
+        <!-- Tab Bar Container -->
+        <div class="tab-bar-container animate-slide-up">
+            <div class="tab-bar">
+                <button class="tab-btn active" id="tab-khasra" onclick="switchTab('khasra')">
+                    <span>📄</span>
+                    <span class="tab-label">खसरा</span>
+                </button>
+                <button class="tab-btn" id="tab-basra" onclick="switchTab('basra')">
+                    <span>👥</span>
+                    <span class="tab-label">बसरा</span>
+                </button>
+                <button class="tab-btn" id="tab-nam" onclick="switchTab('nam')">
+                    <span>👤</span>
+                    <span class="tab-label">नाम</span>
+                </button>
+                <button class="tab-btn" id="tab-statistics" onclick="switchTab('statistics')">
+                    <span>📊</span>
+                    <span class="tab-label">आँकड़े</span>
+                </button>
+                <button class="tab-btn" id="tab-crop" onclick="switchTab('crop')">
+                    <span>🌾</span>
+                    <span class="tab-label">फसल</span>
+                </button>
+                <button class="tab-btn" id="tab-gov" onclick="switchTab('gov')">
+                    <span>🏛️</span>
+                    <span class="tab-label">शासकीय</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Card -->
+        <div class="search-card animate-slide-up" style="max-width: 640px; margin: 32px auto;">
+            <div class="search-title">
+                <div class="emblem-glass" style="width: 32px; height: 32px; font-size: 16px;">🔍</div>
+                <span>खोजें – <span class="text-gradient">Land Search</span></span>
+            </div>
+            
+            <form id="searchForm" onsubmit="handleSearch(event)">
+                <div style="display: grid; gap: 20px;">
+                    <!-- Village Selection -->
+                    <div class="form-group">
+                        <label class="form-label">🏘️ ग्राम का चयन (Select Village)</label>
+                        <div class="select-wrap">
+                            <select id="villageInput" class="form-input-glass" onchange="handleVillageChange()" required>
+                                <option value="" disabled selected>— ग्राम चुनें —</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Search Input Area -->
+                    <div id="searchInputArea">
+                        <!-- Khasra Input -->
+                        <div id="khasraInputWrap">
+                            <label class="form-label">📄 खसरा नंबर (Khasra No.)</label>
+                            <div style="position: relative;">
+                                <input type="text" id="khasraVal" class="form-input-glass" placeholder="उदा. 43 या 43/1"
+                                    autocomplete="off" onfocus="handleKhasraFocus()" oninput="handleKhasraInput()">
+                                <div id="khasraSuggest" style="display:none;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Basra Input -->
+                        <div id="basraInputWrap" style="display:none;">
+                            <label class="form-label">👥 बसरा नंबर (Basra No.)</label>
+                            <div class="select-wrap">
+                                <select id="basraVal" class="form-input-glass">
+                                    <option value="" disabled selected>— पहले ग्राम चुनें —</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Name Input -->
+                        <div id="namInputWrap" style="display:none;">
+                            <label class="form-label">👤 भूमिस्वामी का नाम (Owner Name)</label>
+                            <input type="text" id="namVal" class="form-input-glass"
+                                placeholder="नाम टाइप करें...">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-indigo">
+                        <span id="btnLabel">खोजें (Search)</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Status Containers -->
+        <div id="loadingDiv" style="display:none; text-align:center; padding:60px 0;">
+            <div class="emblem-glass animate-spin" style="width:50px; height:50px; margin:0 auto 20px;">⏳</div>
+            <p style="color:var(--text-secondary); font-weight:600;">डेटा खोजा जा रहा है...</p>
+        </div>
+
+        <div id="emptyDiv" style="display:none; text-align:center; padding:60px 0;">
+            <div style="font-size:64px; margin-bottom:20px;">🔍</div>
+            <h3 style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">कोई रिकॉर्ड नहीं मिला</h3>
+            <p style="color:var(--text-secondary); max-width:400px; margin:0 auto;">कृपया ग्राम और नंबर की जाँच करके दोबारा प्रयास करें।</p>
+        </div>
+
+        <!-- Dynamic Content Sections -->
+        <div id="resultsDiv"></div>
+        <div id="statisticsDiv" style="display:none;"></div>
+        <div id="cropDiv" style="display:none;"></div>
+        <div id="govDiv" style="display:none;"></div>
+    </main>
+
+    <!-- ═══════════════════ SCRIPT ═══════════════════ -->
+    <script>
+
+        let records = [];
+        let currentTab = 'khasra';
+
+        // ── Halka Mapping ──────────────────────────────
+        const HALKA_MAP = {
+            'गबौद': 43, 'तिल्दा': 43,
+            'छड़िया': 28, 'छेरकापुर': 28
+        };
+        function getHalka(village) {
+            const h = HALKA_MAP[village];
+            return h ? `हल्का ${h}` : '';
+        }
+
+        // ── Toast ──────────────────────────────────────
+        function toast(msg, type = 'success') {
+            const bg = { success: 'linear-gradient(to right,#059669,#047857)', error: 'linear-gradient(to right,#dc2626,#b91c1c)', info: 'linear-gradient(to right,#2563eb,#1a1a6e)' };
+            Toastify({ text: msg, duration: 3500, gravity: 'top', position: 'right', style: { background: bg[type] || bg.info, borderRadius: '10px', fontWeight: '700', fontSize: '14px' } }).showToast();
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // ── नई Multi-Tab Google Sheet Config ───────────────────────
+        // ══════════════════════════════════════════════════════════════
+        // Published base URL (File → Share → Publish to web से मिला)
+        const PUBLISHED_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRImiJKxrvQj1NGbSRosAN1hRcqDEZF9Bvaucffx_Qq-iLgFQcgt2q3qzef1diUmjwa4eNVfgO6XuwG/pub';
+
+        // हर गाँव के लिए tab GIDs
+        const VILLAGE_TABS = {
+            'छेरकापुर': {
+                halka: 28,
+                khasra:        1125745063,
+                dcsKharif:      812281055,
+                dcsRabi:        500848412,
+                bhuiyya:        297442845,
+                charaiCeiling: 1665923394,   // चराई सीलिंग एवं सिंचित असिंचित डाटा
+                nistarPatrak:  1804672264,   // निस्तार पत्रक डिटेल्स
+            },
+            'छड़िया': {
+                halka: 28,
+                khasra:        1702197918,
+                dcsKharif:        8447409,
+                dcsRabi:       1499142573,
+                bhuiyya:       1174875375,
+                charaiCeiling: 1740498830,   // चराई सीलिंग एवं सिंचित असिंचित डाटा
+                nistarPatrak:  1031814681,   // निस्तार पत्रक डिटेल्स
+            },
+            'तिल्दा': {
+                halka: 43,
+                khasra:         405640121,
+                dcsKharif:      747813224,
+                dcsRabi:       1746853077,
+                bhuiyya:       1408389150,
+                charaiCeiling: 1518461563,   // चराई सीलिंग एवं सिंचित असिंचित डाटा
+                nistarPatrak:   795996909,   // निस्तार पत्रक डिटेल्स
+            },
+            'गबौद': {
+                halka: 43,
+                khasra:         420059656,
+                dcsKharif:      153278540,
+                dcsRabi:        459902298,
+                bhuiyya:         29039308,
+                charaiCeiling:  602533391,   // चराई सीलिंग एवं सिंचित असिंचित डाटा
+                nistarPatrak:  2065179140,   // निस्तार पत्रक डिटेल्स
+            },
+        };
+
+        // Published CSV URL बनाने का helper
+        function makeCSVUrl(gid) {
+            return `${PUBLISHED_BASE}?gid=${gid}&single=true&output=csv`;
+        }
+
+        // Proxy race से एक CSV text लाना
+        const PROXY_PREFIXES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://api.codetabs.com/v1/proxy?quest=',
+            'https://corsproxy.io/?',
+        ];
+
+        function fetchCSV(gid) {
+            const csvUrl = makeCSVUrl(gid);
+            const proxied = PROXY_PREFIXES.map(p =>
+                fetch(p + encodeURIComponent(csvUrl), { signal: AbortSignal.timeout(15000) })
+                    .then(r => { if (!r.ok) throw new Error('Not OK'); return r.text(); })
+            );
+            const direct = new Promise((res, rej) => {
+                Papa.parse(csvUrl, {
+                    download: true, header: false, skipEmptyLines: false,
+                    complete: (result) => res(Papa.unparse(result.data)),
+                    error: rej,
+                });
+            });
+            return new Promise((resolve, reject) => {
+                let failCount = 0;
+                const all = [...proxied, direct];
+                all.forEach(p => p.then(resolve).catch(() => {
+                    failCount++;
+                    if (failCount === all.length) reject(new Error(`CSV fetch failed gid=${gid}`));
+                }));
+            });
+        }
+
+        // CSV text → array of objects (header = row 1 by default, or custom headerRow index)
+        function parseCSVToRows(csvText, headerRowIndex = 0) {
+            const allRows = Papa.parse(csvText, { header: false, skipEmptyLines: 'greedy' }).data;
+            if (allRows.length <= headerRowIndex) return [];
+            const headers = allRows[headerRowIndex];
+            return allRows.slice(headerRowIndex + 1).map(row => {
+                const obj = {};
+                headers.forEach((h, i) => { obj[h.trim()] = (row[i] || '').trim(); });
+                return obj;
+            });
+        }
+
+        // ── एक गाँव का मर्ज: खसरा लिस्ट + DCS खरीफ + DCS रबी + भुइया खरीफ + चराई/सीलिंग + निस्तार पत्रक ──
+        function mergeVillageData(villageName, halka, khasraRows, dcsKRows, dcsRRows, bhuiyyaRows, charaiRows = [], nistarRows = []) {
+            const vLabel = `${villageName} (हल्का ${halka})`;
+
+            // DCS खरीफ lookup: Survey Number → row (एक खसरे पर एक ही DCS row लेंगे)
+            const dcsKMap = {};
+            dcsKRows.forEach(row => {
+                const sn = (row['Survey Number'] || '').trim();
+                if (sn && !dcsKMap[sn]) dcsKMap[sn] = row;
+            });
+
+            // DCS रबी lookup: Survey Number → row
+            const dcsRMap = {};
+            dcsRRows.forEach(row => {
+                const sn = (row['Survey Number'] || '').trim();
+                if (sn && !dcsRMap[sn]) dcsRMap[sn] = row;
+            });
+
+            // भुइया खरीफ lookup: खसरा क्रमांक → row
+            const bhuiyyaMap = {};
+            bhuiyyaRows.forEach(row => {
+                const kn = (row['खसरा क्रमांक'] || '').trim();
+                if (kn && !bhuiyyaMap[kn]) bhuiyyaMap[kn] = row;
+            });
+
+            // helper: किसी row से multiple possible column names में से पहला valid value निकालना
+            function getCol(row, ...keys) {
+                if (!row) return '';
+                for (const k of keys) {
+                    const v = row[k];
+                    if (v !== undefined && v !== null && v.toString().trim() !== '') return v.toString().trim();
+                }
+                return '';
+            }
+
+            // चराई/सीलिंग lookup: खसरा नंबर → row
+            // तिल्दा में 'खसरा नम्बर' (anunasik 'म' variant) है, बाकी में 'खसरा नंबर'
+            const charaiMap = {};
+            charaiRows.forEach(row => {
+                const kn = getCol(row, 'खसरा नंबर', 'खसरा नम्बर', 'खसरा नम्‍बर');
+                if (kn && !charaiMap[kn]) charaiMap[kn] = row;
+            });
+
+            // निस्तार पत्रक lookup: खसरा नंबर → row (only special/nistar entries)
+            const nistarMap = {};
+            nistarRows.forEach(row => {
+                const kn = getCol(row, 'खसरा नंबर', 'खसरा नम्बर', 'खसरा नम्‍बर');
+                if (kn && !nistarMap[kn]) nistarMap[kn] = row;
+            });
+
+            function isBl(v) { return v === null || v === undefined || v === ''; }
+
+            return khasraRows.map((o, i) => {
+                const kn   = (o['खसरा नंबर'] || '').trim();
+                const bn   = (o['बसरा नंबर'] || '').trim();
+                const ownerRaw = (o['नाम'] || 'अज्ञात').trim();
+                const ownerKey = ownerRaw.replace(/\r/g, '').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+
+                // owner names extraction (same logic as before)
+                const nameMatches = [...ownerRaw.matchAll(/नाम\s*[-–]\s*([^\n\r,;]+)/g)];
+                let ownerNames = nameMatches.map(m => m[1].trim()).filter(Boolean);
+                if (ownerNames.length === 0) {
+                    const fallback = ownerRaw.split(/[\r\n]/)[0].replace(/^\(\d+\)/, '').trim();
+                    if (fallback) ownerNames = [fallback];
+                }
+
+                // ── DCS खरीफ data ──
+                const dk = dcsKMap[kn] || null;
+                const rawK  = dk ? (dk['Crop Name']    || '') : null;   // kharif fasal
+                const rawL  = dk ? (dk['Plot Area']     || '') : null;   // plot area
+                const rawM  = dk ? (dk['Crop Area']     || '') : null;   // crop area
+                const rawN  = dk ? (dk['NA Land']       || '') : null;
+                const rawO  = dk ? (dk['NA Area']       || '') : null;
+                const rawP  = dk ? (dk['Fallow Land']   || '') : null;
+                const rawQ  = dk ? (dk['Fallow Area']   || '') : null;
+
+                // ── DCS रबी data ──
+                const dr = dcsRMap[kn] || null;
+                const rawR  = dr ? (dr['Crop Name']    || '') : null;   // rabi fasal
+                const rawT  = dr ? (dr['Crop Area']     || '') : null;
+                const rawU  = dr ? (dr['NA Land']       || '') : null;
+                const rawV  = dr ? (dr['NA Area']       || '') : null;
+                const rawW  = dr ? (dr['Fallow Land']   || '') : null;
+                const rawX  = dr ? (dr['Fallow Area']   || '') : null;
+
+                // ── भुइया खरीफ data ──
+                const bh = bhuiyyaMap[kn] || null;
+                const cropNameZ     = bh ? (bh['फसल का नाम'] || '').trim() : '';
+                const rakbaSinchit  = bh ? parseFloat(bh['रकबा सिंचित फसल']  || 0) : 0;
+                const rakbaAsinchit = bh ? parseFloat(bh['रकबा असिंचित फसल'] || 0) : 0;
+
+                // ── चराई/सीलिंग/सिंचित-असिंचित data ──
+                const ch = charaiMap[kn] || null;
+                // सिंचित/असिंचित: गबौद में 'सिंचित'/'असिंचित' (बिना 'भूमि'), बाकी में 'सिंचित भूमि'/'असिंचित भूमि'
+                const sinchaiRaw    = getCol(ch, 'सिंचित / असिंचित');
+                const sinchaiType   = sinchaiRaw;
+                const charaiLand    = getCol(ch, 'चराई भूमि है ?');
+                const ceilingLand   = getCol(ch, 'सीलिंग भूमि है ?', 'सीलिंग भूमि है?');
+                // निस्तार विवरण column का नाम tabs में अलग-अलग है
+                const nistarVivaran = getCol(ch,
+                    'निस्तार पत्रक / वाजिबुल अर्ज विवरण',
+                    'निस्तार पत्रक विवरण',
+                    'निस्तार पत्रक विवरण / वाजिबुल अर्ज',
+                    'निस्तार पत्रक विवरण / वाजिबुल अर्ज ',
+                    'निस्तार पत्रक विवरण/वाजिबुल अर्ज विवरण'
+                );
+
+                // ── निस्तार पत्रक tab – special nistar entry check ──
+                const ns = nistarMap[kn] || null;
+                const isNistarEntry = !!ns;   // true if this khasra has a dedicated nistar record
+                const nistarPatrakVivaran = getCol(ns,
+                    'निस्तार पत्रक / वाजिबुल अर्ज विवरण',
+                    'निस्तार पत्रक विवरण',
+                    'निस्तार पत्रक विवरण / वाजिबुल अर्ज',
+                    'निस्तार पत्रक विवरण / वाजिबुल अर्ज ',
+                    'निस्तार पत्रक विवरण/वाजिबुल अर्ज विवरण'
+                );
+
+                // ── DCS blank check (same logic) ──
+                const kharifDCSBlank = !dk;   // DCS खरीफ tab में entry नहीं = blank
+                const rabiDCSBlank   = !dr;   // DCS रबी tab में entry नहीं = blank
+
+                // ── Kharif fasal + source ──
+                let finalKharifCrop = '';
+                let kharifSource    = '';
+                let rawKharifDCS    = '';
+                if (!kharifDCSBlank) {
+                    rawKharifDCS = (rawK || '').toString().trim();
+                    if (rawKharifDCS && rawKharifDCS !== '--') {
+                        finalKharifCrop = rawKharifDCS;
+                    }
+                    kharifSource = 'DCS';
+                } else {
+                    if (cropNameZ && cropNameZ !== '--' && !cropNameZ.includes('पडत भूमि')) {
+                        finalKharifCrop = cropNameZ;
+                        kharifSource    = 'Bhuiyya';
+                    }
+                }
+
+                // ── Kharif area ──
+                const kharifCropAreaDCS = parseFloat(rawM || 0);
+                const kharifCropArea = !kharifDCSBlank
+                    ? kharifCropAreaDCS
+                    : (rakbaSinchit > 0 ? rakbaSinchit : rakbaAsinchit);
+
+                // ── NA / Fallow खरीफ ──
+                const naLandK    = (rawN  || '').toString().trim();
+                const naAreaK    = parseFloat(rawO  || 0);
+                const fallowLandK= (rawP  || '').toString().trim();
+                const fallowAreaK= parseFloat(rawQ  || 0);
+
+                // ── Rabi fasal ──
+                let finalRabiCrop = '';
+                let rawRabiDCS    = '';
+                if (!rabiDCSBlank) {
+                    rawRabiDCS = (rawR || '').toString().trim();
+                    if (rawRabiDCS && rawRabiDCS !== '--') {
+                        finalRabiCrop = rawRabiDCS;
+                    }
+                }
+
+                // ── Rabi area + NA/Fallow ──
+                const rabiCropArea = parseFloat(rawT || 0);
+                const naLandR    = (rawU  || '').toString().trim();
+                const naAreaR    = parseFloat(rawV  || 0);
+                const fallowLandR= (rawW  || '').toString().trim();
+                const fallowAreaR= parseFloat(rawX  || 0);
+
+                // ── Dufasali ──
+                const isDufasali   = (finalKharifCrop !== '' && finalRabiCrop !== '');
+                const dufasaliArea = isDufasali ? Math.min(kharifCropArea, rabiCropArea) : 0;
+
+                return {
+                    id: i + 1,
+                    v: vLabel,
+                    kn: kn,
+                    bn: bn,
+                    owner:      ownerRaw || 'अज्ञात',
+                    ownerKey:   ownerKey || 'अज्ञात',
+                    ownerNames: ownerNames.length ? ownerNames : ['अज्ञात'],
+                    area:  parseFloat(o['क्षेत्रफल'] || 0).toFixed(3),
+                    type:  sinchaiType,          // चराई/सीलिंग tab से सिंचित/असिंचित
+                    nistar: nistarVivaran,        // चराई/सीलिंग tab से निस्तार विवरण
+                    charai:  charaiLand,          // चराई भूमि है?
+                    ceiling: ceilingLand,         // सीलिंग भूमि है?
+                    isNistarEntry:        isNistarEntry,          // निस्तार पत्रक tab में entry है?
+                    nistarPatrakVivaran:  nistarPatrakVivaran,    // निस्तार पत्रक tab का विशेष विवरण
+
+                    kharifDCSBlank:  kharifDCSBlank,
+                    rabiDCSBlank:    rabiDCSBlank,
+                    kharifSource:    kharifSource,
+                    rawKharifDCS:    rawKharifDCS,
+                    rawRabiDCS:      rawRabiDCS,
+                    finalKharifCrop: finalKharifCrop,
+                    kharifCropArea:  kharifCropArea.toFixed(3),
+                    finalRabiCrop:   finalRabiCrop,
+                    rabiCropArea:    rabiCropArea.toFixed(3),
+                    isDufasali:      isDufasali,
+                    dufasaliArea:    dufasaliArea.toFixed(3),
+                    naLandK:    naLandK,  naAreaK:    naAreaK.toFixed(3),
+                    fallowLandK: fallowLandK, fallowAreaK: fallowAreaK.toFixed(3),
+                    naLandR:    naLandR,  naAreaR:    naAreaR.toFixed(3),
+                    fallowLandR: fallowLandR, fallowAreaR: fallowAreaR.toFixed(3),
+                };
+            }).filter(r => r.v && r.kn);
+        }
+
+        let cachedRecords = null;
+
+        async function loadData() {
+            // Cached data instantly return
+            if (cachedRecords) {
+                records = cachedRecords;
+                fillVillages();
+                const badge = document.getElementById('recordCountBadge');
+                badge.textContent = `✅ ${records.length} रिकॉर्ड लोड (कैशड)`;
+                toast(`${records.length} रिकॉर्ड कैश से प्राप्त हुए`, 'success');
+                switchTab('statistics');
+                return records;
+            }
+
+            const badge = document.getElementById('recordCountBadge');
+            badge.textContent = '⏳ डेटा लोड हो रहा है...';
+
+            function onSuccess() {
+                fillVillages();
+                badge.textContent = `✅ ${records.length} रिकॉर्ड लोड`;
+                toast(`${records.length} रिकॉर्ड सफलतापूर्वक लोड हुए`, 'success');
+                switchTab('statistics');
+            }
+
+            function onError(msg) {
+                console.error('onError called:', msg);
+                badge.innerHTML = `❌ लोड विफल &nbsp;<button onclick="loadData()" style="background:#1a1a6e;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:12px;cursor:pointer;font-weight:700;">🔄 पुनः प्रयास</button>
+                <input type="file" id="manualCSV" style="display:none" onchange="handleManualUpload(event)">
+                <button onclick="document.getElementById('manualCSV').click()" style="background:#059669;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:12px;cursor:pointer;font-weight:700;margin-left:5px;">📁 फाइल अपलोड</button>`;
+                toast(msg || 'नेटवर्क त्रुटि — कृपया इंटरनेट जांचें', 'error');
+            }
+
+            try {
+                badge.textContent = '⏳ सभी tabs लोड हो रहे हैं (24 tabs)...';
+
+                // सभी गाँवों के लिए parallel fetch
+                const villageNames = Object.keys(VILLAGE_TABS);
+                const villageResults = await Promise.all(
+                    villageNames.map(async (vName) => {
+                        const cfg = VILLAGE_TABS[vName];
+                        const [khasraCSV, dcsKCSV, dcsRCSV, bhuiyyaCSV, charaiCSV, nistarCSV] = await Promise.all([
+                            fetchCSV(cfg.khasra),
+                            fetchCSV(cfg.dcsKharif),
+                            fetchCSV(cfg.dcsRabi),
+                            fetchCSV(cfg.bhuiyya),
+                            fetchCSV(cfg.charaiCeiling),
+                            fetchCSV(cfg.nistarPatrak),
+                        ]);
+
+                        // खसरा लिस्ट: row 1 = title, row 2 = header (index 1)
+                        const khasraRows  = parseCSVToRows(khasraCSV,  1);
+                        // DCS tabs: row 1 = header directly (index 0)
+                        const dcsKRows    = parseCSVToRows(dcsKCSV,    0);
+                        const dcsRRows    = parseCSVToRows(dcsRCSV,    0);
+                        // भुइया: row 1-2 = title/date, row 3 = header (index 2)
+                        const bhuiyyaRows = parseCSVToRows(bhuiyyaCSV, 2);
+                        // चराई/सीलिंग tab: row 1 = title, row 2 = header (index 1)
+                        const charaiRows  = parseCSVToRows(charaiCSV,  1);
+                        // निस्तार पत्रक tab: row 1 = title, row 2 = header (index 1)
+                        const nistarRows  = parseCSVToRows(nistarCSV,  1);
+
+                        return mergeVillageData(vName, cfg.halka, khasraRows, dcsKRows, dcsRRows, bhuiyyaRows, charaiRows, nistarRows);
+                    })
+                );
+
+                // सभी गाँवों के records एक array में
+                records = villageResults.flat();
+
+                if (records.length === 0) throw new Error('No records merged');
+
+                cachedRecords = records;
+                onSuccess();
+
+            } catch (err) {
+                console.error('Multi-tab load failed:', err);
+                onError('डेटा लोड विफल — कृपया sheet publish करें या इंटरनेट जांचें');
+            }
+        }
+
+        function handleManualUpload(e) {
+            // नई multi-tab sheet के साथ manual upload काम नहीं करता
+            // (डेटा 16 tabs से merge होता है, single CSV से नहीं)
+            toast('नई sheet के साथ manual upload उपलब्ध नहीं — sheet को "Publish to web" करें', 'error');
+        }
+
+
+        function fillVillages() {
+            const desiredOrder = ['छेरकापुर (हल्का 28)', 'छड़िया (हल्का 28)', 'तिल्दा (हल्का 43)', 'गबौद (हल्का 43)'];
+            const sel = document.getElementById('villageInput');
+            const vals = [...new Set(records.map(r => r.v).filter(Boolean))].sort((a, b) => {
+                const idxA = desiredOrder.indexOf(a);
+                const idxB = desiredOrder.indexOf(b);
+                return (idxA !== -1 ? idxA : 999) - (idxB !== -1 ? idxB : 999);
+            });
+            while (sel.options.length > 1) sel.remove(1);
+            vals.forEach(v => { const o = document.createElement('option'); o.value = o.text = v; sel.appendChild(o); });
+        }
+
+        // ── Village change → fill basra & farmers & khasra list ──
+        document.getElementById('villageInput').addEventListener('change', function () {
+            const v = this.value;
+
+            // 1. Populate Basra
+            const sel = document.getElementById('basraVal');
+            const basras = [...new Set(records.filter(r => r.v === v).map(r => r.bn).filter(Boolean))].sort((a, b) => {
+                const [a1, a2 = '0'] = a.split('/'); const [b1, b2 = '0'] = b.split('/');
+                return (parseInt(a1) - parseInt(b1)) || (parseInt(a2) - parseInt(b2));
+            });
+            sel.innerHTML = '<option value="" disabled selected>— बसरा चुनें —</option>';
+            basras.forEach(b => { const o = document.createElement('option'); o.value = o.text = b; sel.appendChild(o); });
+            sel.disabled = false;
+            sel.classList.remove('form-select');
+            sel.className = 'form-select';
+
+            // 2. Populate Farmer Names
+            const farmerList = document.getElementById('farmerList');
+            const namInput = document.getElementById('namVal');
+            if (farmerList && namInput) {
+                const names = [...new Set(
+                    records.filter(r => r.v === v).flatMap(r => r.ownerNames).filter(Boolean)
+                )].sort((a, b) => a.localeCompare(b, 'hi'));
+                farmerList.innerHTML = '';
+                names.forEach(n => { const o = document.createElement('option'); o.value = n; farmerList.appendChild(o); });
+                namInput.disabled = false;
+                namInput.placeholder = 'नाम टाइप करें या चुनें';
+            }
+
+            // 3. Store khasra list for this village (sorted numerically)
+            window._khasraList = [...new Set(records.filter(r => r.v === v).map(r => r.kn).filter(Boolean))].sort((a, b) => {
+                const [a1, a2 = '0'] = String(a).split('/');
+                const [b1, b2 = '0'] = String(b).split('/');
+                return (parseInt(a1) - parseInt(b1)) || (parseInt(a2) - parseInt(b2));
+            });
+
+            if (currentTab === 'basra') toast(`${basras.length} बसरा उपलब्ध`, 'info');
+            else if (currentTab === 'nam') toast(`${        // ── Tab Switch ────────────────────────────────
+        function switchTab(tab) {
+            currentTab = tab;
+            const isSearch = ['khasra', 'basra', 'nam'].includes(tab);
+            const isStat = tab === 'statistics';
+            const isCrop = tab === 'crop';
+            const isGov = tab === 'gov';
+
+            // Show/hide search form
+            const searchCard = document.getElementById('searchForm').closest('.search-card');
+            if (searchCard) searchCard.style.display = isSearch ? '' : 'none';
+
+            // Show/hide specific search inputs
+            const kWrap = document.getElementById('khasraInputWrap');
+            const bWrap = document.getElementById('basraInputWrap');
+            const nWrap = document.getElementById('namInputWrap');
+
+            if (kWrap) kWrap.style.display = tab === 'khasra' ? 'block' : 'none';
+            if (bWrap) bWrap.style.display = tab === 'basra' ? 'block' : 'none';
+            if (nWrap) nWrap.style.display = tab === 'nam' ? 'block' : 'none';
+
+            // Tab Buttons active state
+            ['khasra', 'basra', 'nam', 'statistics', 'crop', 'gov'].forEach(t => {
+                const el = document.getElementById('tab-' + t);
+                if (el) el.className = 'tab-btn' + (tab === t ? ' active' : '');
+            });
+
+            // Show/hide result panels
+            document.getElementById('resultsDiv').innerHTML = '';
+            document.getElementById('emptyDiv').style.display = 'none';
+            document.getElementById('statisticsDiv').style.display = isStat ? 'block' : 'none';
+            document.getElementById('cropDiv').style.display = isCrop ? 'block' : 'none';
+            document.getElementById('govDiv').style.display = isGov ? 'block' : 'none';
+
+            if (isStat) {
+                showStatistics();
+                toast('सांख्यिकी लोड हो रही है...', 'info');
+                return;
+            }
+            if (isCrop) {
+                showCropRecords();
+                const cropSel = document.getElementById('statCropSelect');
+                if (cropSel && cropSel.value) updateCropSummary();
+                return;
+            }
+            if (isGov) { showGovRecords(); return; }
+
+            // If village already chosen, re-populate basra / farmer suggestions if needed
+            if (tab === 'basra' || tab === 'nam') {
+                const v = document.getElementById('villageInput').value;
+                if (v) document.getElementById('villageInput').dispatchEvent(new Event('change'));
+            }
+        }
+
+        // ── Search Logic ──────────────────────────────
+        function handleSearch(e) {
+            if (e) e.preventDefault();
+            const v = document.getElementById('villageInput').value;
+            let val = '';
+
+            if (currentTab === 'khasra') val = document.getElementById('khasraVal').value.trim();
+            else if (currentTab === 'basra') val = document.getElementById('basraVal').value;
+            else if (currentTab === 'nam') val = document.getElementById('namVal').value.trim();
+
+            if (!v) { toast('कृपया ग्राम चुनें', 'error'); return; }
+            if (!val) {
+                const lbl = currentTab === 'khasra' ? 'खसरा नंबर' : currentTab === 'basra' ? 'बसरा नंबर' : 'भूमिस्वामी का नाम';
+                toast(`कृपया ${lbl} चुनें/दर्ज करें`, 'error');
+                return;
+            }
+
+            setLoading(true);
+            setTimeout(() => {
+                let found = [];
+                if (currentTab === 'khasra') found = records.filter(r => r.v === v && r.kn == val);
+                else if (currentTab === 'basra') found = records.filter(r => r.v === v && r.bn == val);
+                else if (currentTab === 'nam') {
+                    const nval = val.replace(/\s+/g, ' ').trim();
+                    const nameMatched = records.filter(r => r.v === v && r.ownerNames.includes(nval));
+                    const basraSet = new Set(nameMatched.map(r => r.bn).filter(Boolean));
+                    found = basraSet.size > 0
+                        ? records.filter(r => r.v === v && basraSet.has(r.bn))
+                        : nameMatched; 
+                }
+
+                setLoading(false);
+                renderResults(found, v, val);
+            }, 60);
+        }
+
+        function setLoading(on) {
+            document.getElementById('loadingDiv').style.display = on ? 'block' : 'none';
+            const btn = document.getElementById('searchBtn') || document.querySelector('.btn-indigo[type="submit"]');
+            if (btn) btn.disabled = on;
+            const lbl = document.getElementById('btnLabel');
+            if (lbl) lbl.textContent = on ? 'खोज रहे हैं...' : 'खोजें';
+        }
+
+        function getFullOwner(r) {
+            if (!r.owner.includes('(ज. ब. न.)')) return r.owner;
+            const mool = records.find(rec =>
+                rec.v === r.v &&
+                String(rec.kn).trim() === String(rec.bn).trim() &&
+                String(rec.bn).trim() === String(r.bn).trim()
+            );
+            return (mool && !mool.owner.includes('(ज. ब. न.)')) ? mool.owner : r.owner;
+        }
+
+        function getCardHTML(r) {
+            const typeBadge = r.type.includes('असिंचित') ? 'badge-warning' : 'badge-success';
+            return `
+                <div class="card-accent-bar"></div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
