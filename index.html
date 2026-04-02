@@ -1744,10 +1744,10 @@
 
         function cropLabelFromEntries(entries, fallback) {
             if (!entries || entries.length <= 1) return fallback || '—';
-            const parts = entries.map((e, i) => {
+            const parts = entries.map((e) => {
                 const c = (e.cropName || '').trim();
                 if (!c || c === '--') return null;
-                return (i + 1) + ') ' + c;
+                return c;
             }).filter(Boolean);
             return parts.length ? parts.join(' · ') : (fallback || '—');
         }
@@ -1764,6 +1764,27 @@
             if (ents.length > 1)
                 return cropLabelFromEntries(ents, r.finalRabiCrop);
             return r.finalRabiCrop || '—';
+        }
+
+        // Portfolio table: build kharif/rabi cell text including NA/Fallow DCS tags
+        function portfolioCropCellText(r, season) {
+            const entries = season === 'kharif' ? (r.dcsKharifEntries || []) : (r.dcsRabiEntries || []);
+            const tag = season === 'kharif' ? '(खरीफ DCS)' : '(रबी DCS)';
+            const fallback = season === 'kharif' ? (r.finalKharifCrop || '—') : (r.finalRabiCrop || '—');
+            if (!entries.length) return fallback;
+            const crops = [];
+            const naFallow = [];
+            entries.forEach(e => {
+                const c = (e.cropName || '').trim();
+                if (c && c !== '--') {
+                    crops.push(c);
+                } else {
+                    if (e.naLand === 'Yes') naFallow.push('NA ' + tag + ' ' + Number(e.naArea).toFixed(3) + ' हे.');
+                    if (e.fallowLand === 'Yes') naFallow.push('Fallow ' + tag + ' ' + Number(e.fallowArea).toFixed(3) + ' हे.');
+                }
+            });
+            const parts = [...crops, ...naFallow];
+            return parts.length ? parts.join(' · ') : fallback;
         }
 
         function kharifAreaForNamedCrop(r, cropName) {
@@ -1876,15 +1897,32 @@
                     '</div></div>';
             }
             let out = '';
-            kList.forEach((e, idx) => {
-                const c = e.cropName || '—';
+            kList.forEach((e) => {
+                const c = (e.cropName || '').trim();
                 const a = Number(e.cropArea).toFixed(3);
-                out += '<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px 10px;margin-bottom:6px;">' +
-                    '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">' +
-                    '<span style="font-size:10px;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:0.04em;">☀️ DCS खरीफ ' + (idx + 1) + '/' + kList.length + '</span>' +
-                    '<span style="font-size:12px;font-weight:800;color:var(--text-main);">' + c + ' <span style="color:#64748b;font-weight:700;">· ' + a + ' हे.</span></span>' +
-                    '<span style="background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:800;">DCS</span>' +
-                    '</div>' + dcsEntryNaFallowLine(e) + '</div>';
+                const hasCrop = c && c !== '--';
+                if (hasCrop) {
+                    // Real crop → show like a normal row with ☀️ खरीफ tag
+                    out += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+                        '<span style="font-size:11px; font-weight:700; color:#065f46; background:#d1fae5; border-radius:5px; padding:2px 8px;">☀️ खरीफ</span>' +
+                        '<div style="flex:1; display:flex; align-items:center; gap:8px; justify-content:flex-end; flex-wrap:wrap;">' +
+                        '<span style="font-size:13px; font-weight:700; color:var(--text-main);">' + c + '</span>' +
+                        '<span style="font-size:12px; font-weight:600; color:var(--text-muted);">' + a + ' हे.</span>' +
+                        '<span style="background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:800;">DCS</span>' +
+                        '</div></div>';
+                } else {
+                    // No crop — show NA/Fallow inline with (खरीफ DCS) tag
+                    const bits = [];
+                    if (e.naLand === 'Yes') bits.push({ label: 'NA', area: Number(e.naArea).toFixed(3) });
+                    if (e.fallowLand === 'Yes') bits.push({ label: 'Fallow', area: Number(e.fallowArea).toFixed(3) });
+                    bits.forEach(b => {
+                        out += '<div style="display:flex; justify-content:space-between; align-items:center; background:#fef3c7; border-radius:6px; padding:5px 10px; margin-bottom:4px;">' +
+                            '<span style="font-size:11px; font-weight:700; color:#92400e;">' + b.label +
+                            ' <span style="background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:800;margin-left:4px;">(खरीफ DCS)</span></span>' +
+                            '<span style="font-size:12px; font-weight:800; color:#78350f;">' + b.area + ' हे.</span>' +
+                            '</div>';
+                    });
+                }
             });
             return out;
         }
@@ -1911,14 +1949,32 @@
                     '</div></div>';
             }
             let out = '';
-            rList.forEach((e, idx) => {
-                const c = e.cropName || '—';
+            rList.forEach((e) => {
+                const c = (e.cropName || '').trim();
                 const a = Number(e.cropArea).toFixed(3);
-                out += '<div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:8px 10px;margin-bottom:6px;">' +
-                    '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">' +
-                    '<span style="font-size:10px;font-weight:800;color:#1e40af;text-transform:uppercase;letter-spacing:0.04em;">❄️ DCS रबी ' + (idx + 1) + '/' + rList.length + '</span>' +
-                    '<span style="font-size:12px;font-weight:800;color:var(--text-main);">' + c + ' <span style="color:#64748b;font-weight:700;">· ' + a + ' हे.</span></span>' +
-                    '</div>' + dcsEntryNaFallowLine(e) + '</div>';
+                const hasCrop = c && c !== '--';
+                if (hasCrop) {
+                    // Real crop → show like a normal row with ❄️ रबी tag
+                    out += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">' +
+                        '<span style="font-size:11px; font-weight:700; color:#1e40af; background:#dbeafe; border-radius:5px; padding:2px 8px;">❄️ रबी</span>' +
+                        '<div style="flex:1; display:flex; align-items:center; gap:8px; justify-content:flex-end; flex-wrap:wrap;">' +
+                        '<span style="font-size:13px; font-weight:700; color:var(--text-main);">' + c + '</span>' +
+                        '<span style="font-size:12px; font-weight:600; color:var(--text-muted);">' + a + ' हे.</span>' +
+                        '<span style="background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;border-radius:5px;padding:1px 7px;font-size:10px;font-weight:800;">DCS</span>' +
+                        '</div></div>';
+                } else {
+                    // No crop — show NA/Fallow inline with (रबी DCS) tag
+                    const bits = [];
+                    if (e.naLand === 'Yes') bits.push({ label: 'NA', area: Number(e.naArea).toFixed(3) });
+                    if (e.fallowLand === 'Yes') bits.push({ label: 'Fallow', area: Number(e.fallowArea).toFixed(3) });
+                    bits.forEach(b => {
+                        out += '<div style="display:flex; justify-content:space-between; align-items:center; background:#dbeafe; border-radius:6px; padding:5px 10px; margin-bottom:4px;">' +
+                            '<span style="font-size:11px; font-weight:700; color:#1e40af;">' + b.label +
+                            ' <span style="background:#1e40af;color:#fff;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:800;margin-left:4px;">(रबी DCS)</span></span>' +
+                            '<span style="font-size:12px; font-weight:800; color:#1e3a8a;">' + b.area + ' हे.</span>' +
+                            '</div>';
+                    });
+                }
             });
             return out;
         }
@@ -2183,8 +2239,20 @@
                 printKharifRows = `<tr><th>☀️ खरीफ फसल</th><td>${(kEnt[0].cropName || r.finalKharifCrop || '—')} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
   <tr><th>☀️ खरीफ रकबा</th><td>${Number(kEnt[0].cropArea).toFixed(3)} हे.</td></tr>`;
             } else if (r.kharifSource === 'DCS' && kEnt.length > 1) {
-                printKharifRows = kEnt.map((e, i) => `<tr><th>☀️ खरीफ DCS ${i + 1}/${kEnt.length}</th><td>${e.cropName || '—'} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
-  <tr><th>☀️ खरीफ ${i + 1} रकबा</th><td>${Number(e.cropArea).toFixed(3)} हे.</td></tr>`).join('\n  ');
+                printKharifRows = kEnt.map((e) => {
+                    const c = (e.cropName || '').trim();
+                    const a = Number(e.cropArea).toFixed(3);
+                    const hasCrop = c && c !== '--';
+                    if (hasCrop) {
+                        return `<tr><th>☀️ खरीफ फसल</th><td>${c} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
+  <tr><th>☀️ खरीफ रकबा</th><td>${a} हे.</td></tr>`;
+                    } else {
+                        const bits = [];
+                        if (e.naLand === 'Yes') bits.push({ label: 'NA', area: Number(e.naArea).toFixed(3) });
+                        if (e.fallowLand === 'Yes') bits.push({ label: 'Fallow', area: Number(e.fallowArea).toFixed(3) });
+                        return bits.map(b => `<tr><th>🏢 ${b.label} <span style="background:#dbeafe;color:#1e40af;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:800;">(खरीफ DCS)</span></th><td>${b.area} हे.</td></tr>`).join('\n  ');
+                    }
+                }).join('\n  ');
             } else {
                 printKharifRows = '<tr><th>☀️ खरीफ फसल</th><td>—</td></tr>';
             }
@@ -2194,8 +2262,20 @@
                 printRabiRows = `<tr><th>❄️ रबी फसल</th><td>${rEnt[0].cropName || r.finalRabiCrop || '—'}</td></tr>
   <tr><th>❄️ रबी रकबा</th><td>${Number(rEnt[0].cropArea).toFixed(3)} हे.</td></tr>`;
             } else if (rEnt.length > 1) {
-                printRabiRows = rEnt.map((e, i) => `<tr><th>❄️ रबी DCS ${i + 1}/${rEnt.length}</th><td>${e.cropName || '—'}</td></tr>
-  <tr><th>❄️ रबी ${i + 1} रकबा</th><td>${Number(e.cropArea).toFixed(3)} हे.</td></tr>`).join('\n  ');
+                printRabiRows = rEnt.map((e) => {
+                    const c = (e.cropName || '').trim();
+                    const a = Number(e.cropArea).toFixed(3);
+                    const hasCrop = c && c !== '--';
+                    if (hasCrop) {
+                        return `<tr><th>❄️ रबी फसल</th><td>${c} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
+  <tr><th>❄️ रबी रकबा</th><td>${a} हे.</td></tr>`;
+                    } else {
+                        const bits = [];
+                        if (e.naLand === 'Yes') bits.push({ label: 'NA', area: Number(e.naArea).toFixed(3) });
+                        if (e.fallowLand === 'Yes') bits.push({ label: 'Fallow', area: Number(e.fallowArea).toFixed(3) });
+                        return bits.map(b => `<tr><th>🏢 ${b.label} <span style="background:#1e40af;color:#fff;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:800;">(रबी DCS)</span></th><td>${b.area} हे.</td></tr>`).join('\n  ');
+                    }
+                }).join('\n  ');
             } else {
                 printRabiRows = '<tr><th>❄️ रबी फसल</th><td>—</td></tr>';
             }
@@ -2263,9 +2343,9 @@
                 <td>${r.owner}</td>
                 <td style="text-align:right;font-weight:800;">${r.area}</td>
                 <td>${r.type || '—'}</td>
-                <td>${kharifCropLabel(r)}</td>
+                 <td>${portfolioCropCellText(r, 'kharif')}</td>
                 <td style="text-align:right;">${r.kharifCropAreaSum || r.kharifCropArea || '0'}</td>
-                <td>${rabiCropLabel(r)}</td>
+                 <td>${portfolioCropCellText(r, 'rabi')}</td>
                 <td style="text-align:right;">${r.rabiCropAreaSum || r.rabiCropArea || '0'}</td>
                 <td style="text-align:right; font-weight:800; color:#3730a3;">${r.dufasaliArea || '0'}</td>
                 <td>${r.naLandK === 'Yes' ? r.naAreaK + ' हे.' : '—'}</td>
@@ -2368,9 +2448,9 @@
                 <td style="text-align:center;">${r.bn}</td>
                 <td style="text-align:right;font-weight:800;">${r.area}</td>
                 <td>${r.type || '—'}</td>
-                <td>${kharifCropLabel(r)}</td>
+                 <td>${portfolioCropCellText(r, 'kharif')}</td>
                 <td style="text-align:right;">${r.kharifCropAreaSum || r.kharifCropArea || '0'}</td>
-                <td>${rabiCropLabel(r)}</td>
+                 <td>${portfolioCropCellText(r, 'rabi')}</td>
                 <td style="text-align:right;">${r.rabiCropAreaSum || r.rabiCropArea || '0'}</td>
                 <td style="text-align:right; font-weight:800; color:#3730a3;">${r.dufasaliArea || '0'}</td>
                 <td>${r.naLandK === 'Yes' ? r.naAreaK + ' हे.' : '—'}</td>
