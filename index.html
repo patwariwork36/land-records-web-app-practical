@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;900&family=Inter:wght@400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <style>
         :root {
@@ -40,7 +40,7 @@
         }
 
         body {
-            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
             background: var(--cream);
             color: var(--text-main);
             min-height: 100vh;
@@ -138,12 +138,12 @@
         }
 
         .tab-btn {
-            padding: 8px 18px;
+            padding: 10px 22px;
             border-radius: 100px;
             border: none;
             cursor: pointer;
-            font-weight: 700;
-            font-size: 13px;
+            font-weight: 800;
+            font-size: 15px;
             transition: all 0.22s ease;
             outline: none;
             display: flex;
@@ -216,12 +216,13 @@
         /* ── Form Controls ── */
         .form-label {
             display: block;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 900;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.08em;
             margin-bottom: 8px;
+            font-family: 'Noto Sans Devanagari', Inter, sans-serif;
         }
 
         .form-select,
@@ -272,14 +273,14 @@
         /* ── Search Button ── */
         .btn-search {
             width: 100%;
-            padding: 14px 24px;
+            padding: 16px 24px;
             background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-light) 100%);
             color: #fff;
             border: none;
             border-radius: 12px;
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: 800;
+            font-family: 'Noto Sans Devanagari', Inter, sans-serif;
+            font-size: 19px;
+            font-weight: 900;
             cursor: pointer;
             transition: all 0.2s;
             box-shadow: 0 4px 20px rgba(232, 83, 10, 0.35);
@@ -307,21 +308,21 @@
         }
 
         .village-chip {
-            padding: 10px 8px;
-            border-radius: 10px;
+            padding: 12px 8px;
+            border-radius: 12px;
             border: 2px solid var(--border);
             background: #fff;
             color: var(--text-muted);
             cursor: pointer;
-            font-weight: 700;
-            font-size: 13px;
+            font-weight: 900;
+            font-size: 17px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
+            gap: 4px;
             transition: all 0.18s;
-            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-family: 'Noto Sans Devanagari', Inter, sans-serif;
         }
 
         .village-chip:hover {
@@ -336,9 +337,9 @@
         }
 
         .village-chip .halka-tag {
-            font-size: 9px;
-            font-weight: 700;
-            opacity: 0.8;
+            font-size: 12px;
+            font-weight: 800;
+            opacity: 0.85;
             letter-spacing: 0.04em;
         }
 
@@ -356,10 +357,11 @@
         }
 
         .qf-chip {
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
+            font-family: 'Noto Sans Devanagari', Inter, sans-serif;
+            font-size: 14px;
+            font-weight: 800;
             cursor: pointer;
             border: 1.5px solid;
             transition: all 0.15s;
@@ -458,31 +460,34 @@
         }
 
         .card-kn {
-            font-size: 28px;
+            font-size: 36px;
             font-weight: 900;
             line-height: 1;
+            font-family: 'Noto Sans Devanagari', Inter, sans-serif;
         }
 
         .stat-chip {
             background: #f1f5f9;
-            border-radius: 10px;
-            padding: 10px 14px;
+            border-radius: 12px;
+            padding: 12px 16px;
             text-align: center;
         }
 
         .stat-chip-label {
-            font-size: 10px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 800;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.07em;
+            font-family: 'Noto Sans Devanagari', Inter, sans-serif;
         }
 
         .stat-chip-val {
-            font-size: 20px;
+            font-size: 26px;
             font-weight: 900;
             color: var(--text-main);
-            margin-top: 2px;
+            margin-top: 3px;
+            font-family: 'Noto Sans Devanagari', Inter, sans-serif;
         }
 
         .type-badge {
@@ -514,13 +519,13 @@
         .land-mini-badge {
             display: inline-flex;
             align-items: center;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 800;
             letter-spacing: 0.02em;
-            padding: 4px 9px;
-            border-radius: 999px;
-            line-height: 1.25;
-            border: 1px solid transparent;
+            padding: 6px 12px;
+            border-radius: 10px;
+            line-height: 1.3;
+            border: 1.5px solid transparent;
             font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
         }
 
@@ -542,28 +547,30 @@
             border-color: #cbd5e1;
         }
 
+        /* चराई/सीलिंग है = लाल, नहीं है = हरा */
         .lmb-yes {
-            background: #ecfdf5;
-            color: #047857;
-            border-color: #a7f3d0;
+            background: #FFF0F0;
+            color: #B91C1C;
+            border-color: #FCA5A5;
         }
 
         .lmb-no {
-            background: #fef2f2;
-            color: #b91c1c;
-            border-color: #fecaca;
+            background: #F0FDF4;
+            color: #15803D;
+            border-color: #86EFAC;
         }
 
+        /* निस्तार दर्ज है = dark red, नहीं है = light green */
         .lmb-nistar-yes {
-            background: #eef2ff;
-            color: #3730a3;
-            border-color: #a5b4fc;
+            background: #7F1D1D;
+            color: #FEE2E2;
+            border-color: #991B1B;
         }
 
         .lmb-nistar-no {
-            background: #f8fafc;
-            color: #64748b;
-            border-color: #e2e8f0;
+            background: #DCFCE7;
+            color: #166534;
+            border-color: #86EFAC;
         }
 
         #khasraSuggest .ksg-item.ksg-active,
@@ -2133,8 +2140,8 @@ patwariwork36.github.io/land-records/`
 
         function dcsEntryNaFallowLine(e) {
             const bits = [];
-            if (e.naLand === 'Yes') bits.push('NA ' + Number(e.naArea).toFixed(3) + ' हे.');
-            if (e.fallowLand === 'Yes') bits.push('Fallow ' + Number(e.fallowArea).toFixed(3) + ' हे.');
+            if (e.naLand === 'Yes') bits.push('ग़ैर कृषि भूमि ' + Number(e.naArea).toFixed(3) + ' हे.');
+            if (e.fallowLand === 'Yes') bits.push('पड़ती भूमि ' + Number(e.fallowArea).toFixed(3) + ' हे.');
             return bits.length
                 ? '<div style="font-size:11px;color:#64748b;margin-top:4px;font-weight:600;">' + bits.join(' · ') + '</div>'
                 : '';
@@ -2176,13 +2183,9 @@ patwariwork36.github.io/land-records/`
                 const c = (e.cropName || '').trim();
                 if (c && c !== '--') {
                     crops.push(c);
-                } else {
-                    if (e.naLand === 'Yes') naFallow.push('NA ' + tag + ' ' + Number(e.naArea).toFixed(3) + ' हे.');
-                    if (e.fallowLand === 'Yes') naFallow.push('Fallow ' + tag + ' ' + Number(e.fallowArea).toFixed(3) + ' हे.');
                 }
             });
-            const parts = [...crops, ...naFallow];
-            return parts.length ? parts.join(' · ') : fallback;
+            return crops.length ? crops.join(' · ') : fallback;
         }
 
         function kharifAreaForNamedCrop(r, cropName) {
@@ -2311,8 +2314,8 @@ patwariwork36.github.io/land-records/`
                 } else {
                     // No crop — show NA/Fallow inline with (खरीफ DCS) tag
                     const bits = [];
-                    if (e.naLand === 'Yes') bits.push({ label: 'NA', area: Number(e.naArea).toFixed(3) });
-                    if (e.fallowLand === 'Yes') bits.push({ label: 'Fallow', area: Number(e.fallowArea).toFixed(3) });
+                    if (e.naLand === 'Yes') bits.push({ label: 'ग़ैर कृषि भूमि', area: Number(e.naArea).toFixed(3) });
+                    if (e.fallowLand === 'Yes') bits.push({ label: 'पड़ती भूमि', area: Number(e.fallowArea).toFixed(3) });
                     bits.forEach(b => {
                         out += '<div style="display:flex; justify-content:space-between; align-items:center; background:#fef3c7; border-radius:6px; padding:5px 10px; margin-bottom:4px;">' +
                             '<span style="font-size:11px; font-weight:700; color:#92400e;">' + b.label +
@@ -2363,8 +2366,8 @@ patwariwork36.github.io/land-records/`
                 } else {
                     // No crop — show NA/Fallow inline with (रबी DCS) tag
                     const bits = [];
-                    if (e.naLand === 'Yes') bits.push({ label: 'NA', area: Number(e.naArea).toFixed(3) });
-                    if (e.fallowLand === 'Yes') bits.push({ label: 'Fallow', area: Number(e.fallowArea).toFixed(3) });
+                    if (e.naLand === 'Yes') bits.push({ label: 'ग़ैर कृषि भूमि', area: Number(e.naArea).toFixed(3) });
+                    if (e.fallowLand === 'Yes') bits.push({ label: 'पड़ती भूमि', area: Number(e.fallowArea).toFixed(3) });
                     bits.forEach(b => {
                         out += '<div style="display:flex; justify-content:space-between; align-items:center; background:#dbeafe; border-radius:6px; padding:5px 10px; margin-bottom:4px;">' +
                             '<span style="font-size:11px; font-weight:700; color:#1e40af;">' + b.label +
@@ -2379,113 +2382,267 @@ patwariwork36.github.io/land-records/`
 
         function getLandDetailBadgesHTML(r) {
             const t = (r.type || '').trim();
-            let irrCls = 'lmb-irr-unknown';
-            let irrText = 'सिंचित/असिंचित: —';
-            if (t) {
-                if (t.includes('असिंचित')) { irrCls = 'lmb-asinchit'; irrText = 'असिंचित भूमि'; }
-                else if (t.includes('सिंचित')) { irrCls = 'lmb-sinchit'; irrText = 'सिंचित भूमि'; }
-                else { irrText = t; }
-            }
+            let irrBg = '#F0F4F8', irrColor = '#5a6b7a', irrBorder = '#DDE5EE', irrIcon = '💧';
+            if (t.includes('असिंचित')) { irrBg='#FFF7ED'; irrColor='#9A3412'; irrBorder='#FDBA74'; irrIcon='🏜️'; }
+            else if (t.includes('सिंचित')) { irrBg='#EFF6FF'; irrColor='#1D4ED8'; irrBorder='#93C5FD'; irrIcon='💧'; }
 
             const charaiYes = fieldMeansYes(r.charai);
             const ceilYes = fieldMeansYes(r.ceiling);
-
-            const nistarRegistered = !!(r.isNistarEntry
+            const nistarRegYes = !!(r.isNistarEntry
                 || (r.nistar && String(r.nistar).trim())
                 || (r.nistarPatrakVivaran && String(r.nistarPatrakVivaran).trim()));
 
+            const row = (bg, color, border, icon, label) =>
+                `<div style="display:flex;align-items:center;gap:9px;background:${bg};border:2px solid ${border};border-radius:10px;padding:10px 14px;">
+                   <span style="font-size:18px;line-height:1;">${icon}</span>
+                   <span style="font-size:13px;font-weight:800;color:${color};font-family:'Noto Sans Devanagari',Inter,sans-serif;">${label}</span>
+                 </div>`;
+
             return `
-          <div class="land-badges-row" aria-label="भूमि विवरण बैज">
-            <span class="land-mini-badge ${irrCls}">💧 ${irrText}</span>
-            <span class="land-mini-badge ${charaiYes ? 'lmb-yes' : 'lmb-no'}">🌿 ${charaiYes ? 'चराई भूमि है' : 'चराई भूमि नहीं है'}</span>
-            <span class="land-mini-badge ${ceilYes ? 'lmb-yes' : 'lmb-no'}">⚖️ ${ceilYes ? 'सीलिंग भूमि है' : 'सीलिंग भूमि नहीं है'}</span>
-            <span class="land-mini-badge ${nistarRegistered ? 'lmb-nistar-yes' : 'lmb-nistar-no'}">📋 ${nistarRegistered ? 'निस्तार पत्रक में दर्ज है' : 'निस्तार पत्रक में दर्ज नहीं है'}</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;">
+            ${row(irrBg, irrColor, irrBorder, irrIcon, (t || 'प्रकार अज्ञात'))}
+            ${row(
+              charaiYes ? '#FFF0F0' : '#F0FDF4',
+              charaiYes ? '#B91C1C' : '#15803D',
+              charaiYes ? '#FCA5A5' : '#86EFAC',
+              charaiYes ? '🌿' : '🚫',
+              charaiYes ? 'चराई भूमि है' : 'चराई भूमि नहीं है'
+            )}
+            ${row(
+              ceilYes ? '#FFF0F0' : '#F0FDF4',
+              ceilYes ? '#B91C1C' : '#15803D',
+              ceilYes ? '#FCA5A5' : '#86EFAC',
+              ceilYes ? '⚖️' : '✅',
+              ceilYes ? 'सीलिंग भूमि है' : 'सीलिंग भूमि नहीं है'
+            )}
+            ${row(
+              nistarRegYes ? '#7F1D1D' : '#DCFCE7',
+              nistarRegYes ? '#FEE2E2' : '#166534',
+              nistarRegYes ? '#991B1B' : '#86EFAC',
+              nistarRegYes ? '📋' : '📄',
+              nistarRegYes ? 'निस्तार पत्रक में दर्ज है' : 'निस्तार पत्रक में दर्ज नहीं है'
+            )}
           </div>`;
         }
 
         function getCardHTML(r) {
             const hdrClass = currentTab === 'nam' ? 'card-header-khasra' : `card-header-${currentTab}`;
-            const typeBadge = (r.type && r.type.includes('असिंचित')) ? 'asinchai' : 'sinchai';
+
+            // Source badge
+            const srcBadge = r.kharifSource === 'DCS'
+                ? `<span style="background:#EDFBF2;color:#1A6B38;border:1.5px solid #27A85A;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;">✅ DCS</span>`
+                : r.kharifSource === 'Bhuiyya'
+                ? `<span style="background:#FFF3E0;color:#7B3F00;border:1.5px solid #D4813A;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;">📜 भुइयाँ</span>`
+                : `<span style="background:#F1F5F9;color:#64748B;border:1.5px solid #CBD5E1;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;">— अज्ञात</span>`;
+
+            // Kharif section HTML
+            function buildKharifSection() {
+                const kList = r.dcsKharifEntries || [];
+                const entries = [];
+
+                if (r.kharifSource === 'Bhuiyya' && r.finalKharifCrop) {
+                    entries.push({ crop: r.finalKharifCrop, area: r.kharifCropAreaSum || r.kharifCropArea, src: 'Bhuiyya', naLand: null, fallowLand: null });
+                } else if (r.kharifSource === 'DCS' && kList.length === 0 && r.finalKharifCrop) {
+                    entries.push({ crop: r.finalKharifCrop, area: r.kharifCropAreaSum || r.kharifCropArea, src: 'DCS', naLand: null, fallowLand: null });
+                } else if (r.kharifSource === 'DCS' && kList.length > 0) {
+                    kList.forEach(e => {
+                        const c = (e.cropName || '').trim();
+                        if (c && c !== '--') {
+                            entries.push({ crop: c, area: Number(e.cropArea).toFixed(3), src: 'DCS', naLand: null, fallowLand: null });
+                        } else {
+                            if (e.naLand === 'Yes') entries.push({ crop: null, area: Number(e.naArea).toFixed(3), src: 'DCS', naLand: true });
+                            if (e.fallowLand === 'Yes') entries.push({ crop: null, area: Number(e.fallowArea).toFixed(3), src: 'DCS', fallowLand: true });
+                        }
+                    });
+                } else {
+                    // Non-DCS NA/Fallow
+                    if (r.naLandK === 'Yes') entries.push({ crop: null, area: r.naAreaK, src: null, naLand: true });
+                    if (r.fallowLandK === 'Yes') entries.push({ crop: null, area: r.fallowAreaK, src: null, fallowLand: true });
+                }
+
+                if (!entries.length) {
+                    return `<div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border-radius:10px;padding:12px 14px;">
+                        <span style="font-size:14px;font-weight:700;color:#94A3B8;">☀️ खरीफ — कोई फसल नहीं</span>
+                    </div>`;
+                }
+
+                return entries.map(e => {
+                    if (e.naLand) {
+                        return `<div style="display:flex;justify-content:space-between;align-items:center;background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:10px;padding:12px 14px;">
+                            <span style="font-size:14px;font-weight:800;color:#92400E;">🏢 ग़ैर कृषि भूमि <span style="background:#DBEAFE;color:#1E40AF;border-radius:4px;padding:2px 7px;font-size:11px;font-weight:800;margin-left:6px;">(खरीफ DCS)</span></span>
+                            <span style="font-size:16px;font-weight:900;color:#78350F;">${e.area} हे.</span>
+                        </div>`;
+                    }
+                    if (e.fallowLand) {
+                        return `<div style="display:flex;justify-content:space-between;align-items:center;background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:10px;padding:12px 14px;">
+                            <span style="font-size:14px;font-weight:800;color:#92400E;">🏜️ पड़ती भूमि <span style="background:#DBEAFE;color:#1E40AF;border-radius:4px;padding:2px 7px;font-size:11px;font-weight:800;margin-left:6px;">(खरीफ DCS)</span></span>
+                            <span style="font-size:16px;font-weight:900;color:#78350F;">${e.area} हे.</span>
+                        </div>`;
+                    }
+                    const srcTag = e.src === 'DCS'
+                        ? `<span style="background:#DBEAFE;color:#1E40AF;border:1px solid #93C5FD;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:800;margin-left:6px;">DCS</span>`
+                        : `<span style="background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:800;margin-left:6px;">Bhuiyya</span>`;
+                    return `<div style="display:flex;justify-content:space-between;align-items:center;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;padding:12px 14px;">
+                        <div>
+                            <div style="font-size:14px;font-weight:900;color:#14532D;font-family:'Noto Sans Devanagari',Inter,sans-serif;">${e.crop}${srcTag}</div>
+                        </div>
+                        <span style="font-size:18px;font-weight:900;color:#15803D;">${e.area} <span style="font-size:12px;font-weight:600;">हे.</span></span>
+                    </div>`;
+                }).join('');
+            }
+
+            // Rabi section HTML
+            function buildRabiSection() {
+                const rList = r.dcsRabiEntries || [];
+                const entries = [];
+
+                if (rList.length === 0) {
+                    if (r.finalRabiCrop) entries.push({ crop: r.finalRabiCrop, area: r.rabiCropAreaSum || r.rabiCropArea });
+                    else {
+                        if (r.naLandR === 'Yes') entries.push({ crop: null, area: r.naAreaR, naLand: true });
+                        if (r.fallowLandR === 'Yes') entries.push({ crop: null, area: r.fallowAreaR, fallowLand: true });
+                    }
+                } else {
+                    rList.forEach(e => {
+                        const c = (e.cropName || '').trim();
+                        if (c && c !== '--') {
+                            entries.push({ crop: c, area: Number(e.cropArea).toFixed(3) });
+                        } else {
+                            if (e.naLand === 'Yes') entries.push({ crop: null, area: Number(e.naArea).toFixed(3), naLand: true });
+                            if (e.fallowLand === 'Yes') entries.push({ crop: null, area: Number(e.fallowArea).toFixed(3), fallowLand: true });
+                        }
+                    });
+                }
+
+                if (!entries.length) {
+                    return `<div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border-radius:10px;padding:12px 14px;">
+                        <span style="font-size:14px;font-weight:700;color:#94A3B8;">❄️ रबी — कोई फसल नहीं</span>
+                    </div>`;
+                }
+
+                return entries.map(e => {
+                    if (e.naLand) {
+                        return `<div style="display:flex;justify-content:space-between;align-items:center;background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:10px;padding:12px 14px;">
+                            <span style="font-size:14px;font-weight:800;color:#1E40AF;">🏢 ग़ैर कृषि भूमि <span style="background:#1E40AF;color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;font-weight:800;margin-left:6px;">(रबी DCS)</span></span>
+                            <span style="font-size:16px;font-weight:900;color:#1E3A8A;">${e.area} हे.</span>
+                        </div>`;
+                    }
+                    if (e.fallowLand) {
+                        return `<div style="display:flex;justify-content:space-between;align-items:center;background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:10px;padding:12px 14px;">
+                            <span style="font-size:14px;font-weight:800;color:#1E40AF;">🏜️ पड़ती भूमि <span style="background:#1E40AF;color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;font-weight:800;margin-left:6px;">(रबी DCS)</span></span>
+                            <span style="font-size:16px;font-weight:900;color:#1E3A8A;">${e.area} हे.</span>
+                        </div>`;
+                    }
+                    return `<div style="display:flex;justify-content:space-between;align-items:center;background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:10px;padding:12px 14px;">
+                        <div>
+                            <div style="font-size:14px;font-weight:900;color:#1E3A8A;font-family:'Noto Sans Devanagari',Inter,sans-serif;">${e.crop}<span style="background:#DBEAFE;color:#1E40AF;border:1px solid #93C5FD;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:800;margin-left:6px;">DCS</span></div>
+                        </div>
+                        <span style="font-size:18px;font-weight:900;color:#1D4ED8;">${e.area} <span style="font-size:12px;font-weight:600;">हे.</span></span>
+                    </div>`;
+                }).join('');
+            }
+
+            // Nistar section
+            const nistarHTML = r.nistar ? `
+            <div style="background:#7F1D1D;border-radius:12px;padding:14px 16px;margin-top:0;">
+                <div style="font-size:11px;font-weight:800;color:#FCA5A5;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:6px;">📋 निस्तार विवरण</div>
+                <div style="font-size:14px;font-weight:700;color:#FEE2E2;line-height:1.6;font-family:'Noto Sans Devanagari',Arial,sans-serif;">${r.nistar}</div>
+            </div>` : '';
+
             return `
-        <div class="${hdrClass}" style="padding:16px 20px; display:flex; justify-content:space-between; align-items:flex-start;">
-          <div>
-            <div style="font-size:10px; font-weight:700; color:rgba(255,255,255,0.65); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">
-              ${currentTab === 'khasra' ? 'खसरा नंबर' : currentTab === 'basra' ? 'बसरा नंबर' : 'खसरा नंबर'}
+        <div class="${hdrClass}" style="padding:18px 20px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+            <div>
+              <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:3px;">
+                ${currentTab === 'khasra' ? 'खसरा नंबर' : currentTab === 'basra' ? 'बसरा नंबर' : 'खसरा नंबर'}
+              </div>
+              <div class="card-kn" style="color:#fff;font-size:32px;font-weight:900;line-height:1;">${currentTab === 'basra' ? r.bn : r.kn}</div>
+              <div style="margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span style="font-size:13px;color:rgba(255,255,255,0.75);font-weight:700;">${r.v}</span>
+                ${getHalka(r.v) ? `<span style="background:rgba(255,255,255,0.18);border-radius:6px;padding:2px 9px;font-size:11px;font-weight:800;color:rgba(255,255,255,0.9);">${getHalka(r.v)}</span>` : ''}
+                ${srcBadge}
+              </div>
             </div>
-            <div class="card-kn" style="color:#fff;">${currentTab === 'basra' ? r.bn : r.kn}</div>
-            <div style="font-size:13px; color:rgba(255,255,255,0.7); margin-top:4px; font-weight:600;">${r.v}${getHalka(r.v) ? ` &nbsp;<span style="background:rgba(255,255,255,0.18);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:800;letter-spacing:0.05em;">${getHalka(r.v)}</span>` : ''}</div>
-          </div>
-          <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;">
-            <button onclick="event.stopPropagation();shareOnWhatsApp(${JSON.stringify(r).replace(/&quot;/g, '').replace(/"/g, '&quot;')})" style="background:rgba(37,211,102,0.25);border:1px solid rgba(37,211,102,0.5);color:#fff;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">📲 Share</button>
-            <button onclick="event.stopPropagation();printSingleRecord(${JSON.stringify(r).replace(/"/g, '&quot;')})" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">🖨 Print</button>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0;">
+              <button onclick="event.stopPropagation();shareOnWhatsApp(${JSON.stringify(r).replace(/&quot;/g, '').replace(/"/g, '&quot;')})" style="background:rgba(37,211,102,0.25);border:1px solid rgba(37,211,102,0.5);color:#fff;border-radius:8px;padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">📲 Share</button>
+              <button onclick="event.stopPropagation();printSingleRecord(${JSON.stringify(r).replace(/"/g, '&quot;')})" style="background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:8px;padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">🖨 Print</button>
+            </div>
           </div>
         </div>
-        <div style="padding:18px 20px; display:flex; flex-direction:column; gap:14px;">
+
+        <div style="padding:20px;display:flex;flex-direction:column;gap:16px;font-family:'Noto Sans Devanagari',Inter,sans-serif;">
+
+          <!-- Status badges 2x2 grid -->
           ${getLandDetailBadgesHTML(r)}
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div class="stat-chip">
-              <div class="stat-chip-label">खसरा नं.</div>
-              <div class="stat-chip-val">${r.kn}</div>
+
+          <!-- Khasra / Basra / Area / Type -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="background:#F0F4F8;border-radius:12px;padding:12px 14px;">
+              <div style="font-size:11px;font-weight:800;color:#5a6b7a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">खसरा नं.</div>
+              <div style="font-size:22px;font-weight:900;color:var(--royal);">${r.kn}</div>
             </div>
-            <div class="stat-chip">
-              <div class="stat-chip-label">बसरा नं.</div>
-              <div class="stat-chip-val">${r.bn}</div>
-            </div>
-          </div>
-          <div style="border-top:1px solid var(--border); padding-top:12px;">
-            <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:6px;">भूमिस्वामी</div>
-            <div style="font-size:14px; font-weight:700; color:var(--text-main); line-height:1.4;">${getFullOwner(r)}</div>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; border-top:1px solid var(--border); padding-top:12px;">
-            <div>
-              <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:4px;">क्षेत्रफल (हे.)</div>
-              <div style="font-size:18px; font-weight:900; color:var(--text-main);">${r.area}</div>
-            </div>
-            <div>
-              <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:6px;">प्रकार</div>
-              <span class="type-badge ${typeBadge}">${r.type || '—'}</span>
-            </div>
-          </div>
-          
-          <div style="border-top:1px solid var(--border); padding-top:12px;">
-            <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:8px;">🌾 फसल विवरण</div>
-            
-            <div style="display:flex; flex-direction:column; gap:6px;">
-              
-              ${getKharifCropBlocksHTML(r)}
-              ${getRabiCropBlocksHTML(r)}
-              
-              ${r.isDufasali ? `
-              <div style="background:#ede9fe; border:1px solid #c4b5fd; border-radius:8px; padding:6px 10px; display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
-                <span style="font-size:11px; font-weight:800; color:#5b21b6;">🌾 दुफसली रकबा</span>
-                <span style="font-size:13px; font-weight:900; color:#4c1d95;">${r.dufasaliArea} हे.</span>
-              </div>` : ''}
-              
-              `+ (r.kharifSource === 'DCS' && (r.dcsKharifEntries || []).length > 1 ? '' : (r.naLandK === 'Yes' ?
-                '<div style="display:flex;justify-content:space-between;align-items:center;background:#fef3c7;border-radius:6px;padding:5px 10px;margin-top:4px;">' +
-                '<span style="font-size:11px;font-weight:700;color:#92400e;">🏢 NA Land (खरीफ)</span>' +
-                '<span style="font-size:12px;font-weight:800;color:#78350f;">' + r.naAreaK + ' हे.</span></div>' : '')) 
-              + (r.kharifSource === 'DCS' && (r.dcsKharifEntries || []).length > 1 ? '' : (r.fallowLandK === 'Yes' ?
-                '<div style="display:flex;justify-content:space-between;align-items:center;background:#fef3c7;border-radius:6px;padding:5px 10px;margin-top:4px;">' +
-                '<span style="font-size:11px;font-weight:700;color:#92400e;">🏜️ Fallow Land (खरीफ)</span>' +
-                '<span style="font-size:12px;font-weight:800;color:#78350f;">' + r.fallowAreaK + ' हे.</span></div>' : '')) 
-              + ((r.dcsRabiEntries || []).length > 1 ? '' : (r.naLandR === 'Yes' ?
-                '<div style="display:flex;justify-content:space-between;align-items:center;background:#dbeafe;border-radius:6px;padding:5px 10px;margin-top:4px;">' +
-                '<span style="font-size:11px;font-weight:700;color:#1e40af;">🏢 NA Land (रबी)</span>' +
-                '<span style="font-size:12px;font-weight:800;color:#1e3a8a;">' + r.naAreaR + ' हे.</span></div>' : '')) 
-              + ((r.dcsRabiEntries || []).length > 1 ? '' : (r.fallowLandR === 'Yes' ?
-                '<div style="display:flex;justify-content:space-between;align-items:center;background:#dbeafe;border-radius:6px;padding:5px 10px;margin-top:4px;">' +
-                '<span style="font-size:11px;font-weight:700;color:#1e40af;">🏜️ Fallow Land (रबी)</span>' +
-                '<span style="font-size:12px;font-weight:800;color:#1e3a8a;">' + r.fallowAreaR + ' हे.</span></div>' : '')) + `
-              
+            <div style="background:#F0F4F8;border-radius:12px;padding:12px 14px;">
+              <div style="font-size:11px;font-weight:800;color:#5a6b7a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">बसरा नं.</div>
+              <div style="font-size:22px;font-weight:900;color:var(--royal);">${r.bn}</div>
             </div>
           </div>
 
-          ${r.nistar ? `
-          <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:10px 14px; border-top:1px solid var(--border); padding-top:12px;">
-            <div style="font-size:10px; font-weight:700; color:#92400e; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:6px;">निस्तार विवरण</div>
-            <div style="font-size:14px; font-weight:700; color:#78350f; line-height:1.5; font-family:'Noto Sans Devanagari',Arial,sans-serif;">${r.nistar}</div>
+          <!-- Owner -->
+          <div style="background:#F8F9FB;border-radius:12px;padding:14px 16px;border-left:4px solid var(--saffron);">
+            <div style="font-size:11px;font-weight:800;color:#5a6b7a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;">👤 भूमिस्वामी</div>
+            <div style="font-size:16px;font-weight:800;color:var(--royal);line-height:1.45;font-family:'Noto Sans Devanagari',sans-serif;">${getFullOwner(r)}</div>
+          </div>
+
+          <!-- Area -->
+          <div style="background:linear-gradient(135deg,#1A6B38,#27A85A);border-radius:12px;padding:14px 16px;color:#fff;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-size:12px;font-weight:800;opacity:0.75;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">📐 कुल क्षेत्रफल</div>
+                <div style="font-size:26px;font-weight:900;line-height:1;">${r.area} <span style="font-size:14px;font-weight:600;opacity:0.85;margin-left:4px;">हेक्टेयर</span></div>
+              </div>
+              <div style="font-size:36px;opacity:0.2;">📏</div>
+            </div>
+          </div>
+
+          <!-- ☀️ Kharif Section -->
+          <div style="background:#fff;border:2px solid #BBF7D0;border-radius:14px;overflow:hidden;">
+            <div style="background:linear-gradient(90deg,#14532D,#15803D);padding:10px 16px;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:18px;">☀️</span>
+              <span style="font-size:14px;font-weight:900;color:#fff;letter-spacing:0.04em;">खरीफ फसल विवरण</span>
+            </div>
+            <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+              ${buildKharifSection()}
+            </div>
+          </div>
+
+          <!-- ❄️ Rabi Section -->
+          <div style="background:#fff;border:2px solid #BFDBFE;border-radius:14px;overflow:hidden;">
+            <div style="background:linear-gradient(90deg,#1E3A8A,#1D4ED8);padding:10px 16px;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:18px;">❄️</span>
+              <span style="font-size:14px;font-weight:900;color:#fff;letter-spacing:0.04em;">रबी फसल विवरण</span>
+            </div>
+            <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+              ${buildRabiSection()}
+            </div>
+          </div>
+
+          <!-- 🌾 Dufasali Section (only if applicable) -->
+          ${r.isDufasali ? `
+          <div style="background:#fff;border:2px solid #DDD6FE;border-radius:14px;overflow:hidden;">
+            <div style="background:linear-gradient(90deg,#4C1D95,#6D28D9);padding:10px 16px;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:18px;">🌾</span>
+              <span style="font-size:14px;font-weight:900;color:#fff;letter-spacing:0.04em;">दुफसली रकबा</span>
+            </div>
+            <div style="padding:14px 16px;">
+              <div style="display:flex;justify-content:center;align-items:center;background:#EDE9FE;border:1.5px solid #C4B5FD;border-radius:10px;padding:12px 16px;text-align:center;">
+                <span style="font-size:26px;font-weight:900;color:#4C1D95;">${r.dufasaliArea} <span style="font-size:15px;font-weight:600;">हेक्टेयर</span></span>
+              </div>
+            </div>
           </div>` : ''}
+
+          <!-- Nistar -->
+          ${nistarHTML}
+
         </div>`;
         }
 
@@ -2638,51 +2795,51 @@ patwariwork36.github.io/land-records/`
 
             let printKharifRows = '';
             if (r.kharifSource === 'Bhuiyya' && r.finalKharifCrop) {
-                printKharifRows = `<tr><th>☀️ खरीफ फसल</th><td>${r.finalKharifCrop} &nbsp;<span style="background:#fef3c7;color:#92400e;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">Bhuiyya</span></td></tr>
-  <tr><th>☀️ खरीफ रकबा</th><td>${r.kharifCropAreaSum || r.kharifCropArea} हे.</td></tr>`;
+                printKharifRows = `<tr class="tr-kharif"><th>☀️ खरीफ फसल</th><td>${r.finalKharifCrop} &nbsp;<span style="background:#fef3c7;color:#92400e;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">Bhuiyya</span></td></tr>
+  <tr class="tr-kharif"><th>☀️ खरीफ रकबा</th><td>${r.kharifCropAreaSum || r.kharifCropArea} हे.</td></tr>`;
             } else if (r.kharifSource === 'DCS' && kEnt.length === 1) {
-                printKharifRows = `<tr><th>☀️ खरीफ फसल</th><td>${(kEnt[0].cropName || r.finalKharifCrop || '—')} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
-  <tr><th>☀️ खरीफ रकबा</th><td>${Number(kEnt[0].cropArea).toFixed(3)} हे.</td></tr>`;
+                printKharifRows = `<tr class="tr-kharif"><th>☀️ खरीफ फसल</th><td>${(kEnt[0].cropName || r.finalKharifCrop || '—')} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
+  <tr class="tr-kharif"><th>☀️ खरीफ रकबा</th><td>${Number(kEnt[0].cropArea).toFixed(3)} हे.</td></tr>`;
             } else if (r.kharifSource === 'DCS' && kEnt.length > 1) {
                 printKharifRows = kEnt.map((e) => {
                     const c = (e.cropName || '').trim();
                     const a = Number(e.cropArea).toFixed(3);
                     const hasCrop = c && c !== '--';
                     if (hasCrop) {
-                        return `<tr><th>☀️ खरीफ फसल</th><td>${c} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
-  <tr><th>☀️ खरीफ रकबा</th><td>${a} हे.</td></tr>`;
+                        return `<tr class="tr-kharif"><th>☀️ खरीफ फसल</th><td>${c} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
+  <tr class="tr-kharif"><th>☀️ खरीफ रकबा</th><td>${a} हे.</td></tr>`;
                     } else {
                         const bits = [];
-                        if (e.naLand === 'Yes') bits.push({ label: 'NA', area: Number(e.naArea).toFixed(3) });
-                        if (e.fallowLand === 'Yes') bits.push({ label: 'Fallow', area: Number(e.fallowArea).toFixed(3) });
-                        return bits.map(b => `<tr><th>🏢 ${b.label} <span style="background:#dbeafe;color:#1e40af;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:800;">(खरीफ DCS)</span></th><td>${b.area} हे.</td></tr>`).join('\n  ');
+                        if (e.naLand === 'Yes') bits.push({ label: 'ग़ैर कृषि भूमि', area: Number(e.naArea).toFixed(3) });
+                        if (e.fallowLand === 'Yes') bits.push({ label: 'पड़ती भूमि', area: Number(e.fallowArea).toFixed(3) });
+                        return bits.map(b => `<tr class="tr-kharif"><th>🏢 ${b.label} <span style="background:#dbeafe;color:#1e40af;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:800;">(खरीफ DCS)</span></th><td>${b.area} हे.</td></tr>`).join('\n  ');
                     }
                 }).join('\n  ');
             } else {
-                printKharifRows = '<tr><th>☀️ खरीफ फसल</th><td>—</td></tr>';
+                printKharifRows = '<tr class="tr-kharif"><th>☀️ खरीफ फसल</th><td>—</td></tr>';
             }
 
             let printRabiRows = '';
             if (rEnt.length === 1) {
-                printRabiRows = `<tr><th>❄️ रबी फसल</th><td>${rEnt[0].cropName || r.finalRabiCrop || '—'}</td></tr>
-  <tr><th>❄️ रबी रकबा</th><td>${Number(rEnt[0].cropArea).toFixed(3)} हे.</td></tr>`;
+                printRabiRows = `<tr class="tr-rabi"><th>❄️ रबी फसल</th><td>${rEnt[0].cropName || r.finalRabiCrop || '—'}</td></tr>
+  <tr class="tr-rabi"><th>❄️ रबी रकबा</th><td>${Number(rEnt[0].cropArea).toFixed(3)} हे.</td></tr>`;
             } else if (rEnt.length > 1) {
                 printRabiRows = rEnt.map((e) => {
                     const c = (e.cropName || '').trim();
                     const a = Number(e.cropArea).toFixed(3);
                     const hasCrop = c && c !== '--';
                     if (hasCrop) {
-                        return `<tr><th>❄️ रबी फसल</th><td>${c} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
-  <tr><th>❄️ रबी रकबा</th><td>${a} हे.</td></tr>`;
+                        return `<tr class="tr-rabi"><th>❄️ रबी फसल</th><td>${c} &nbsp;<span style="background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 8px;font-size:12px;font-weight:800;">DCS</span></td></tr>
+  <tr class="tr-rabi"><th>❄️ रबी रकबा</th><td>${a} हे.</td></tr>`;
                     } else {
                         const bits = [];
-                        if (e.naLand === 'Yes') bits.push({ label: 'NA', area: Number(e.naArea).toFixed(3) });
-                        if (e.fallowLand === 'Yes') bits.push({ label: 'Fallow', area: Number(e.fallowArea).toFixed(3) });
-                        return bits.map(b => `<tr><th>🏢 ${b.label} <span style="background:#1e40af;color:#fff;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:800;">(रबी DCS)</span></th><td>${b.area} हे.</td></tr>`).join('\n  ');
+                        if (e.naLand === 'Yes') bits.push({ label: 'ग़ैर कृषि भूमि', area: Number(e.naArea).toFixed(3) });
+                        if (e.fallowLand === 'Yes') bits.push({ label: 'पड़ती भूमि', area: Number(e.fallowArea).toFixed(3) });
+                        return bits.map(b => `<tr class="tr-rabi"><th>🏢 ${b.label} <span style="background:#1e40af;color:#fff;border-radius:4px;padding:1px 6px;font-size:11px;font-weight:800;">(रबी DCS)</span></th><td>${b.area} हे.</td></tr>`).join('\n  ');
                     }
                 }).join('\n  ');
             } else {
-                printRabiRows = '<tr><th>❄️ रबी फसल</th><td>—</td></tr>';
+                printRabiRows = '<tr class="tr-rabi"><th>❄️ रबी फसल</th><td>—</td></tr>';
             }
 
             pw.document.write(`<!DOCTYPE html>
@@ -2702,6 +2859,15 @@ patwariwork36.github.io/land-records/`
   th,td { border:1px solid #e2e8f0; padding:12px 16px; font-size:14px; text-align:left; vertical-align:middle; }
   th { background:#eef2ff; font-weight:700; color:#1e40af; width:38%; text-align:left; padding-left:16px; border-left:3px solid #1a1a6e; }
   td { font-weight:600; color:#1a1a1a; }
+  .tr-kharif { background:#f0fdf4; }
+  .tr-kharif th { background:#dcfce7 !important; color:#166534; border-left-color:#166534; }
+  .tr-kharif td { color:#14532d; }
+  .tr-rabi { background:#eff6ff; }
+  .tr-rabi th { background:#dbeafe !important; color:#1e40af; border-left-color:#1e40af; }
+  .tr-rabi td { color:#1e3a8a; }
+  .tr-dufasali { background:#faf5ff; }
+  .tr-dufasali th { background:#f3e8ff !important; color:#6b21a8; border-left-color:#6b21a8; }
+  .tr-dufasali td { color:#5b21b6; }
   .footer { margin-top:30px; text-align:center; font-size:11px; color:#aaa; }
   @media print { body { padding:20px; } }
 </style></head><body>
@@ -2719,11 +2885,11 @@ patwariwork36.github.io/land-records/`
   <tr><th>🌱 भूमि का प्रकार</th><td>${r.type || '—'}</td></tr>
   ${printKharifRows}
   ${printRabiRows}
-  ${r.isDufasali ? `<tr><th>🌾 दुफसली रकबा</th><td style="color:#5b21b6;font-weight:900;">${r.dufasaliArea} हे.</td></tr>` : ''}
-  ${(r.kharifSource === 'DCS' && kEnt.length > 1) ? '' : (r.naLandK === 'Yes' ? `<tr><th>🏢 NA Land (खरीफ)</th><td>${r.naAreaK} हे.</td></tr>` : '')}
-  ${(r.kharifSource === 'DCS' && kEnt.length > 1) ? '' : (r.fallowLandK === 'Yes' ? `<tr><th>🏜️ Fallow Land (खरीफ)</th><td>${r.fallowAreaK} हे.</td></tr>` : '')}
-  ${(rEnt.length > 1) ? '' : (r.naLandR === 'Yes' ? `<tr><th>🏢 NA Land (रबी)</th><td>${r.naAreaR} हे.</td></tr>` : '')}
-  ${(rEnt.length > 1) ? '' : (r.fallowLandR === 'Yes' ? `<tr><th>🏜️ Fallow Land (रबी)</th><td>${r.fallowAreaR} हे.</td></tr>` : '')}
+  ${r.isDufasali ? `<tr class="tr-dufasali"><th>🌾 दुफसली रकबा</th><td style="color:#5b21b6;font-weight:900;">${r.dufasaliArea} हे.</td></tr>` : ''}
+  ${(r.kharifSource === 'DCS' && kEnt.length > 1) ? '' : (r.naLandK === 'Yes' ? `<tr class="tr-kharif"><th>🏢 ग़ैर कृषि भूमि (खरीफ)</th><td>${r.naAreaK} हे.</td></tr>` : '')}
+  ${(r.kharifSource === 'DCS' && kEnt.length > 1) ? '' : (r.fallowLandK === 'Yes' ? `<tr class="tr-kharif"><th>🏜️ पड़ती भूमि (खरीफ)</th><td>${r.fallowAreaK} हे.</td></tr>` : '')}
+  ${(rEnt.length > 1) ? '' : (r.naLandR === 'Yes' ? `<tr class="tr-rabi"><th>🏢 ग़ैर कृषि भूमि (रबी)</th><td>${r.naAreaR} हे.</td></tr>` : '')}
+  ${(rEnt.length > 1) ? '' : (r.fallowLandR === 'Yes' ? `<tr class="tr-rabi"><th>��️ पड़ती भूमि (रबी)</th><td>${r.fallowAreaR} हे.</td></tr>` : '')}
   ${r.charai ? `<tr><th>🌿 चराई भूमि</th><td>${r.charai}</td></tr>` : ''}
   ${r.ceiling ? `<tr><th>⚖️ सीलिंग भूमि</th><td>${r.ceiling}</td></tr>` : ''}
   ${r.nistar ? `<tr><th>📝 निस्तार विवरण</th><td>${r.nistar}</td></tr>` : ''}
@@ -2806,6 +2972,15 @@ patwariwork36.github.io/land-records/`
     padding:10px 8px;
   }
   tbody tr:nth-child(even) { background:#f8fafc; }
+  .tr-kharif { background:#f0fdf4; }
+  .tr-kharif th { background:#dcfce7 !important; color:#166534; border-left-color:#166534; }
+  .tr-kharif td { color:#14532d; }
+  .tr-rabi { background:#eff6ff; }
+  .tr-rabi th { background:#dbeafe !important; color:#1e40af; border-left-color:#1e40af; }
+  .tr-rabi td { color:#1e3a8a; }
+  .tr-dufasali { background:#faf5ff; }
+  .tr-dufasali th { background:#f3e8ff !important; color:#6b21a8; border-left-color:#6b21a8; }
+  .tr-dufasali td { color:#5b21b6; }
   .footer { margin-top:24px; text-align:center; font-size:11px; color:#aaa; border-top:1px solid #e2e8f0; padding-top:12px; }
   @media print { body { padding:15px; } }
 </style></head><body>
@@ -2819,7 +2994,7 @@ patwariwork36.github.io/land-records/`
 </div>
 </div>
 <table>
-  <thead><tr><th>#</th><th>खसरा</th><th>भूमिस्वामी</th><th style="text-align:center;">क्षेत्रफल (हे.)</th><th>भूमि प्रकार</th><th>खरीफ फसल</th><th>खरीफ रकबा</th><th>रबी फसल</th><th>रबी रकबा</th><th>दुफसली रकबा</th><th>NA Land (खरीफ)</th><th>Fallow (खरीफ)</th><th>NA Land (रबी)</th><th>Fallow (रबी)</th><th>चराई भूमि</th><th>सीलिंग भूमि</th><th>निस्तार विवरण</th></tr></thead>
+  <thead><tr><th>#</th><th>खसरा</th><th>भूमिस्वामी</th><th style="text-align:center;">क्षेत्रफल (हे.)</th><th>भूमि प्रकार</th><th>खरीफ फसल</th><th>खरीफ रकबा</th><th>रबी फसल</th><th>रबी रकबा</th><th>दुफसली रकबा</th><th>ग़ैर कृषि भूमि (खरीफ)</th><th>पड़ती भूमि (खरीफ)</th><th>ग़ैर कृषि भूमि (रबी)</th><th>पड़ती भूमि (रबी)</th><th>चराई भूमि</th><th>सीलिंग भूमि</th><th>निस्तार विवरण</th></tr></thead>
   <tbody>${rowsHtml}</tbody>
 </table>
 <p class="footer">भूमि रिकॉर्ड डैशबोर्ड — हल्का 43 एवं 28 | कम्प्यूटर जनित रिकॉर्ड — सत्यापन हेतु पटवारी कार्यालय से संपर्क करें</p>
@@ -2919,6 +3094,15 @@ patwariwork36.github.io/land-records/`
   }
   tbody tr:nth-child(even) { background:#f8fafc; }
 
+  .tr-kharif { background:#f0fdf4; }
+  .tr-kharif th { background:#dcfce7 !important; color:#166534; border-left-color:#166534; }
+  .tr-kharif td { color:#14532d; }
+  .tr-rabi { background:#eff6ff; }
+  .tr-rabi th { background:#dbeafe !important; color:#1e40af; border-left-color:#1e40af; }
+  .tr-rabi td { color:#1e3a8a; }
+  .tr-dufasali { background:#faf5ff; }
+  .tr-dufasali th { background:#f3e8ff !important; color:#6b21a8; border-left-color:#6b21a8; }
+  .tr-dufasali td { color:#5b21b6; }
   .footer { margin-top:24px; text-align:center; font-size:11px; color:#aaa; border-top:1px solid #e2e8f0; padding-top:12px; }
   @media print { body { padding:15px; } }
 </style></head><body>
@@ -2948,10 +3132,10 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
       <th>रबी फसल</th>
       <th>रबी रकबा</th>
       <th>दुफसली रकबा</th>
-      <th>NA Land (खरीफ)</th>
-      <th>Fallow (खरीफ)</th>
-      <th>NA Land (रबी)</th>
-      <th>Fallow (रबी)</th>
+      <th>ग़ैर कृषि भूमि (खरीफ)</th>
+      <th>पड़ती भूमि (खरीफ)</th>
+      <th>ग़ैर कृषि भूमि (रबी)</th>
+      <th>पड़ती भूमि (रबी)</th>
       <th>चराई भूमि</th>
       <th>सीलिंग भूमि</th>
       <th>निस्तार विवरण</th>
@@ -2990,7 +3174,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             csvContent += `रबी फसल,${rCrops},रबी रकबा,${rArea} हे.\n`;
             csvContent += `दुफसली रकबा,${dArea} हे.\n\n`;
 
-            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,खरीफ फसल,खरीफ रकबा,रबी फसल,रबी रकबा,दुफसली रकबा,NA (खरीफ),Fallow (खरीफ),NA (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
+            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,खरीफ फसल,खरीफ रकबा,रबी फसल,रबी रकबा,दुफसली रकबा,ग़ैर कृषि भूमि (खरीफ),Fallow (खरीफ),ग़ैर कृषि भूमि (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
 
             basraRecs.forEach((r, i) => {
                 const row = [
@@ -3057,7 +3241,7 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             csvContent += `रबी फसल,${rCrops},रबी रकबा,${rArea} हे.\n`;
             csvContent += `दुफसली रकबा,${dArea} हे.\n\n`;
 
-            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,खरीफ फसल,खरीफ रकबा,रबी फसल,रबी रकबा,दुफसली रकबा,NA (खरीफ),Fallow (खरीफ),NA (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
+            csvContent += "क्र.,खसरा नं.,बसरा नं.,क्षेत्रफल (हे.),भूमि प्रकार,खरीफ फसल,खरीफ रकबा,रबी फसल,रबी रकबा,दुफसली रकबा,ग़ैर कृषि भूमि (खरीफ),Fallow (खरीफ),ग़ैर कृषि भूमि (रबी),Fallow (रबी),चराई भूमि,सीलिंग भूमि,निस्तार विवरण\n";
 
             farmerRecs.forEach((r, i) => {
                 const row = [
@@ -4013,6 +4197,15 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
   table { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:20px; }
   th,td { border:1px solid #e2e8f0; padding:6px 8px; text-align:left; vertical-align:middle; }
   th { background:#1a1a6e; color:#fff; font-weight:700; font-size:12px; text-align:center; }
+  .tr-kharif { background:#f0fdf4; }
+  .tr-kharif th { background:#dcfce7 !important; color:#166534; border-left-color:#166534; }
+  .tr-kharif td { color:#14532d; }
+  .tr-rabi { background:#eff6ff; }
+  .tr-rabi th { background:#dbeafe !important; color:#1e40af; border-left-color:#1e40af; }
+  .tr-rabi td { color:#1e3a8a; }
+  .tr-dufasali { background:#faf5ff; }
+  .tr-dufasali th { background:#f3e8ff !important; color:#6b21a8; border-left-color:#6b21a8; }
+  .tr-dufasali td { color:#5b21b6; }
   .footer { margin-top:24px; text-align:center; font-size:11px; color:#aaa; border-top:1px solid #e2e8f0; padding-top:12px; }
   @media print { body { padding:10px; } }
 </style></head><body>
@@ -4387,6 +4580,15 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
   table { width:100%; border-collapse:collapse; font-size:13px; margin-bottom:20px; }
   th,td { border:1px solid #e2e8f0; padding:10px 14px; text-align:left; vertical-align:middle; }
   th { background:#1a1a6e; color:#fff; font-weight:700; font-size:13px; text-align:center; }
+  .tr-kharif { background:#f0fdf4; }
+  .tr-kharif th { background:#dcfce7 !important; color:#166534; border-left-color:#166534; }
+  .tr-kharif td { color:#14532d; }
+  .tr-rabi { background:#eff6ff; }
+  .tr-rabi th { background:#dbeafe !important; color:#1e40af; border-left-color:#1e40af; }
+  .tr-rabi td { color:#1e3a8a; }
+  .tr-dufasali { background:#faf5ff; }
+  .tr-dufasali th { background:#f3e8ff !important; color:#6b21a8; border-left-color:#6b21a8; }
+  .tr-dufasali td { color:#5b21b6; }
   .footer { margin-top:24px; text-align:center; font-size:11px; color:#aaa; border-top:1px solid #e2e8f0; padding-top:12px; }
   @media print { body { padding:15px; } }
 </style></head><body>
