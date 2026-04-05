@@ -14,19 +14,23 @@
         rel="stylesheet">
     <style>
         :root {
-            --royal: #1a1a6e;
-            --royal-mid: #2d2db0;
-            --gold: #f0a500;
+            --royal: #0B1D35;
+            --royal-mid: #1a3a5c;
+            --saffron: #E8530A;
+            --saffron-light: #FF8C42;
+            --gov-green: #1A6B38;
+            --gov-green-light: #27A85A;
+            --gold: #F5C842;
             --gold-light: #ffd966;
-            --cream: #fffdf5;
+            --cream: #F0F4F8;
             --surface: #ffffff;
-            --text-main: #1a1a2e;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --green: #059669;
-            --orange: #d97706;
-            --shadow-card: 0 4px 24px rgba(26, 26, 110, 0.10);
-            --shadow-hover: 0 12px 40px rgba(26, 26, 110, 0.18);
+            --text-main: #0B1D35;
+            --text-muted: #5a6b7a;
+            --border: #DDE5EE;
+            --green: #1A6B38;
+            --orange: #E8530A;
+            --shadow-card: 0 4px 24px rgba(11, 29, 53, 0.10);
+            --shadow-hover: 0 12px 40px rgba(11, 29, 53, 0.22);
         }
 
         * {
@@ -55,69 +59,127 @@
                 radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
         }
 
+        /* ── Tricolor Strip ── */
+        .tricolor-strip {
+            height: 5px;
+            background: linear-gradient(to right, #FF9933 33.33%, #fff 33.33% 66.66%, #138808 66.66%);
+        }
+
         /* ── Header ── */
         .site-header {
-            background: linear-gradient(135deg, var(--royal) 0%, #2d2db0 60%, #1e3a8a 100%);
+            background: linear-gradient(135deg, var(--royal) 0%, #142740 60%, #1a3a5c 100%);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 32px rgba(26, 26, 110, 0.35);
+            box-shadow: 0 4px 32px rgba(11, 29, 53, 0.45);
         }
 
         .site-header::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
 
         .header-gold-bar {
-            height: 4px;
+            height: 3px;
             background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
         }
 
         /* ── Emblem ── */
         .emblem {
-            width: 72px;
-            height: 72px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
-            background: linear-gradient(145deg, var(--gold) 0%, var(--gold-light) 100%);
+            background: radial-gradient(circle, var(--gold-light) 0%, var(--gold) 60%, #a07010 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            box-shadow: 0 0 0 4px rgba(240, 165, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.3);
+            font-size: 32px;
+            box-shadow: 0 0 0 3px rgba(245,200,66,0.35), 0 8px 24px rgba(212, 160, 23, 0.4);
             flex-shrink: 0;
+        }
+
+        /* ── Live Status Badge ── */
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(39, 168, 90, 0.25);
+            border: 1px solid rgba(39, 168, 90, 0.5);
+            color: #6bffA0;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #6bffA0;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
         }
 
         /* ── Tab Bar ── */
         .tab-bar {
             background: #fff;
-            border-radius: 16px;
-            padding: 6px;
+            border-radius: 100px;
+            padding: 5px;
             display: inline-flex;
-            gap: 6px;
+            gap: 4px;
             box-shadow: var(--shadow-card);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
         }
 
         .tab-btn {
-            padding: 10px 28px;
-            border-radius: 12px;
+            padding: 8px 18px;
+            border-radius: 100px;
             border: none;
             cursor: pointer;
             font-weight: 700;
-            font-size: 15px;
-            transition: all 0.25s;
+            font-size: 13px;
+            transition: all 0.22s ease;
             outline: none;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .tab-btn .tab-count {
+            background: var(--saffron);
+            color: #fff;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .tab-btn.active .tab-count {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .tab-btn .tab-new {
+            background: var(--saffron);
+            color: #fff;
+            font-size: 8px;
+            padding: 1px 5px;
+            border-radius: 8px;
+            font-weight: 700;
         }
 
         .tab-btn.active {
-            background: linear-gradient(135deg, var(--royal), var(--royal-mid));
+            background: var(--royal);
             color: #fff;
-            box-shadow: 0 4px 16px rgba(26, 26, 110, 0.30);
+            box-shadow: 0 4px 16px rgba(11, 29, 53, 0.35);
         }
 
         .tab-btn:not(.active) {
@@ -126,7 +188,7 @@
         }
 
         .tab-btn:not(.active):hover {
-            background: #f1f5f9;
+            background: var(--cream);
             color: var(--royal);
         }
 
@@ -210,17 +272,17 @@
         /* ── Search Button ── */
         .btn-search {
             width: 100%;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, var(--royal) 0%, var(--royal-mid) 100%);
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-light) 100%);
             color: #fff;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             font-family: inherit;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 20px rgba(26, 26, 110, 0.35);
+            box-shadow: 0 4px 20px rgba(232, 83, 10, 0.35);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -229,11 +291,118 @@
 
         .btn-search:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(26, 26, 110, 0.45);
+            box-shadow: 0 8px 28px rgba(232, 83, 10, 0.50);
         }
 
         .btn-search:active {
             transform: translateY(0);
+        }
+
+        /* ── Village Grid ── */
+        .village-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+            margin-bottom: 14px;
+        }
+
+        .village-chip {
+            padding: 10px 8px;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            background: #fff;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            transition: all 0.18s;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+
+        .village-chip:hover {
+            border-color: var(--saffron);
+            color: var(--saffron);
+        }
+
+        .village-chip.selected {
+            border-color: var(--saffron);
+            background: var(--saffron);
+            color: #fff;
+        }
+
+        .village-chip .halka-tag {
+            font-size: 9px;
+            font-weight: 700;
+            opacity: 0.8;
+            letter-spacing: 0.04em;
+        }
+
+        .village-chip.selected .halka-tag {
+            opacity: 0.9;
+            color: rgba(255,255,255,0.85);
+        }
+
+        /* ── Quick Filters ── */
+        .quick-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .qf-chip {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1.5px solid;
+            transition: all 0.15s;
+        }
+
+        .qf-chip:hover {
+            transform: scale(1.04);
+        }
+
+        /* ── Recent Searches ── */
+        .recent-search-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .recent-search-item:hover {
+            background: var(--cream);
+        }
+
+        /* ── WhatsApp Share Button ── */
+        .btn-whatsapp {
+            background: #25D366;
+            color: #fff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 7px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.18s;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+            transform: scale(1.04);
         }
 
         /* ── Loading Spinner ── */
@@ -409,21 +578,41 @@
             gap: 8px;
             padding: 9px 18px;
             border-radius: 10px;
-            border: none;
-            background: rgba(255, 255, 255, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.30);
+            background: rgba(255, 255, 255, 0.15);
             color: #fff;
             font-family: inherit;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.30);
             transition: all 0.2s;
         }
 
         .btn-pdf:hover {
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.30);
             transform: scale(1.04);
+        }
+
+        /* ── Source Badge DCS / Bhuiyya ── */
+        .source-badge-dcs {
+            background: #EDFBF2;
+            color: #1A6B38;
+            border: 1.5px solid #27A85A;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .source-badge-bhuiyya {
+            background: #FFF3E0;
+            color: #7B3F00;
+            border: 1.5px solid #D4813A;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
         }
 
         /* ── Portfolio Banner ── */
@@ -689,31 +878,28 @@
     <div class="bg-mesh"></div>
 
     <!-- ═══════════════════ HEADER ═══════════════════ -->
-    <div class="header-gold-bar"></div>
+    <div class="tricolor-strip"></div>
     <header class="site-header">
-        <div style="max-width:900px; margin:0 auto; padding:clamp(16px,4vw,28px) clamp(12px,3vw,24px);">
-            <div style="display:flex; align-items:center; gap:clamp(8px,2vw,16px); flex-wrap:wrap;">
-                <div class="emblem">🌾</div>
-                <div style="flex:1; min-width:min(200px,55vw);">
-                    <div
-                        style="font-size:12px; color:rgba(255,255,255,0.55); font-weight:600; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:4px;">
-                        छत्तीसगढ़ शासन – राजस्व विभाग
-                    </div>
-                    <h1
-                        style="font-size:clamp(20px,4vw,30px); font-weight:900; color:#fff; line-height:1.1; font-family:'Noto Sans Devanagari',sans-serif;">
+        <div style="max-width:900px; margin:0 auto; padding:clamp(14px,3vw,22px) clamp(12px,3vw,24px);">
+            <div style="display:flex; align-items:center; gap:clamp(8px,2vw,14px); flex-wrap:wrap;">
+                <div class="emblem">🏛️</div>
+                <div style="flex:1; min-width:min(180px,55vw);">
+                    <div style="font-size:9px; color:var(--gold); font-weight:700; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:3px;">छत्तीसगढ़ शासन · राजस्व विभाग</div>
+                    <h1 style="font-size:clamp(18px,3.5vw,26px); font-weight:900; color:#fff; line-height:1.15; font-family:'Noto Sans Devanagari',sans-serif;">
                         भूमि रिकॉर्ड खोज प्रणाली
                     </h1>
-                    <div style="margin-top:4px; font-size:clamp(14px,2.5vw,18px); color:#e2e8f0; font-weight:700; font-family:'Noto Sans Devanagari',sans-serif;">
-                        तहसील पलारी जिला बलौदाबाज़ार-भाटापारा छ०ग०
+                    <div style="margin-top:5px; font-size:clamp(11px,2vw,13px); color:rgba(255,255,255,0.65); font-weight:600; font-family:'Noto Sans Devanagari',sans-serif;">
+                        तहसील पलारी जिला बलौदाबाज़ार-भाटापारा
                     </div>
-                    <div style="margin-top:4px; font-size:14px; color:var(--gold-light); font-weight:600;">
-                        हल्का 43 एवं 28 — ग्रामवार खसरा / बसरा सूची
+                    <div style="display:flex; gap:6px; margin-top:7px; flex-wrap:wrap; align-items:center;">
+                        <span style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); padding:2px 9px; border-radius:20px; font-size:9px; color:rgba(255,255,255,0.85); font-weight:700;">हल्का 28</span>
+                        <span style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); padding:2px 9px; border-radius:20px; font-size:9px; color:rgba(255,255,255,0.85); font-weight:700;">हल्का 43</span>
+                        <span class="live-badge"><span class="live-dot"></span>Live</span>
                     </div>
                 </div>
-                <div
-                    style="text-align:right; display:flex; flex-direction:column; gap:4px; color:rgba(255,255,255,0.6); font-size:12px;">
+                <div style="text-align:right; display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
                     <span id="recordCountBadge"
-                        style="background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.20); border-radius:8px; padding:6px 14px; font-weight:700; color:#fff; font-size:13px;">
+                        style="background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.20); border-radius:10px; padding:6px 14px; font-weight:700; color:#fff; font-size:12px;">
                         डेटा लोड हो रहा है...
                     </span>
                 </div>
@@ -726,10 +912,10 @@
         style="max-width:900px; margin:0 auto; padding:clamp(20px,4vw,32px) clamp(12px,3vw,16px) 80px; position:relative; z-index:1;">
 
         <!-- Tab Bar -->
-        <div class="tab-bar-wrap fade-in" style="margin-bottom:28px;">
+        <div class="tab-bar-wrap fade-in" style="margin-bottom:24px;">
             <div class="tab-bar">
                 <button class="tab-btn active" id="tab-khasra" onclick="switchTab('khasra')">
-                    📄 खसरा खोज
+                    📄 खसरा खोज <span class="tab-count" id="tc-khasra">—</span>
                 </button>
                 <button class="tab-btn" id="tab-basra" onclick="switchTab('basra')">
                     👥 बसरा खोज
@@ -738,7 +924,7 @@
                     👤 नाम खोज
                 </button>
                 <button class="tab-btn" id="tab-statistics" onclick="switchTab('statistics')">
-                    📊 आँकड़े
+                    📊 आँकड़े <span class="tab-new">✨नया</span>
                 </button>
                 <button class="tab-btn" id="tab-crop" onclick="switchTab('crop')">
                     🌾 फसल विवरण
@@ -750,17 +936,38 @@
         </div>
 
         <!-- Search Card -->
-        <div class="search-card fade-in" style="max-width:640px; margin:0 auto 32px;">
+        <div class="search-card fade-in" style="max-width:640px; margin:0 auto 28px;">
             <form id="searchForm" onsubmit="handleSearch(event)">
-                <div style="display:grid; gap:18px;">
+                <div style="display:grid; gap:16px;">
 
-                    <!-- Village -->
-                    <div>
+                    <!-- Village Grid (NEW) -->
+                    <div id="khasraVillageGrid">
+                        <label class="form-label">🏘️ ग्राम चुनें</label>
+                        <div class="village-grid" id="villageChipsContainer">
+                            <button type="button" class="village-chip" data-value="छेरकापुर (हल्का 28)" onclick="selectVillageChip(this)">
+                                छेरकापुर<span class="halka-tag">हल्का 28</span>
+                            </button>
+                            <button type="button" class="village-chip" data-value="छड़िया (हल्का 28)" onclick="selectVillageChip(this)">
+                                छड़िया<span class="halka-tag">हल्का 28</span>
+                            </button>
+                            <button type="button" class="village-chip" data-value="तिल्दा (हल्का 43)" onclick="selectVillageChip(this)">
+                                तिल्दा<span class="halka-tag">हल्का 43</span>
+                            </button>
+                            <button type="button" class="village-chip" data-value="गबौद (हल्का 43)" onclick="selectVillageChip(this)">
+                                गबौद<span class="halka-tag">हल्का 43</span>
+                            </button>
+                        </div>
+                        <!-- Hidden select (still used for logic) -->
+                        <div class="select-wrap" style="display:none;">
+                            <select id="villageInput" class="form-select" required></select>
+                        </div>
+                    </div>
+
+                    <!-- Village Dropdown (for basra/nam tabs) -->
+                    <div id="villageDropdownGroup" style="display:none;">
                         <label class="form-label">🏘️ ग्राम का नाम</label>
                         <div class="select-wrap">
-                            <select id="villageInput" class="form-select" required>
-                                <option value="" disabled selected>— ग्राम चुनें —</option>
-                            </select>
+                            <select id="villageInput2" class="form-select"></select>
                         </div>
                     </div>
 
@@ -773,9 +980,9 @@
                             position:fixed;
                             z-index:9999;
                             background:#fff;
-                            border:1px solid var(--border);
+                            border:2px solid var(--border);
                             border-radius:12px;
-                            box-shadow:0 8px 32px rgba(26,26,110,0.18);
+                            box-shadow:0 8px 32px rgba(11,29,53,0.18);
                             max-height:240px;
                             overflow-y:auto;
                             padding-bottom:4px;
@@ -803,28 +1010,48 @@
                             position:fixed;
                             z-index:9999;
                             background:#fff;
-                            border:1px solid var(--border);
+                            border:2px solid var(--border);
                             border-radius:12px;
-                            box-shadow:0 8px 32px rgba(26,26,110,0.18);
+                            box-shadow:0 8px 32px rgba(11,29,53,0.18);
                             max-height:240px;
                             overflow-y:auto;
                             padding-bottom:4px;
                         "></div>
                     </div>
 
+                    <!-- Quick Filters (shown for khasra tab) -->
+                    <div id="quickFiltersGroup" style="border-top:2px solid var(--cream); padding-top:12px;">
+                        <div style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:8px;">त्वरित फ़िल्टर</div>
+                        <div class="quick-filters">
+                            <span class="qf-chip" id="qf-dcs" style="color:#1A6B38; background:#EDFBF2; border-color:#1A6B38;" onclick="applyQuickFilter('dcs')">✅ DCS</span>
+                            <span class="qf-chip" id="qf-bhuiyya" style="color:#7B3F00; background:#FFF3E0; border-color:#7B3F00;" onclick="applyQuickFilter('bhuiyya')">📜 भुइयाँ</span>
+                            <span class="qf-chip" id="qf-crop" style="color:#1565C0; background:#E3F2FD; border-color:#1565C0;" onclick="applyQuickFilter('crop')">🌾 फसल सहित</span>
+                            <span class="qf-chip" id="qf-nocrop" style="color:#5B2D8E; background:#F3E5F5; border-color:#5B2D8E;" onclick="applyQuickFilter('nocrop')">⭕ फसल रहित</span>
+                        </div>
+                    </div>
+
                     <!-- Button -->
-                    <button type="submit" class="btn-search" id="searchBtn" style="margin-top:4px;">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"
-                            viewBox="0 0 24 24">
+                    <button type="submit" class="btn-search" id="searchBtn" style="margin-top:2px;">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                             <circle cx="11" cy="11" r="8" />
                             <path d="m21 21-4.35-4.35" />
                         </svg>
-                        <span id="btnLabel">खोजें</span>
+                        <span id="btnLabel">🔍 खोजें</span>
                     </button>
+
+                    <!-- Recent Searches -->
+                    <div id="recentSearchesPanel" style="border-top:2px solid var(--cream); padding-top:12px; display:none;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <div style="font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted);">🕐 हाल की खोज</div>
+                            <button type="button" onclick="clearRecentSearches()" style="background:none; border:none; color:var(--text-muted); font-size:11px; cursor:pointer; font-weight:700;">सब हटाएं ✕</button>
+                        </div>
+                        <div id="recentSearchesList"></div>
+                    </div>
 
                 </div>
             </form>
         </div>
+
 
         <!-- Loading -->
         <div id="loadingDiv" style="display:none; text-align:center; padding:48px 0;" class="fade-in">
@@ -1321,14 +1548,146 @@
         function fillVillages() {
             const desiredOrder = ['छेरकापुर (हल्का 28)', 'छड़िया (हल्का 28)', 'तिल्दा (हल्का 43)', 'गबौद (हल्का 43)'];
             const sel = document.getElementById('villageInput');
+            const sel2 = document.getElementById('villageInput2');
             const vals = [...new Set(records.map(r => r.v).filter(Boolean))].sort((a, b) => {
                 const idxA = desiredOrder.indexOf(a);
                 const idxB = desiredOrder.indexOf(b);
                 return (idxA !== -1 ? idxA : 999) - (idxB !== -1 ? idxB : 999);
             });
+            // Fill hidden select
             while (sel.options.length > 1) sel.remove(1);
             vals.forEach(v => { const o = document.createElement('option'); o.value = o.text = v; sel.appendChild(o); });
+            // Fill visible dropdown (basra/nam)
+            if (sel2) {
+                sel2.innerHTML = '<option value="" disabled selected>— ग्राम चुनें —</option>';
+                vals.forEach(v => { const o = document.createElement('option'); o.value = o.text = v; sel2.appendChild(o); });
+            }
+            // Update khasra tab count badge
+            const tcEl = document.getElementById('tc-khasra');
+            if (tcEl) tcEl.textContent = records.length;
         }
+
+        // ── Village Chip Selection (Grid UI) ────────────────────────
+        function selectVillageChip(chip) {
+            document.querySelectorAll('#villageChipsContainer .village-chip').forEach(c => c.classList.remove('selected'));
+            chip.classList.add('selected');
+            const val = chip.dataset.value;
+            // Sync hidden select
+            const sel = document.getElementById('villageInput');
+            if (sel) sel.value = val;
+            // Trigger change event to populate basra/nam lists
+            sel.dispatchEvent(new Event('change'));
+        }
+
+        // ── Recent Searches (localStorage) ──────────────────────────
+        const RS_KEY = 'bhoomi_recent_searches';
+
+        function getRecentSearches() {
+            try { return JSON.parse(localStorage.getItem(RS_KEY) || '[]'); } catch { return []; }
+        }
+
+        function saveRecentSearch(entry) {
+            let list = getRecentSearches();
+            // Remove duplicate
+            list = list.filter(x => !(x.tab === entry.tab && x.village === entry.village && x.val === entry.val));
+            list.unshift(entry);
+            if (list.length > 10) list = list.slice(0, 10);
+            localStorage.setItem(RS_KEY, JSON.stringify(list));
+            renderRecentSearches();
+        }
+
+        function clearRecentSearches() {
+            localStorage.removeItem(RS_KEY);
+            renderRecentSearches();
+        }
+
+        function renderRecentSearches() {
+            const panel = document.getElementById('recentSearchesPanel');
+            const list = document.getElementById('recentSearchesList');
+            if (!panel || !list) return;
+            const items = getRecentSearches();
+            if (!items.length) { panel.style.display = 'none'; return; }
+            panel.style.display = '';
+            list.innerHTML = items.map((it, i) => `
+                <div class="recent-search-item" onclick="applyRecentSearch(${i})">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:16px; color:#9aaabb;">⏱</span>
+                        <div>
+                            <div style="font-size:12px; font-weight:700; color:var(--text-main);">${it.val}</div>
+                            <div style="font-size:10px; color:var(--text-muted);">${it.village} &middot; ${it.timeAgo || ''}</div>
+                        </div>
+                    </div>
+                    <span style="background:var(--saffron); color:#fff; font-size:9px; padding:3px 9px; border-radius:20px; font-weight:700; white-space:nowrap;">दोबारा खोजें</span>
+                </div>`).join('');
+        }
+
+        function applyRecentSearch(idx) {
+            const items = getRecentSearches();
+            const it = items[idx];
+            if (!it) return;
+            // Switch to correct tab first
+            switchTab(it.tab || 'khasra');
+            // Select village
+            if (it.tab === 'khasra') {
+                // Select chip
+                const chip = document.querySelector(`#villageChipsContainer .village-chip[data-value="${it.village}"]`);
+                if (chip) selectVillageChip(chip);
+                // Set khasra value
+                const inp = document.getElementById('khasraVal');
+                if (inp) { inp.value = it.val; }
+            } else {
+                const sel2 = document.getElementById('villageInput2');
+                if (sel2) { sel2.value = it.village; sel2.dispatchEvent(new Event('change')); }
+            }
+            // Trigger search
+            setTimeout(() => document.getElementById('searchForm').dispatchEvent(new Event('submit')), 100);
+        }
+
+        // ── Quick Filters ────────────────────────────────────────────
+        let _quickFilterActive = null;
+
+        function applyQuickFilter(type) {
+            _quickFilterActive = (_quickFilterActive === type) ? null : type;
+            // Visual feedback
+            ['dcs','bhuiyya','crop','nocrop'].forEach(t => {
+                const el = document.getElementById('qf-' + t);
+                if (!el) return;
+                el.style.opacity = (!_quickFilterActive || _quickFilterActive === t) ? '1' : '0.45';
+                el.style.fontWeight = (_quickFilterActive === t) ? '900' : '700';
+            });
+            toast(_quickFilterActive ? `फ़िल्टर: ${type.toUpperCase()} — अब खोजें` : 'फ़िल्टर हटाया', 'info');
+        }
+
+        function applyQuickFilterToResults(found) {
+            if (!_quickFilterActive) return found;
+            if (_quickFilterActive === 'dcs') return found.filter(r => !r.kharifDCSBlank);
+            if (_quickFilterActive === 'bhuiyya') return found.filter(r => r.kharifSource === 'Bhuiyya');
+            if (_quickFilterActive === 'crop') return found.filter(r => r.finalKharifCrop || r.finalRabiCrop);
+            if (_quickFilterActive === 'nocrop') return found.filter(r => !r.finalKharifCrop && !r.finalRabiCrop);
+            return found;
+        }
+
+        // ── WhatsApp Share ────────────────────────────────────────────
+        function shareOnWhatsApp(r) {
+            const halka = getHalka(r.v) || '';
+            const kharifLine = r.finalKharifCrop ? `🌾 खरीफ: ${r.finalKharifCrop}` : '';
+            const rabiLine = r.finalRabiCrop ? `🌿 रबी: ${r.finalRabiCrop}` : '';
+            const sourceLine = r.kharifSource === 'DCS' ? '✅ DCS' : '📜 भुइयाँ';
+            const msg = [
+                `📋 *खसरा विवरण — ${halka}*`,
+                `ग्राम: ${r.v}`,
+                `खसरा नं: *${r.kn}*`,
+                `बसरा नं: ${r.bn}`,
+                `भूमिस्वामी: *${getFullOwner(r)}*`,
+                `रकबा: ${r.area} हे. | ${sourceLine}`,
+                [kharifLine, rabiLine].filter(Boolean).join(' | '),
+                `—
+patwariwork36.github.io/land-records/`
+            ].filter(Boolean).join('\n');
+            const url = 'https://wa.me/?text=' + encodeURIComponent(msg);
+            window.open(url, '_blank');
+        }
+
 
         // ── Village change → fill basra & farmers & khasra list ──
         document.getElementById('villageInput').addEventListener('change', function () {
@@ -1370,6 +1729,21 @@
             if (currentTab === 'basra') toast(`${basras.length} बसरा उपलब्ध`, 'info');
             else if (currentTab === 'nam') toast(`${farmerList.options.length} भूमिस्वामी उपलब्ध`, 'info');
             else if (currentTab === 'khasra') toast(`${window._khasraList.length} खसरे उपलब्ध`, 'info');
+        });
+
+        // ── villageInput2 (basra/nam visible dropdown) → sync to villageInput + fill lists ──
+        document.addEventListener('DOMContentLoaded', function() {
+            const sel2 = document.getElementById('villageInput2');
+            if (sel2) {
+                sel2.addEventListener('change', function() {
+                    const v = this.value;
+                    // Sync to the hidden select used by handleSearch
+                    const hiddenSel = document.getElementById('villageInput');
+                    if (hiddenSel) hiddenSel.value = v;
+                    // Trigger the change event so basra/farmer/khasra lists get populated
+                    hiddenSel.dispatchEvent(new Event('change'));
+                });
+            }
         });
 
         // ── Khasra Autocomplete ───────────────────────────────────
@@ -1632,6 +2006,15 @@
 
             // Show/hide search form
             document.getElementById('searchForm').closest('.search-card').style.display = isSearch ? '' : 'none';
+
+            // Toggle village input UI: grid for khasra, dropdown for basra/nam
+            const villageGrid = document.getElementById('khasraVillageGrid');
+            const villageDropdown = document.getElementById('villageDropdownGroup');
+            const quickFilters = document.getElementById('quickFiltersGroup');
+            if (villageGrid) villageGrid.style.display = tab === 'khasra' ? '' : 'none';
+            if (villageDropdown) villageDropdown.style.display = (tab === 'basra' || tab === 'nam') ? '' : 'none';
+            if (quickFilters) quickFilters.style.display = tab === 'khasra' ? '' : 'none';
+
             document.getElementById('khasraGroup').style.display = tab === 'khasra' ? '' : 'none';
             document.getElementById('basraGroup').style.display = tab === 'basra' ? '' : 'none';
             document.getElementById('namGroup').style.display = tab === 'nam' ? '' : 'none';
@@ -1660,11 +2043,14 @@
             }
             if (isGov) { showGovRecords(); return; }
 
-            // If village already chosen, re-populate basra / farmerList
+            // If village already chosen for basra/nam, re-populate lists
             if (tab === 'basra' || tab === 'nam') {
-                const v = document.getElementById('villageInput').value;
-                if (v) document.getElementById('villageInput').dispatchEvent(new Event('change'));
+                const v2 = document.getElementById('villageInput2');
+                if (v2 && v2.value) v2.dispatchEvent(new Event('change'));
             }
+
+            // Render recent searches for khasra tab
+            if (tab === 'khasra') renderRecentSearches();
         }
 
 
@@ -1672,7 +2058,16 @@
         // ── Search ────────────────────────────────────
         function handleSearch(e) {
             e.preventDefault();
-            const v = document.getElementById('villageInput').value;
+            // Get village from either chip selection (khasra) or dropdown (basra/nam)
+            let v = '';
+            if (currentTab === 'khasra') {
+                v = document.getElementById('villageInput').value;
+            } else {
+                const sel2 = document.getElementById('villageInput2');
+                v = sel2 ? sel2.value : document.getElementById('villageInput').value;
+                // Sync to hidden select
+                if (v) { const sel = document.getElementById('villageInput'); if (sel) sel.value = v; }
+            }
             let val = '';
 
             if (currentTab === 'khasra') val = document.getElementById('khasraVal').value.trim();
@@ -1685,6 +2080,9 @@
                 toast(`कृपया ${lbl} चुनें/दर्ज करें`, 'error');
                 return;
             }
+
+            // Save to recent searches
+            saveRecentSearch({ tab: currentTab, village: v, val, timeAgo: 'अभी' });
 
             setLoading(true);
             setTimeout(() => {
@@ -2017,7 +2415,10 @@
             <div class="card-kn" style="color:#fff;">${currentTab === 'basra' ? r.bn : r.kn}</div>
             <div style="font-size:13px; color:rgba(255,255,255,0.7); margin-top:4px; font-weight:600;">${r.v}${getHalka(r.v) ? ` &nbsp;<span style="background:rgba(255,255,255,0.18);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:800;letter-spacing:0.05em;">${getHalka(r.v)}</span>` : ''}</div>
           </div>
-          <button onclick="event.stopPropagation();printSingleRecord(${JSON.stringify(r).replace(/"/g, '&quot;')})" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">🖨 Print</button>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;">
+            <button onclick="event.stopPropagation();shareOnWhatsApp(${JSON.stringify(r).replace(/&quot;/g, '').replace(/"/g, '&quot;')})" style="background:rgba(37,211,102,0.25);border:1px solid rgba(37,211,102,0.5);color:#fff;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">📲 Share</button>
+            <button onclick="event.stopPropagation();printSingleRecord(${JSON.stringify(r).replace(/"/g, '&quot;')})" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;">🖨 Print</button>
+          </div>
         </div>
         <div style="padding:18px 20px; display:flex; flex-direction:column; gap:14px;">
           ${getLandDetailBadgesHTML(r)}
@@ -2128,13 +2529,17 @@
             const emp = document.getElementById('emptyDiv');
             res.innerHTML = '';
 
+            // Apply quick filter if active
+            if (currentTab === 'khasra') found = applyQuickFilterToResults(found);
+
             if (!found.length) {
                 emp.style.display = '';
-                toast('कोई रिकॉर्ड नहीं मिला', 'error');
+                toast(_quickFilterActive ? `फ़िल्टर "${_quickFilterActive}" पर कोई रिकॉर्ड नहीं` : 'कोई रिकॉर्ड नहीं मिला', 'error');
                 return;
             }
             emp.style.display = 'none';
-            toast(`${found.length} रिकॉर्ड मिले`, 'success');
+            toast(`${found.length} रिकॉर्ड मिले${_quickFilterActive ? ' (फ़िल्टर लागू)' : ''}`, 'success');
+
 
             // Portfolio banner for basra or nam
             if (currentTab === 'basra' || currentTab === 'nam') {
