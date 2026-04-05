@@ -1475,7 +1475,6 @@
 
             function onSuccess() {
                 fillVillages();
-                initStatVillageGrid();
                 badge.innerHTML = `✅ ${records.length} रिकॉर्ड लोड <span onclick="loadData(true)" style="cursor:pointer;text-decoration:underline;margin-left:8px;font-size:11px;">🔄 रिफ्रेश</span>`;
                 toast(`${records.length} रिकॉर्ड सफलतापूर्वक लोड हुए`, 'success');
                 switchTab('statistics');
@@ -3452,6 +3451,9 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             </div>`;
 
             statDiv.innerHTML = html;
+            
+            // Initialize the Government Lands Village Grid Chips
+            initStatVillageGrid();
         }
 
         // ── Crop Records Page ────────────────────────────
