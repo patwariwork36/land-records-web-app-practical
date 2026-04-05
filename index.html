@@ -4469,7 +4469,6 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             const container = document.getElementById('statDynamicGovtCards');
             if(!container) return;
             
-            const vRecs = records.filter(r => (r.v || '').trim() === villageName);
             
             // Collect Charai
             const charaiRecs = vRecs.filter(r => r.charai && !String(r.charai).includes("चराई भूमि नहीं है") && String(r.charai).trim() !== "—" && String(r.charai).trim() !== "");
