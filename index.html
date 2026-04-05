@@ -1234,8 +1234,18 @@
             // helper: किसी row से multiple possible column names में से पहला valid value निकालना
             function getCol(row, ...keys) {
                 if (!row) return '';
+                
+                // create a space-stripped copy of row keys
+                const normRow = {};
+                for (const rk in row) {
+                    if (Object.prototype.hasOwnProperty.call(row, rk)) {
+                        normRow[rk.replace(/\s+/g, '')] = row[rk];
+                    }
+                }
+
                 for (const k of keys) {
-                    const v = row[k];
+                    const normK = k.replace(/\s+/g, '');
+                    const v = normRow[normK];
                     if (v !== undefined && v !== null && v.toString().trim() !== '') return v.toString().trim();
                 }
                 return '';
@@ -4442,6 +4452,9 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
         function renderStatGovtCards(villageNameFull) {
             // Unpack "छेरकापुर (हल्का 28)" -> "छेरकापुर" to match r.v
             const villageName = villageNameFull.split('(')[0].trim();
+            const vRecs = records.filter(r => (r.v || '').trim() === villageName);
+
+
             
             // Update chip styles natively
             const chips = document.querySelectorAll('#statVillageChips .village-chip');
@@ -4464,8 +4477,8 @@ ${uniqueBasras ? `<p style="text-align:center;font-size:13px;margin-top:-15px;ma
             // Collect Nistar
             const nistarGroups = {};
             vRecs.forEach(r => {
-                const nText = r.nistar;
-                if(nText && !String(nText).includes("निस्तार पत्रक में दर्ज नहीं") && String(nText).trim() !== "—" && String(nText).trim() !== "") {
+                const nText = String(r.nistarPatrakVivaran || r.nistar || '').trim();
+                if(nText && !nText.includes("निस्तार पत्रक में दर्ज नहीं") && nText !== "—" && nText !== "") {
                     // normalize string spaces slightly
                     const k = String(nText).trim();
                     if(!nistarGroups[k]) nistarGroups[k] = [];
